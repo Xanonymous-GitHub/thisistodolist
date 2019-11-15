@@ -102,11 +102,7 @@ $(function () {
         }
     });
     $.get("/todolist/lists", function (data) {
-<<<<<<< HEAD
-        for (let i = 0; i <= data.length - 1; i++) {
-=======
         for (let i = 0; i < data.length; i++) {
->>>>>>> front
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
     });
