@@ -48,7 +48,7 @@ func getlists(c *gin.Context) {
 	c.JSON(http.StatusOK, todos)
 }
 func newtodo(c *gin.Context) {
-	db, err := gorm.Open("mysql", "root:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
@@ -65,7 +65,7 @@ func newtodo(c *gin.Context) {
 }
 func changeStatus(c *gin.Context) {
 	id := c.Param("id")
-	db, err := gorm.Open("mysql", "root:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
@@ -78,7 +78,7 @@ func changeStatus(c *gin.Context) {
 }
 func deletetodo(c *gin.Context) {
 
-	db, err := gorm.Open("mysql", "root:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
