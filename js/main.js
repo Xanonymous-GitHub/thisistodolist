@@ -20,9 +20,6 @@ $(function () {
             $.ajax({
                 type: "DELETE",
                 url: "/todolist/" + $(this).attr("name"),
-                // data: JSON.stringify({ status: status }),
-                // dataType: "JSON",
-                // contentType: "application/json",
                 beforeSend: function () {
 
                 },
@@ -38,9 +35,6 @@ $(function () {
                     });
                 },
             });
-            // $(this).hide().parent().parent().parent().fadeOut(500, function () {
-            //     $(this).remove();
-            // });
         });
         $chk_box.attr({
             "type": "checkbox",
@@ -88,10 +82,10 @@ $(function () {
                 dataType: "JSON",
                 url: "/todolist",
                 beforeSend: function () {
-                    //
+                    
                 },
                 complete: function () {
-                    //alert("request sent")
+                    
                 },
                 fail: function (e) {
                     alert("li way server is die die")
@@ -102,7 +96,6 @@ $(function () {
                     $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
                 },
             });
-
             // //test
             // e.preventDefault();
             // $("#input_area").val('');
