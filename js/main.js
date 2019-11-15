@@ -20,9 +20,6 @@ $(function () {
             $.ajax({
                 type: "DELETE",
                 url: "/todolist/" + $(this).attr("name"),
-                // data: JSON.stringify({ status: status }),
-                // dataType: "JSON",
-                // contentType: "application/json",
                 beforeSend: function () {
 
                 },
@@ -38,9 +35,6 @@ $(function () {
                     });
                 },
             });
-            // $(this).hide().parent().parent().parent().fadeOut(500, function () {
-            //     $(this).remove();
-            // });
         });
         $chk_box.attr({
             "type": "checkbox",
@@ -88,10 +82,10 @@ $(function () {
                 dataType: "JSON",
                 url: "/todolist",
                 beforeSend: function () {
-                    //
+
                 },
                 complete: function () {
-                    //alert("request sent")
+
                 },
                 fail: function (e) {
                     alert("li way server is die die")
@@ -102,19 +96,17 @@ $(function () {
                     $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
                 },
             });
-
-            // //test
-            // e.preventDefault();
-            // $("#input_area").val('');
-            // $("#to_do_list_container").createNewItems(user_input, 0);
-            // //test
         }
         else {
             alert("please input something!")
         }
     });
     $.get("/todolist/lists", function (data) {
+<<<<<<< HEAD
         for (let i = 0; i <= data.length - 1; i++) {
+=======
+        for (let i = 0; i < data.length; i++) {
+>>>>>>> front
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
     });
