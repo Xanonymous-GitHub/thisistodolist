@@ -82,10 +82,10 @@ $(function () {
                 dataType: "JSON",
                 url: "/todolist",
                 beforeSend: function () {
-                    
+
                 },
                 complete: function () {
-                    
+
                 },
                 fail: function (e) {
                     alert("li way server is die die")
@@ -96,18 +96,13 @@ $(function () {
                     $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
                 },
             });
-            // //test
-            // e.preventDefault();
-            // $("#input_area").val('');
-            // $("#to_do_list_container").createNewItems(user_input, 0);
-            // //test
         }
         else {
             alert("please input something!")
         }
     });
     $.get("/todolist/lists", function (data) {
-        for (let i = data.length - 1; i >= 0; i--) {
+        for (let i = 0; i < data.length; i++) {
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
     });
