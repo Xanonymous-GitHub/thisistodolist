@@ -38,7 +38,7 @@ func gettingtodolist(c *gin.Context) {
 	c.HTML(200, "index.html", nil)
 }
 func getlists(c *gin.Context) {
-	db, err := gorm.Open("mysql", "root:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
