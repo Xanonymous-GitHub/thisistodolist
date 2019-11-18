@@ -151,13 +151,13 @@ func checkCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		username, err := c.Cookie("username")
 		if err != nil {
-			c.Redirect(http.StatusUnauthorized, "/login")
+			c.Redirect(301, "/login")
 			c.Abort()
 			return
 		}
 		password, err := c.Cookie("password")
 		if err != nil {
-			c.Redirect(http.StatusUnauthorized, "/login")
+			c.Redirect(301, "/login")
 			c.Abort()
 			return
 		}
@@ -171,7 +171,8 @@ func checkCookie() gin.HandlerFunc {
 		if db.Table("userinfo").Where("username=? password=?", username, password).First(&userinfo).RecordNotFound() {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
-			c.Redirect(http.StatusUnauthorized, "/login")
+			c.String(http.StatusUnauthorized, "your password is change")
+			c.Redirect(301, "/login")
 			c.Abort()
 			return
 		}
