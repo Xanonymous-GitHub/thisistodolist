@@ -5,7 +5,7 @@ $(function () {
         $item_div.css(i_css);
         $item_div.text(i_text);
         return $item_div;
-    }
+    };
     $.fn.createNewItems = function (user_input, item_id, is_checked) {
         let $del_btn = $("<button\>");
         let $chk_box = $("<input>");
@@ -54,7 +54,7 @@ $(function () {
 
                 },
                 fail: function (e) {
-
+                    
                 },
                 success: function () {
                     $chk_box.prop("checked", status);
@@ -79,7 +79,7 @@ $(function () {
             $.post("/todolist", JSON.stringify({ user_input: user_input }), function (data) {
                 $("#input_area").val('');
                 $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
-            }, "JSON");
+            }, "JSON").fail(() => { });
         }
         else {
             alert("please input something!")
@@ -89,5 +89,5 @@ $(function () {
         for (let i = 0; i < data.length; i++) {
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
-    });
+    }).fail(() => { });
 });
