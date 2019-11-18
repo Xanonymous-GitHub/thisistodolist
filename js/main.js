@@ -1,17 +1,14 @@
 $(function () {
+    let divTemplate = (i_class, i_css, i_text) => {
+        let $item_div = $("<div\>");
+        $item_div.addClass(i_class);
+        $item_div.css(i_css);
+        $item_div.text(i_text);
+        return $item_div;
+    };
     $.fn.createNewItems = function (user_input, item_id, is_checked) {
-        let $new_item = $("<div\>");
-        let $new_item_container = $("<div\>");
-        let $content_container = $("<div\>");
-        let $button_container = $("<div\>");
         let $del_btn = $("<button\>");
         let $chk_box = $("<input>");
-        $new_item.addClass("mx-2 my-2 to_do_list_title");
-        $new_item.css("word-break", "break-all");
-        $new_item_container.addClass("row w-100");
-        $content_container.addClass("col-10");
-        $content_container.text(user_input);
-        $button_container.addClass("col-2 p-0 text-right");
         $del_btn.text("Del");
         $del_btn.addClass("btn btn-danger");
         $del_btn.css("whiteSpace", "nowrap");
@@ -57,13 +54,17 @@ $(function () {
 
                 },
                 fail: function (e) {
-
+                    
                 },
                 success: function () {
                     $chk_box.prop("checked", status);
                 },
             });
         });
+        let $new_item = divTemplate("mx-2 my-2 to_do_list_title", { "word-break": "break-all" });
+        let $new_item_container = divTemplate("row w-100");
+        let $content_container = divTemplate("col-10", {}, user_input);
+        let $button_container = divTemplate("col-2 p-0 text-right");
         $button_container.append($del_btn);
         $content_container.prepend($chk_box);
         $new_item_container.append($content_container)
@@ -75,27 +76,10 @@ $(function () {
     $("#new_item").click(function (e) {
         let user_input = $("#input_area").val();
         if (user_input.trim() != "") {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ user_input: user_input }),
-                dataType: "JSON",
-                url: "/todolist",
-                beforeSend: function () {
-
-                },
-                complete: function () {
-
-                },
-                fail: function (e) {
-                    alert("li way server is die die")
-                },
-                success: function (data) {
-                    e.preventDefault();
-                    $("#input_area").val('');
-                    $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
-                },
-            });
+            $.post("/todolist", JSON.stringify({ user_input: user_input }), function (data) {
+                $("#input_area").val('');
+                $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
+            }, "JSON").fail(() => { });
         }
         else {
             alert("please input something!")
@@ -105,5 +89,5 @@ $(function () {
         for (let i = 0; i < data.length; i++) {
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
-    });
+    }).fail(() => { });
 });
