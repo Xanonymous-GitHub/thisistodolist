@@ -58,7 +58,11 @@ func newtodo(c *gin.Context) {
 	if newtodo.Describe == "" {
 		c.JSON(403, nil)
 	} else {
-		db.Create(&newtodo)
+		err := db.Create(&newtodo).Error
+		if err != nil {
+			c.String(403, "")
+			return
+		}
 		fmt.Println(newtodo)
 		c.JSON(http.StatusOK, newtodo)
 	}
