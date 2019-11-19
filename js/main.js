@@ -10,7 +10,7 @@ $(function () {
         let $edit_btn = $("<button\>");
         let $chk_box = $("<input\>");
         $edit_btn.attr("disabled", true);
-        $del_btn.click(() => {
+        $del_btn.click( function (){
             $.ajax({
                 type: "DELETE",
                 url: "/todolist/" + $(this).attr("name"),
