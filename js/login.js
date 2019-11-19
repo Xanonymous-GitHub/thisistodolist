@@ -19,33 +19,8 @@ $(function () {
         $(this)[0][1].value=md5($(this)[0][1].value);
         var formData = $(this).serializeObject();
         $(this)[0].reset();
-
-
-
-        $.ajax({
-            type: "POST",
-            url: "/login",
-            data: JSON.stringify(formData),
-            dataType: "JSON",
-            contentType: "application/json",
-            beforeSend: () => {
-
-            },
-            complete: () => {
-
-            },
-            error: () => {
-                alert("Connection failed!");
-            },
-            success: () => {
-                window.location.replace("./todolist");
-            },
-        });
-
-
-
-        // $.post("/login", JSON.stringify(formData), function() {
-        //     window.location.replace("./todolist");
-        // }, "JSON").fail(function() { alert("Connection failed!"); });
+        $.post("/login", JSON.stringify(formData), function() {
+            window.location.replace("./todolist");
+        }, "JSON");
     });
 });
