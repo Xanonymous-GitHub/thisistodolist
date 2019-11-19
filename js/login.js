@@ -21,6 +21,6 @@ $(function () {
         $(this)[0].reset();
         $.post("/login", JSON.stringify(formData), function() {
             window.location.replace("./todolist");
-        }, "JSON");
+        }, "JSON");//
     });
 });
