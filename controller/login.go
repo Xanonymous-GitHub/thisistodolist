@@ -12,6 +12,7 @@ func Getlogin(c *gin.Context) {
 func VerifiesUser(c *gin.Context) {
 	var userinfo model.LoginForm
 	c.BindJSON(&userinfo)
+	password := userinfo.Password
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 
@@ -19,13 +20,17 @@ func VerifiesUser(c *gin.Context) {
 		panic("failed to connect database")
 	}
 
-	if db.Table("userinfo").Where("username=? password=?", userinfo.Username, userinfo.Password).First(&userinfo).RecordNotFound() {
+	if db.Table("userinfo").Where("username=?", userinfo.Username).First(&userinfo).RecordNotFound() {
 		c.String(403, "")
-	} else {
+	}
+	if password == userinfo.Password {
 		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, true)
 		c.SetCookie("password", userinfo.Password, 1000, "/", "35.189.167.203", false, true)
 		c.String(200, "")
+	} else {
+		c.String(403, "")
 	}
+
 }
 func CreateNewuser(c *gin.Context) {
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist??charset=utf8&parseTime=True&loc=Local")
