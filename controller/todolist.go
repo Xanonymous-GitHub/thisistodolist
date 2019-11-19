@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"../model"
@@ -32,7 +31,7 @@ func Getlists(c *gin.Context) {
 			panic(err)
 		}
 	}
-	fmt.Println(todos)
+
 	c.JSON(http.StatusOK, todos)
 }
 func Newtodo(c *gin.Context) {
@@ -55,7 +54,7 @@ func Newtodo(c *gin.Context) {
 			c.String(403, "")
 			return
 		}
-		fmt.Println(newtodo)
+
 		c.JSON(http.StatusOK, newtodo)
 	}
 }
@@ -68,7 +67,6 @@ func ChangeStatus(c *gin.Context) {
 	}
 	var status model.Status
 	c.BindJSON(&status)
-	fmt.Println(status.Status)
 	db.Table("todo").Where("todo_id=?", id).Update("todo_status", status.Status)
 	c.JSON(http.StatusOK, nil)
 }
