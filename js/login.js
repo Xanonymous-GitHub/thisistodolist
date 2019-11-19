@@ -16,11 +16,13 @@ $(function () {
     };
     $('#login').on('submit', function (e) {
         e.preventDefault();
-        $(this)[0][1].value=md5($(this)[0][1].value);
+        $(this)[0][1].value = md5($(this)[0][1].value);
         var formData = $(this).serializeObject();
         $(this)[0].reset();
-        $.post("/login", JSON.stringify(formData), function() {
-            window.location.replace("./todolist")
-        }).fail(alert(""));//
+        $.post("/login", JSON.stringify(formData), function () {
+            window.location.replace("./todolist");
+        }).fail(function () {
+            alert("Wrong username or Password, please try again.")
+        });//
     });
 });
