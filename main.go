@@ -36,7 +36,8 @@ func main() {
 	router.GET("/todolist", gettingtodolist)
 	router.GET("/todolist/lists", getlists)
 	router.POST("/todolist", newtodo)
-	router.PUT("/todolist/:id", changeStatus)
+	router.PUT("/todolist/:id/describe", changeDescribe)
+	router.PUT("/todolist/:id/status", changeStatus)
 	router.DELETE("/todolist/:id", deletetodo)
 	router.GET("/login", getlogin)
 	router.POST("/login", verifiesUser)
@@ -99,6 +100,21 @@ func changeStatus(c *gin.Context) {
 	db.Table("todo").Where("todo_id=?", id).Update("todo_status", status.Status)
 	c.JSON(http.StatusOK, nil)
 }
+func changeDescribe(c *gin.Context) {
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		panic("failed to connect database")
+	}
+	id := c.Param("id")
+	var describe TodoSQLmodel
+	c.BindJSON(&describe)
+	err = db.Where("todo_id=?", id).Update("todo_describe=?", describe.Describe).Error
+	if err != nil {
+		c.String(http.StatusBadRequest, "")
+	} else {
+		c.String(200, "")
+	}
+}
 func deletetodo(c *gin.Context) {
 
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
@@ -108,78 +124,7 @@ func deletetodo(c *gin.Context) {
 	}
 	db.Table("todo").Where("todo_id=?", c.Param("id")).Delete(TodoSQLmodel{})
 }
-func getlogin(c *gin.Context) {
-	c.HTML(200, "login.html", nil)
-}
-func verifiesUser(c *gin.Context) {
-	var userinfo LoginForm
-	c.BindJSON(&userinfo)
-	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
-	defer db.Close()
 
-	if err != nil {
-		panic("failed to connect database")
-	}
-
-	if db.Table("userinfo").Where("username=? password=?", userinfo.Username, userinfo.Password).First(&userinfo).RecordNotFound() {
-		c.String(403, "")
-	} else {
-		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, true)
-		c.SetCookie("password", userinfo.Password, 1000, "/", "35.189.167.203", false, true)
-		c.String(200, "")
-	}
-}
-func createNewuser(c *gin.Context) {
-	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist??charset=utf8&parseTime=True&loc=Local")
-	defer db.Close()
-	if err != nil {
-		panic("failed to connect database")
-	}
-	var newuser LoginForm
-	c.BindJSON(&newuser)
-	err = db.Create(&newuser).Error
-	if err != nil {
-		c.String(403, "")
-	} else {
-		c.SetCookie("username", newuser.Username, 1000, "/", "35.189.167.203", false, true)
-		c.SetCookie("password", newuser.Password, 1000, "/", "35.189.167.203", false, true)
-		c.String(200, "")
-	}
-
-}
-func checkCookie() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		username, err := c.Cookie("username")
-		if err != nil {
-			c.Redirect(301, "/login")
-			c.Abort()
-			return
-		}
-		password, err := c.Cookie("password")
-		if err != nil {
-			c.Redirect(301, "/login")
-			c.Abort()
-			return
-		}
-		db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
-		defer db.Close()
-
-		if err != nil {
-			panic("failed to connect database")
-		}
-		var userinfo LoginForm
-		if db.Table("userinfo").Where("username=? password=?", username, password).First(&userinfo).RecordNotFound() {
-			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
-			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
-			c.String(http.StatusUnauthorized, "your password is change")
-			c.Redirect(301, "/login")
-			c.Abort()
-			return
-		}
-
-		c.Next()
-	}
-}
 func (todo *TodoSQLmodel) TableName() string {
 	return "todo"
 }
