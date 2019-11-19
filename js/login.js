@@ -20,7 +20,7 @@ $(function () {
         var formData = $(this).serializeObject();
         $(this)[0].reset();
         $.post("/login", JSON.stringify(formData), function() {
-            window.location.replace("./todolist");
-        }, "JSON");//
+            
+        }, "JSON").then(window.location.replace("./todolist"));//
     });
 });
