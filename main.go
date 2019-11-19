@@ -13,7 +13,7 @@ func main() {
 	router.LoadHTMLGlob("./*.html")
 	router.Static("/css", "./css")
 	router.Static("/js", "./js")
-	
+	router.Use(controller.CheckCookie())
 	router.GET("/todolist", controller.Gettingtodolist)
 	router.GET("/todolist/lists", controller.Getlists)
 	router.POST("/todolist", controller.Newtodo)

@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"net/http"
-
 	"../model"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -10,19 +8,19 @@ import (
 
 func CheckCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Header("Cache-Control", "no-cache")
+		c.Header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate, value")
 		if c.Request.URL.Path == "/login" {
 			c.Next()
 		}
 		username, err := c.Cookie("username")
 		if err != nil {
-			c.Redirect(301, "/login")
+			c.Redirect(302, "/login")
 			c.Abort()
 			return
 		}
 		password, err := c.Cookie("password")
 		if err != nil {
-			c.Redirect(301, "/login")
+			c.Redirect(302, "/login")
 			c.Abort()
 			return
 		}
@@ -36,18 +34,14 @@ func CheckCookie() gin.HandlerFunc {
 		if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
-			c.String(http.StatusUnauthorized, "user is hasn't register")
-			c.Header("Cache-Control", "no-cache")
-			c.Redirect(301, "/register")
+			c.Redirect(302, "/register")
 			c.Abort()
 			return
 		}
 		if userinfo.Password != password {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
-			c.String(http.StatusUnauthorized, "your password is change")
-			c.Header("Cache-Control", "no-cache")
-			c.Redirect(301, "/login")
+			c.Redirect(302, "/login")
 			c.Abort()
 			return
 		}
