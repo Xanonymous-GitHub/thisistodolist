@@ -22,6 +22,7 @@ func main() {
 	router.DELETE("/todolist/:id", controller.Deletetodo)
 	router.GET("/login", controller.Getlogin)
 	router.POST("/login", controller.VerifiesUser)
+	router.GET("/signup", controller.Getsignup)
 	router.POST("/signup", controller.CreateNewuser)
 	router.Run(":8888")
 

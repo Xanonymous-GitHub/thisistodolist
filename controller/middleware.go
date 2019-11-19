@@ -13,6 +13,10 @@ func CheckCookie() gin.HandlerFunc {
 			c.Next()
 			return
 		}
+		if c.Request.URL.Path == "/signup" {
+			c.Next()
+			return
+		}
 		username, err := c.Cookie("username")
 		if err != nil {
 			c.Redirect(302, "/login")
