@@ -19,3 +19,6 @@ type (
 func (todo *TodoSQLmodel) TableName() string {
 	return "todo"
 }
+func (Lg *LoginForm) TableName() string {
+	return "userinfo"
+}
