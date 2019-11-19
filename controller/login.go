@@ -7,7 +7,37 @@ import (
 )
 
 func Getlogin(c *gin.Context) {
-	c.HTML(200, "login.html", nil)
+	username, err := c.Cookie("username")
+	if err != nil {
+		c.HTML(200, "login.html", nil)
+		return
+	}
+	password, err := c.Cookie("password")
+	if err != nil {
+		c.HTML(200, "login.html", nil)
+		return
+	}
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
+	defer db.Close()
+
+	if err != nil {
+		panic("failed to connect database")
+	}
+	var userinfo model.LoginForm
+	if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
+		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
+		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
+		c.HTML(200, "login.html", nil)
+		return
+	}
+	if userinfo.Password != password {
+		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
+		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
+		c.HTML(200, "login.html", nil)
+		return
+	}
+
+	c.Redirect(302, "/todolist")
 }
 func VerifiesUser(c *gin.Context) {
 	var userinfo model.LoginForm
