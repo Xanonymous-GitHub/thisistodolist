@@ -25,14 +25,14 @@ func Getlogin(c *gin.Context) {
 	}
 	var userinfo model.LoginForm
 	if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
-		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
-		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
+		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, false)
+		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, false)
 		c.HTML(200, "login.html", nil)
 		return
 	}
 	if userinfo.Password != password {
-		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
-		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
+		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, false)
+		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, false)
 		c.HTML(200, "login.html", nil)
 		return
 	}
@@ -55,8 +55,8 @@ func VerifiesUser(c *gin.Context) {
 		return
 	}
 	if password == userinfo.Password {
-		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, true)
-		c.SetCookie("password", userinfo.Password, 1000, "/", "35.189.167.203", false, true)
+		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, false)
+		c.SetCookie("password", userinfo.Password, 1000, "/", "35.189.167.203", false, false)
 		c.JSON(200, `{ mes:"ok"}`)
 	} else {
 		c.String(403, "")
@@ -78,8 +78,8 @@ func CreateNewuser(c *gin.Context) {
 	if err != nil {
 		c.String(403, "")
 	} else {
-		c.SetCookie("username", newuser.Username, 1000, "/", "35.189.167.203", false, true)
-		c.SetCookie("password", newuser.Password, 1000, "/", "35.189.167.203", false, true)
+		c.SetCookie("username", newuser.Username, 1000, "/", "35.189.167.203", false, false)
+		c.SetCookie("password", newuser.Password, 1000, "/", "35.189.167.203", false, false)
 		c.String(200, "")
 	}
 
