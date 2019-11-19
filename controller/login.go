@@ -52,6 +52,7 @@ func VerifiesUser(c *gin.Context) {
 
 	if db.Table("userinfo").Where("username=?", userinfo.Username).First(&userinfo).RecordNotFound() {
 		c.String(403, "")
+		return
 	}
 	if password == userinfo.Password {
 		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, true)
