@@ -56,7 +56,6 @@ func VerifiesUser(c *gin.Context) {
 	if password == userinfo.Password {
 		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, true)
 		c.SetCookie("password", userinfo.Password, 1000, "/", "35.189.167.203", false, true)
-		c.String(200, "")
 	} else {
 		c.String(403, "")
 	}

@@ -35,7 +35,7 @@ func CheckCookie() gin.HandlerFunc {
 		if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
-			c.Redirect(302, "/register")
+			c.Redirect(302, "/login")
 			c.Abort()
 			return
 		}
