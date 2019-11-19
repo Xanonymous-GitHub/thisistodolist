@@ -1,0 +1,100 @@
+
+
+<script>
+function OnClose()
+{
+if(document.all.chkShow.checked == true)
+{
+document.cookie = "eccpopup=no";
+}
+else
+{
+document.cookie = "eccpopup=yes";
+}
+
+window.close();
+}
+
+
+function run()
+{
+var hiddenValue = document.getElementById("btn_HiddenValue");
+var submitValue = document.getElementById("showNum");
+var currentValue = parseInt(submitValue.innerHTML);
+if(hiddenValue.value == 0)
+{
+window.location.href= ecclogin ;
+return true;
+}
+currentValue = hiddenValue.value * 1 - 1;
+document.getElementById("btn_HiddenValue").value=currentValue;
+document.getElementById("showNum").innerHTML=currentValue;
+if(hiddenValue.value==0)
+{
+window.location.href= ecclogin;
+return true;
+}
+}
+
+function redirectJump()
+{
+window.location.href=ecclogin;
+}
+window.setInterval("run();", 1000);
+
+
+
+</script>
+</head>
+
+<body>
+<form name='form1'>
+<div >
+<div >
+<div ><label res>系統提示:</label></div>
+</div>
+<div >
+<ul>
+
+<li><label res>可能由於以下的原因,系統需重新進行登入</label></li>
+<li><label res>1、會話超時;</label></li>
+<li><label res>2、無效的系統連結;</label></li>
+<li><label res>3、未啟動UDS單點登入或單點登入失效。</label></li>
+<li><label res>由於MICI 資訊中心子系統已整合到ECC系統中,故請登入ECC系統</label> <A href="http://ecc.app.com.cn" ><strong>http://ecc.app.com.cn</A> <label res>進行訪問。</label></li>
+</ul>
+</div>
+<div >
+<div >
+<label res>系統將在</label><label >10</label><label res>秒後自動進入ECC登入頁面</label>
+</div>
+<div >
+<input type="hidden" value="10"/>
+<input type="button" res value="立即登入" onClick="javascript:redirectJump();"/>
+<input type="button" res value="關閉" onclick="javascript:window.close();"/>
+</div>
+</div>
+</div>
+</form>
+</body>
+</html>
+
+<SCRIPT LANGUAGE="javascript1.2">
+<!--//
+if (navigator.appName == 'Netscape')
+var language = navigator.language;
+else
+var language = navigator.browserLanguage;
+if (language.indexOf('en') > -1)
+{
+document.location.href = 'http://mim.zte.com.cn/MIMS/uiloader/login.html?lan=en';
+}
+else if (language.indexOf('zh') > -1)
+{
+document.location.href = 'http://mim.zte.com.cn/MIMS/uiloader/login.html?lan=zh';
+}
+else
+{
+document.location.href = 'http://mim.zte.com.cn/MIMS/uiloader/login.html?lan=zh';
+}
+// End -->
+</script> 

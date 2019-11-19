@@ -6,7 +6,8 @@
   height: auto;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,5%);
+  bottom: 50%;
+  transform: translate(-50%, 5%);
   border-radius: 20px;
   box-shadow: 3px 3px 5px 6px rgb(42, 42, 42);
 }
@@ -37,7 +38,7 @@
   min-height: 20px;
 }
 .main-title {
-  background-color:black;
+  background-color: black;
   color: azure;
   margin: 10px 10px;
   border-radius: 10px;
@@ -76,7 +77,7 @@
 .flex {
   display: flex;
   flex-direction: row;
-  justify-content:center;
+  justify-content: center;
 }
 .flex_a {
   flex: 1;
@@ -110,7 +111,7 @@
   .base {
     width: 95%;
     height: auto;
-    transform: translate(-50%,0%);
+    transform: translate(-50%, 0%);
   }
   .left,
   .right {
@@ -138,7 +139,7 @@
   .base {
     width: 95%;
     height: auto;
-    transform: translate(-50%,0%);
+    transform: translate(-50%, 0%);
   }
   .left,
   .right {
@@ -160,7 +161,7 @@
   .base {
     width: 95%;
     height: auto;
-    transform: translate(-50%,0%);
+    transform: translate(-50%, 0%);
   }
   .left,
   .right {
