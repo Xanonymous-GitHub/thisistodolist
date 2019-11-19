@@ -44,6 +44,7 @@ func CheckCookie() gin.HandlerFunc {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
 			c.String(http.StatusUnauthorized, "your password is change")
+			c.Header("Cache-Control", "no-cache")
 			c.Redirect(301, "/login")
 			c.Abort()
 			return
