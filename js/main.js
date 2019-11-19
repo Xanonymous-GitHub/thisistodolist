@@ -10,7 +10,7 @@ $(function () {
         let $edit_btn = $("<button\>");
         let $chk_box = $("<input\>");
         $edit_btn.attr("disabled", true);
-        $del_btn.click( function (){
+        $del_btn.click(function () {
             $.ajax({
                 type: "DELETE",
                 url: "/todolist/" + $(this).attr("name"),
@@ -33,7 +33,7 @@ $(function () {
             "type": "checkbox",
             "name": item_id
         });
-        $chk_box.click(function(e) {
+        $chk_box.click(function (e) {
             let status = $(this).prop("checked");
             $(this).prop("checked", !status);
             $.ajax({
@@ -43,7 +43,7 @@ $(function () {
                 dataType: "JSON",
                 contentType: "application/json",
                 beforeSend: () => {
-                    
+
                 },
                 complete: () => {
 
@@ -80,15 +80,15 @@ $(function () {
                 .append(
                     divTemplate("flex-fill", user_input).css({ "word-break": "break-all", "display": "block" })
                 )
-                .attr({"id":item_id}));
+                .attr({ "id": item_id }));
     };
     $("body").css("background-color", "#9400D3");
-    $("#new_item").click( (e)=> {
+    $("#new_item").click((e) => {
         let user_input = $("#input_area").val();
         if (user_input.trim() != "") {
             // $("#input_area").val('');
             // $("#to_do_list_container").createNewItems(user_input, "000", false);
-            $.post("/todolist", JSON.stringify({ user_input: user_input }),  (data)=> {
+            $.post("/todolist", JSON.stringify({ user_input: user_input }), (data) => {
                 $("#input_area").val('');
                 $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
             }, "JSON").fail(() => { alert("Connection failed!"); });
@@ -104,7 +104,7 @@ $(function () {
             $("#new_item").click();
         }
     });
-    $.get("/todolist/lists",  (data)=> {
+    $.get("/todolist/lists", (data) => {
         for (let i = 0; i < data.length; i++) {
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
