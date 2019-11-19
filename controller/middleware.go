@@ -10,6 +10,7 @@ import (
 
 func CheckCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Cache-Control", "no-cache")
 		if c.Request.URL.Path == "/login" {
 			c.Next()
 		}
@@ -36,6 +37,7 @@ func CheckCookie() gin.HandlerFunc {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
 			c.String(http.StatusUnauthorized, "user is hasn't register")
+			c.Header("Cache-Control", "no-cache")
 			c.Redirect(301, "/register")
 			c.Abort()
 			return
