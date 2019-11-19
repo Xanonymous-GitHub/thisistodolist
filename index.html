@@ -1,62 +1,96 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/main_vue.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"
+      defer
+    ></script>
+    <link href="./css/main.css" type="text/css" rel="stylesheet" />
+    <title>This is To Do List</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue" defer></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"
-    defer></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"
-    defer></script>
-  <script src="js/main.js" defer></script>
-  <script src="js/main_vue.js" defer></script>
-  <link href="./css/main.css" type="text/css" rel="stylesheet" />
-  <title>This is To Do List</title>
-</head>
-
-<body>
-  <div id="base" class="base flex">
-    <div id="left" class="left flex_a">
-      <div id="my_personal_img" class="my_personal_img">
-        <img src="https://www.apple.com/v/home/eq/images/heroes/macbook-pro-16/hero__dvsxv8smkkgi_large.jpg"
-          alt="Xanonymous" style="border-radius:10px;" id="my_photo" />
-        <span class="my_status">
-          <img class="my_icon" src="https://github.githubassets.com/images/icons/emoji/octocat.png" alt="" />
-          {{ my_status }}</span>
-        <div class="container">
-          <button id="logout" type="button" class="btn btn-secondary btn-sm btn-block">登出</button> 
-        </div>
-
-      </div>
-    </div>
-    <div id="right" class="right flex_b">
-      <h1 class="main-title">
-        {{ title }}
-      </h1>
-      <div class="mx-2 my-3 to_do_list_title">
-        <div class="input-group">
-          <input type="text" class="form-control flex-fill" placeholder="請輸入待辦項目" aria-label="請輸入待辦項目"
-            aria-describedby="button-addon2" id="input_area" />
-          <div class="input-group-append">
-            <button class="btn btn-success" type="button" id="new_item">
-              新增
+  <body>
+    <div id="base" class="base flex">
+      <div id="left" class="left flex_a">
+        <div id="my_personal_img" class="my_personal_img">
+          <img
+            src="https://www.apple.com/v/home/eq/images/heroes/macbook-pro-16/hero__dvsxv8smkkgi_large.jpg"
+            alt="Xanonymous"
+            style="border-radius:10px;"
+            id="my_photo"
+          />
+          <span class="my_status">
+            <img
+              class="my_icon"
+              src="https://github.githubassets.com/images/icons/emoji/octocat.png"
+              alt=""
+            />
+            {{ my_status }}</span
+          >
+          <div class="container">
+            <button
+              id="logout"
+              type="button"
+              class="btn btn-secondary btn-sm btn-block"
+            >
+              登出
             </button>
           </div>
         </div>
       </div>
-      <div id="to_do_list_container">
+      <div id="right" class="right flex_b">
+        <h1 class="main-title">
+          {{ title }}
+        </h1>
+        <div class="mx-2 my-3 to_do_list_title">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control flex-fill"
+              placeholder="請輸入待辦項目"
+              aria-label="請輸入待辦項目"
+              aria-describedby="button-addon2"
+              id="input_area"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-success" type="button" id="new_item">
+                新增
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="to_do_list_container"></div>
       </div>
     </div>
-  </div>
-  
-</body>
-
+  </body>
 </html>

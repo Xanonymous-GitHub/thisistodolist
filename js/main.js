@@ -126,8 +126,8 @@ $(function () {
         }
     });
     $("#logout").click(function () {
-        JS_LIB.setCookie("username", "", -1);
-        JS_LIB.setCookie("password", "", -1);
+        Cookies.remove('username');
+        Cookies.remove('password');
         window.location.replace("./login");
     });
     $.get("/todolist/lists", (data) => {
