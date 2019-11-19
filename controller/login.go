@@ -52,6 +52,7 @@ func VerifiesUser(c *gin.Context) {
 
 	if db.Table("userinfo").Where("username=?", userinfo.Username).First(&userinfo).RecordNotFound() {
 		c.String(403, "")
+		return
 	}
 	if password == userinfo.Password {
 		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, true)
@@ -61,6 +62,9 @@ func VerifiesUser(c *gin.Context) {
 		c.String(403, "")
 	}
 
+}
+func Getsignup(c *gin.Context) {
+	c.HTML(200, "signup.html", nil)
 }
 func CreateNewuser(c *gin.Context) {
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist??charset=utf8&parseTime=True&loc=Local")

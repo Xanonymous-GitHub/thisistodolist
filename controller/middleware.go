@@ -8,8 +8,12 @@ import (
 
 func CheckCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate, value")
+		c.Header("Cache-Control", "no-cache")
 		if c.Request.URL.Path == "/login" {
+			c.Next()
+			return
+		}
+		if c.Request.URL.Path == "/signup" {
 			c.Next()
 			return
 		}
