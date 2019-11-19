@@ -1,15 +1,16 @@
-package main
+package controller
 
 import (
+	"../model"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
-func getlogin(c *gin.Context) {
+func Getlogin(c *gin.Context) {
 	c.HTML(200, "login.html", nil)
 }
-func verifiesUser(c *gin.Context) {
-	var userinfo LoginForm
+func VerifiesUser(c *gin.Context) {
+	var userinfo model.LoginForm
 	c.BindJSON(&userinfo)
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
@@ -26,13 +27,13 @@ func verifiesUser(c *gin.Context) {
 		c.String(200, "")
 	}
 }
-func createNewuser(c *gin.Context) {
+func CreateNewuser(c *gin.Context) {
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist??charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
 	}
-	var newuser LoginForm
+	var newuser model.LoginForm
 	c.BindJSON(&newuser)
 	err = db.Create(&newuser).Error
 	if err != nil {
@@ -44,6 +45,6 @@ func createNewuser(c *gin.Context) {
 	}
 
 }
-func logout(c *gin.Context) {
+func Logout(c *gin.Context) {
 
 }

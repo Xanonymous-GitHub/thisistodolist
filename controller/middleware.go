@@ -1,14 +1,18 @@
-package main
+package controller
 
 import (
 	"net/http"
 
+	"../model"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
-func checkCookie() gin.HandlerFunc {
+func CheckCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if c.Request.URL.Path == "/login" {
+			c.Next()
+		}
 		username, err := c.Cookie("username")
 		if err != nil {
 			c.Redirect(301, "/login")
@@ -27,8 +31,16 @@ func checkCookie() gin.HandlerFunc {
 		if err != nil {
 			panic("failed to connect database")
 		}
-		var userinfo LoginForm
-		if db.Table("userinfo").Where("username=? password=?", username, password).First(&userinfo).RecordNotFound() {
+		var userinfo model.LoginForm
+		if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
+			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
+			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
+			c.String(http.StatusUnauthorized, "user is hasn't register")
+			c.Redirect(301, "/register")
+			c.Abort()
+			return
+		}
+		if userinfo.Password != password {
 			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, true)
 			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, true)
 			c.String(http.StatusUnauthorized, "your password is change")
