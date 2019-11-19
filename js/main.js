@@ -128,7 +128,7 @@ $(function () {
     $("#logout").click(function () {
         JS_LIB.setCookie("username", "", -1);
         JS_LIB.setCookie("password", "", -1);
-        window.location.replace("./");
+        window.location.replace("./login");
     });
     $.get("/todolist/lists", (data) => {
         for (let i = 0; i < data.length; i++) {
