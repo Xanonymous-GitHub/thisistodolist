@@ -40,8 +40,8 @@ $(function () {
                 type: "PUT",
                 url: "/todolist/" + $(this).attr("name") + "/status",
                 data: JSON.stringify({ status: status }),
-                dataType: "JSON",
-                contentType: "application/json",
+                // dataType: "JSON",
+                // contentType: "application/json",
                 beforeSend: () => {
 
                 },
@@ -87,11 +87,11 @@ $(function () {
         let user_input = $("#input_area").val();
         $("#input_area").val('');
         if (user_input.trim() != "") {
-            $("#input_area").val('');
-            $("#to_do_list_container").createNewItems(user_input, "000", false);
-            // $.post("/todolist", JSON.stringify({ user_input: user_input }), (data) => {
-            //     $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
-            // }, "JSON").fail(() => { alert("Connection failed!"); });
+            // $("#input_area").val('');
+            // $("#to_do_list_container").createNewItems(user_input, "000", false);
+            $.post("/todolist", JSON.stringify({ user_input: user_input }), (data) => {
+                $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
+            }).fail(() => { alert("Connection failed!"); });
         }
         else {
             alert("please input something!")
