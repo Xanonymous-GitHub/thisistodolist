@@ -23,7 +23,7 @@ func Getlists(c *gin.Context) {
 		panic("failed to connect database")
 	}
 	var todos []model.TodoSQLmodel
-	if username == "admin" {
+	if username == "admin@admin.com" {
 		db.Table("todo").Find(&todos)
 	} else {
 		err = db.Table("todo").Where("username=?", username).Find(&todos).Error
