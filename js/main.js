@@ -9,23 +9,23 @@ $(function () {
         let $del_btn = $("<button\>");
         let $edit_btn = $("<button\>");
         let $chk_box = $("<input\>");
+        $edit_btn.attr("disabled", true);
         $del_btn.click(() => {
             $.ajax({
                 type: "DELETE",
                 url: "/todolist/" + $(this).attr("name"),
                 beforeSend: () => {
-
+                    $(this).attr("disabled", true);
                 },
                 complete: () => {
-
+                    $(this).attr("disabled", false);
                 },
-                fail: () => {
-
+                error: (e) => {
+                    alert("Connection failed!");
+                    $(this).attr("disabled", false);
                 },
                 success: () => {
-                    $del_btn.parent().parent().parent().fadeOut(500, () => {
-                        $del_btn.remove();
-                    });
+                    $("#" + item_id).fadeOut(500).remove();
                 },
             });
         }).text("刪除").addClass("btn-sm btn-danger").attr("name", item_id);
@@ -33,7 +33,9 @@ $(function () {
             "type": "checkbox",
             "name": item_id
         });
-        $chk_box.click(() => {
+        $chk_box.click(function(e) {
+            let status = $(this).prop("checked");
+            $(this).prop("checked", !status);
             $.ajax({
                 type: "PUT",
                 url: "/todolist/" + $(this).attr("name") + "/status",
@@ -41,14 +43,13 @@ $(function () {
                 dataType: "JSON",
                 contentType: "application/json",
                 beforeSend: () => {
-                    let status = $(this).prop("checked");
-                    $(this).prop("checked", !status);
+                    
                 },
                 complete: () => {
 
                 },
-                fail: () => {
-
+                error: () => {
+                    alert("Connection failed!");
                 },
                 success: () => {
                     $chk_box.prop("checked", status);
@@ -78,14 +79,15 @@ $(function () {
                 )
                 .append(
                     divTemplate("flex-fill", user_input).css({ "word-break": "break-all", "display": "block" })
-                ));
+                )
+                .attr({"id":item_id}));
     };
     $("body").css("background-color", "#9400D3");
     $("#new_item").click( (e)=> {
         let user_input = $("#input_area").val();
         if (user_input.trim() != "") {
-            $("#input_area").val('');
-            $("#to_do_list_container").createNewItems(user_input, "000", false);
+            // $("#input_area").val('');
+            // $("#to_do_list_container").createNewItems(user_input, "000", false);
             $.post("/todolist", JSON.stringify({ user_input: user_input }),  (data)=> {
                 $("#input_area").val('');
                 $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
