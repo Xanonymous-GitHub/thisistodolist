@@ -19,8 +19,8 @@ $(function () {
         $(this)[0][1].value=md5($(this)[0][1].value);
         var formData = $(this).serializeObject();
         $(this)[0].reset();
-        $.post("/login", JSON.stringify(formData), (data) => {
+        $.post("/login", JSON.stringify(formData), function() {
             window.location.replace("./todolist");
-        }, "JSON").fail(() => { alert("Connection failed!"); });
+        }, "JSON").fail(function() { alert("Connection failed!"); });
     });
 });
