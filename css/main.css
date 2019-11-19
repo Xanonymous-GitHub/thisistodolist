@@ -2,14 +2,15 @@
 .base {
   background-color: wheat;
   position: relative;
-  width: 100%;
+  width: 95%;
   height: auto;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,0%);
+  transform: translate(-50%,5%);
   border-radius: 20px;
   box-shadow: 3px 3px 5px 6px rgb(42, 42, 42);
 }
+
 .left {
   height: auto;
   width: 40%;
@@ -75,6 +76,7 @@
 .flex {
   display: flex;
   flex-direction: row;
+  justify-content:center;
 }
 .flex_a {
   flex: 1;
@@ -106,8 +108,9 @@
 }
 @media (max-width: 650px) {
   .base {
-    width: auto;
+    width: 95%;
     height: auto;
+    transform: translate(-50%,0%);
   }
   .left,
   .right {
@@ -133,8 +136,9 @@
 }
 @media (max-width: 500px) {
   .base {
-    width: auto;
+    width: 95%;
     height: auto;
+    transform: translate(-50%,0%);
   }
   .left,
   .right {
@@ -154,8 +158,9 @@
 }
 @media (max-width: 350px) {
   .base {
-    width: auto;
+    width: 95%;
     height: auto;
+    transform: translate(-50%,0%);
   }
   .left,
   .right {
