@@ -67,7 +67,7 @@ func Getsignup(c *gin.Context) {
 	c.HTML(200, "signup.html", nil)
 }
 func CreateNewuser(c *gin.Context) {
-	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist??charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
