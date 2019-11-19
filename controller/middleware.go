@@ -11,6 +11,7 @@ func CheckCookie() gin.HandlerFunc {
 		c.Header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate, value")
 		if c.Request.URL.Path == "/login" {
 			c.Next()
+			return
 		}
 		username, err := c.Cookie("username")
 		if err != nil {
