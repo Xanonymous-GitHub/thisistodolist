@@ -16,8 +16,11 @@ $(function () {
     };
     $('#login').on('submit', function (e) {
         e.preventDefault();
-
+        $(this)[0][1].value=md5($(this)[0][1].value);
         var formData = $(this).serializeObject();
-        console.log(formData);
+        $(this)[0].reset();
+        $.post("/todolist/login", formData, (data) => {
+            window.location.replace("./todolist");
+        }, "JSON").fail(() => { alert("Connection failed!"); });
     });
 });

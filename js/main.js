@@ -85,13 +85,13 @@ $(function () {
     $("body").css("background-color", "#9400D3");
     $("#new_item").click((e) => {
         let user_input = $("#input_area").val();
+        $("#input_area").val('');
         if (user_input.trim() != "") {
-            // $("#input_area").val('');
-            // $("#to_do_list_container").createNewItems(user_input, "000", false);
-            $.post("/todolist", JSON.stringify({ user_input: user_input }), (data) => {
-                $("#input_area").val('');
-                $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
-            }, "JSON").fail(() => { alert("Connection failed!"); });
+            $("#input_area").val('');
+            $("#to_do_list_container").createNewItems(user_input, "000", false);
+            // $.post("/todolist", JSON.stringify({ user_input: user_input }), (data) => {
+            //     $("#to_do_list_container").createNewItems(user_input, data.item_id, false);
+            // }, "JSON").fail(() => { alert("Connection failed!"); });
         }
         else {
             alert("please input something!")
@@ -108,5 +108,5 @@ $(function () {
         for (let i = 0; i < data.length; i++) {
             $("#to_do_list_container").createNewItems(data[i].user_input, data[i].item_id, data[i].status);
         }
-    }).fail(() => { alert("Connection failed!"); });
+    }).fail(() => { /*not login*/ });
 });
