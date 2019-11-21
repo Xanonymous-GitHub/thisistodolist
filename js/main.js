@@ -126,10 +126,10 @@ $(function () {
         }
     });
     $("#logout").click(function () {
-        Cookies.set("username", "", { domain: '35.189.167.203' });
-        Cookies.set("password", "", { domain: '35.189.167.203' });
-        Cookies.remove('username');
-        Cookies.remove('password');
+        // Cookies.set("username", "", { domain: '35.189.167.203' });
+        Cookies.set("sessionID", "", { domain: '35.189.167.203' });
+        Cookies.remove('sessionID');
+        // Cookies.remove('password');
         window.location.replace("./login");
     });
     $.get("/todolist/lists", (data) => {
