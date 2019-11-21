@@ -12,11 +12,7 @@ func Gettingtodolist(c *gin.Context) {
 	c.HTML(200, "index.html", nil)
 }
 func Getlists(c *gin.Context) {
-	username, err := c.Cookie("username")
-	if err != nil {
-		c.String(403, "")
-		return
-	}
+	username := c.MustGet("username").(string)
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
@@ -42,10 +38,7 @@ func Newtodo(c *gin.Context) {
 	}
 	var newtodo model.TodoSQLmodel
 	c.BindJSON(&newtodo)
-	newtodo.Username, err = c.Cookie("username")
-	if err != nil {
-		panic("cookie get error")
-	}
+	newtodo.Username = c.MustGet("username").(string)
 	if newtodo.Describe == "" {
 		c.JSON(403, nil)
 	} else {

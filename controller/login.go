@@ -1,18 +1,15 @@
 package controller
 
 import (
+	"time"
+
 	"../model"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
 func Getlogin(c *gin.Context) {
-	username, err := c.Cookie("username")
-	if err != nil {
-		c.HTML(200, "login.html", nil)
-		return
-	}
-	password, err := c.Cookie("password")
+	sessionID, err := c.Cookie("sessionID")
 	if err != nil {
 		c.HTML(200, "login.html", nil)
 		return
@@ -23,24 +20,29 @@ func Getlogin(c *gin.Context) {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	var userinfo model.LoginForm
-	if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
-		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, false)
-		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, false)
+	var session model.SessionMysqlModel
+	if db.Table("session").Where("sessionId = ?", sessionID).First(&session).RecordNotFound() {
+		c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
 		c.HTML(200, "login.html", nil)
 		return
 	}
-	if userinfo.Password != password {
-		c.SetCookie("username", "", -1, "/", "35.189.167.203", false, false)
-		c.SetCookie("password", "", -1, "/", "35.189.167.203", false, false)
+	if session.ClientIP != c.ClientIP() {
+		c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
 		c.HTML(200, "login.html", nil)
 		return
 	}
-
+	diff := time.Now().Sub(session.CreateTime)
+	if diff.Seconds() > 1000 {
+		c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+		c.HTML(200, "login.html", nil)
+		return
+	}
 	c.Redirect(302, "/todolist")
+
 }
 func VerifiesUser(c *gin.Context) {
 	var userinfo model.LoginForm
+	var session model.SessionMysqlModel
 	c.BindJSON(&userinfo)
 	password := userinfo.Password
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
@@ -55,8 +57,8 @@ func VerifiesUser(c *gin.Context) {
 		return
 	}
 	if password == userinfo.Password {
-		c.SetCookie("username", userinfo.Username, 1000, "/", "35.189.167.203", false, false)
-		c.SetCookie("password", userinfo.Password, 1000, "/", "35.189.167.203", false, false)
+		session.SetSession(userinfo.Username, c.ClientIP())
+		c.SetCookie("sessionID", session.SessionID, 1000, "/", "35.189.167.203", false, false)
 		c.JSON(200, `{ mes:"ok"}`)
 	} else {
 		c.String(403, "")
@@ -78,12 +80,7 @@ func CreateNewuser(c *gin.Context) {
 	if err != nil {
 		c.String(403, "")
 	} else {
-		c.SetCookie("username", newuser.Username, 1000, "/", "35.189.167.203", false, false)
-		c.SetCookie("password", newuser.Password, 1000, "/", "35.189.167.203", false, false)
-		c.String(200, "")
+		c.Redirect(302, "/login")
 	}
-
-}
-func Logout(c *gin.Context) {
 
 }

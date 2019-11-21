@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"time"
+
 	"../model"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -17,13 +19,7 @@ func CheckCookie() gin.HandlerFunc {
 			c.Next()
 			return
 		}
-		username, err := c.Cookie("username")
-		if err != nil {
-			c.Redirect(302, "/login")
-			c.Abort()
-			return
-		}
-		password, err := c.Cookie("password")
+		sessionID, err := c.Cookie("sessionID")
 		if err != nil {
 			c.Redirect(302, "/login")
 			c.Abort()
@@ -35,22 +31,27 @@ func CheckCookie() gin.HandlerFunc {
 		if err != nil {
 			panic("failed to connect database")
 		}
-		var userinfo model.LoginForm
-		if db.Table("userinfo").Where("username = ?", username).First(&userinfo).RecordNotFound() {
-			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, false)
-			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, false)
+		var session model.SessionMysqlModel
+		if db.Table("session").Where("sessionId = ?", sessionID).First(&session).RecordNotFound() {
+			c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
 			c.Redirect(302, "/login")
 			c.Abort()
 			return
 		}
-		if userinfo.Password != password {
-			c.SetCookie("username", "", -1, "/", "35.189.167.203", false, false)
-			c.SetCookie("password", "", -1, "/", "35.189.167.203", false, false)
+		if session.ClientIP != c.ClientIP() {
+			c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
 			c.Redirect(302, "/login")
 			c.Abort()
 			return
 		}
-
+		diff := time.Now().Sub(session.CreateTime)
+		if diff.Seconds() > 1000 {
+			c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+			c.Redirect(302, "/login")
+			c.Abort()
+			return
+		}
+		c.Set("username", session.Username)
 		c.Next()
 	}
 }
