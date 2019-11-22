@@ -1,5 +1,37 @@
 <template>
   <v-app>
+    <!-- main list -->
+    <v-card class="mx-auto my-2" max-width="100%" width="98%">
+      <v-list shaped>
+        <v-list-item-group v-model="model" multiple>
+          <template v-for="(item, i) in todo_list">
+            <v-divider v-if="!item" :key="`divider-${i}`"></v-divider>
+            <v-list-item
+              v-else
+              :key="`item-${i}`"
+              :value="item"
+              active-class="deep-purple--text text--accent-4"
+            >
+              <template v-slot:default="{ active, toggle }">
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.text"></v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-checkbox
+                    :input-value="active"
+                    :true-value="item"
+                    color="deep-purple accent-4"
+                    @click="toggle"
+                  ></v-checkbox>
+                </v-list-item-action>
+              </template>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+<!-- top bar -->
     <v-content>
       <v-app-bar app clipped-left color="purple darken-2">
         <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer" />
@@ -8,13 +40,17 @@
 
         <v-spacer />
       </v-app-bar>
-
+<!-- nav drawer -->
       <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4">
         <v-list dense class="grey lighten-4">
           <template v-for="(item, i) in items">
             <v-row v-if="item.heading" :key="i" align="center">
               <v-col cols="6">
-                <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
+                <v-subheader v-if="item.heading">
+                  {{
+                  item.heading
+                  }}
+                </v-subheader>
               </v-col>
               <v-col cols="6" class="text-right">
                 <!--<v-btn small text>edit</v-btn>-->
@@ -28,16 +64,24 @@
               </v-list-item-action>
               -->
               <v-list-item-content>
-                <v-list-item-title class="black--text">{{ item.text }}</v-list-item-title>
+                <v-list-item-title class="black--text">
+                  {{
+                  item.text
+                  }}
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </template>
         </v-list>
+        <template v-slot:append>
+          <div class="pa-2">
+            <v-btn class="amber" block>登出</v-btn>
+          </div>
+        </template>
       </v-navigation-drawer>
     </v-content>
-
+<!-- blue button -->
     <v-card id="create">
-      
       <v-speed-dial
         v-model="fab"
         :top="top"
@@ -65,18 +109,33 @@
         </v-btn>
       </v-speed-dial>
     </v-card>
-
   </v-app>
 </template>
-
 <script>
 export default {
-    name:'todolist',
+  name: "todolist",
   props: {
     source: String
   },
+  methods:{
+    getdata:()=>{
+      
+    },
+  },
   data: () => ({
     drawer: null,
+    todo_list: [
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" },
+      { u_uuid: "", text: "立委好帥" }
+    ],
     items: [
       { icon: "lightbulb_outline", text: "記事" },
       { icon: "touch_app", text: "提醒" },
@@ -136,7 +195,6 @@ export default {
 #create .v-speed-dial {
   position: fixed;
 }
-
 #create .v-btn--floating {
   position: relative;
 }
