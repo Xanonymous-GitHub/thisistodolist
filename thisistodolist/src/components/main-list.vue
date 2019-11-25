@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-2 my-2" max-width="98%">
-    <v-list shaped>
+    <v-list v-show="haveitems" shaped>
       <v-list-item-group v-model="model" multiple>
         <template v-for="(item, i) in items">
           <v-divider v-if="!item" :key="`divider-${i}`"></v-divider>
@@ -35,29 +35,33 @@
 <script>
 import axios from "axios";
 export default {
-  created: function() {
-    axios
-      .get("/lists")
-      .then(function(data) {
-        data.forEach(i => {
-          if (i.status == "false") {
-            this.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
-            // this.model.push(`"${i.uuid}"`);
-          }
-        });
-      })
-      .catch(function() {
-        // console.log(e);
-        this.items = [];
-      });
-  },
   data: () => ({
+    haveitems:true,
     items: [
       { uuid: "123123", text: "test" },
 
     ],
     model: ["123123"]
-  })
+  }),
+  created: function() {
+    //this.items = [];
+    axios
+      .get("/lists")
+      .then(function(data) {
+        this.haveitems=true;
+        data.forEach(i => {
+          this.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
+          if (i.status == "true") {
+            this.model.push(`"${i.uuid}"`);
+          }
+        });
+      })
+      .catch(function() {
+        // console.log(e);
+        this.haveitems=false;
+        this.items = [];
+      });
+  },
 };
 </script>
 
