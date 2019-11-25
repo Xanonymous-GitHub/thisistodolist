@@ -1,23 +1,13 @@
 <template>
-  <v-app>
-    <v-content>
-      <todolist />
-    </v-content>
-  </v-app>
+  <div id="app">
+    <router-link to="/"></router-link>
+    <router-link to="/about"></router-link>
+    <router-view />
+  </div>
 </template>
 
-<script>
-//import HelloWorld from './components/HelloWorld';
-import todolist from './components/todolist'
-export default {
-  name: 'App',
-
-  components: {
-    todolist
-  },
-
-  data: () => ({
-    //
-  }),
-};
-</script>
+<style scope>
+#app {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
