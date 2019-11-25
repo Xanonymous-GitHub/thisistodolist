@@ -4,7 +4,7 @@
     <v-card class="mx-auto my-2" max-width="100%" width="98%">
       <v-list shaped>
         <v-list-item-group v-model="model" multiple>
-          <template v-for="(item, i) in todo_list">
+          <template v-for="(item, i) in todo_list" id="main_list">
             <v-divider v-if="!item" :key="`divider-${i}`"></v-divider>
             <v-list-item
               v-else
@@ -28,10 +28,11 @@
               </template>
             </v-list-item>
           </template>
+            
         </v-list-item-group>
       </v-list>
     </v-card>
-<!-- top bar -->
+    <!-- top bar -->
     <v-content>
       <v-app-bar app clipped-left color="purple darken-2">
         <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer" />
@@ -40,7 +41,7 @@
 
         <v-spacer />
       </v-app-bar>
-<!-- nav drawer -->
+      <!-- nav drawer -->
       <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4">
         <v-list dense class="grey lighten-4">
           <template v-for="(item, i) in items">
@@ -80,7 +81,7 @@
         </template>
       </v-navigation-drawer>
     </v-content>
-<!-- blue button -->
+    <!-- blue button -->
     <v-card id="create">
       <v-speed-dial
         v-model="fab"
@@ -112,17 +113,30 @@
   </v-app>
 </template>
 <script>
+//import axios from 'axios'
+// import Vue from 'vue'
+
 export default {
   name: "todolist",
   props: {
     source: String
   },
-  methods:{
-    getdata:()=>{
-      
-    },
+  methods: {
+    create: () => {
+      this.test = "5644565";
+      // alert("123132312132132");
+      fetch("http://time.jsontest.com/")
+        .then(res => res.json())
+        .then(data => {
+          alert("02.");
+          this.todo_list = data;
+        });
+    }
   },
+
   data: () => ({
+    test: "",
+    list: [],
     drawer: null,
     todo_list: [
       { u_uuid: "", text: "立委好帥" },
