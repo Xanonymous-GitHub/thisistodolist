@@ -10,10 +10,11 @@
                 <v-spacer />
               </v-toolbar>
               <v-card-text>
-                <v-form v-model="valid" ref="form">
+                <v-form v-model="valid" ref="form" :lazy-validation="lazy"> 
                   <v-text-field
                     v-model="id"
                     label="帳號"
+                    :rules="emailRules"
                     name="login"
                     prepend-icon="mdi-login"
                     type="text"
@@ -22,13 +23,20 @@
                   <v-text-field
                     id="password"
                     label="密碼"
+                    :rules="pswdRules"
                     name="password"
                     prepend-icon="mdi-lock"
                     type="password"
                     v-model="pswd"
                     required
                   />
-                  <v-btn @click="validate" :disabled="!valid" color="amber">登入</v-btn>
+                  <v-btn
+                    class="mx-2"
+                    @click="validate"
+                    :disabled="!valid || !id || !pswd"
+                    color="light-green accent-3"
+                  >登入</v-btn>
+                  <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -47,24 +55,35 @@ export default {
   data: function() {
     return {
       valid: true,
+      lazy: true,
       id: "",
       pswd: "",
-      self
+      self,
+      emailRules: [
+        v => !!v || "請填入有效電子郵件!",
+        v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
+      ],
+      pswdRules: [
+        v => !!v || "請輸入密碼!",
+      ]
     };
   },
-  // created: function() {
-  //   this.self = this;
-  // },
+  created: function() {
+    this.s_self = this;
+    this.valid = false;
+  },
   methods: {
+    signup: function() {
+      window.location.replace("./signup");
+    },
     validate: function() {
       if (this.$refs.form.validate()) {
-
         let sha256 = require("js-sha256").sha256;
         this.pswd = sha256(this.pswd);
         axios
           .post(
             "/signin",
-            JSON.stringify({ username: this.id, password: this.pswd }),
+            JSON.stringify({ username: this.id.trim(), password: this.pswd }),
             {
               headers: {
                 "Content-Type": "application/json;charset=UTF-8"
@@ -75,11 +94,13 @@ export default {
             window.location.replace("./");
           })
           .catch(function() {
-            //
+            alert("伺服器通訊失敗！");
           });
       }
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      else{
+        alert("密碼或帳號驗證未通過！");
+      }
+      this.$refs.form.reset()
     }
   }
 };
