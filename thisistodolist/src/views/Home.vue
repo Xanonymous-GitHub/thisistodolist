@@ -144,6 +144,7 @@ export default {
   },
   methods: {
     logout: () => {
+      this.$cookie.delete('test');
       window.location.replace("./signin");
     }
   }

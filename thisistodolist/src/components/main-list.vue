@@ -50,8 +50,9 @@ export default {
       .get("/lists")
       .then(function(data) {
         self.haveitems=true;
+        self.items=data;
         data.forEach(i => {
-          self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
+          // self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
           if (i.status == "true") {
             self.model.push(`"${i.uuid}"`);
           }
