@@ -1,45 +1,11 @@
 package controller
 
 import (
-	"time"
-
 	"../model"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
-func Getlogin(c *gin.Context) {
-	sessionID, err := c.Cookie("sessionID")
-	if err != nil {
-		c.HTML(200, "login.html", nil)
-		return
-	}
-	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
-	defer db.Close()
-
-	if err != nil {
-		panic("failed to connect database")
-	}
-	var session model.SessionMysqlModel
-	if db.Table("session").Where("sessionId = ?", sessionID).First(&session).RecordNotFound() {
-		c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
-		c.HTML(200, "login.html", nil)
-		return
-	}
-	if session.ClientIP != c.ClientIP() {
-		c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
-		c.HTML(200, "login.html", nil)
-		return
-	}
-	diff := time.Now().Sub(session.CreateTime)
-	if diff.Seconds() > 1000 {
-		c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
-		c.HTML(200, "login.html", nil)
-		return
-	}
-	c.Redirect(302, "/todolist")
-
-}
 func VerifiesUser(c *gin.Context) {
 	var userinfo model.LoginForm
 	var session model.SessionMysqlModel
