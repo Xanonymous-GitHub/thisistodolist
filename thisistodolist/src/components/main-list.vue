@@ -45,21 +45,22 @@ export default {
   }),
   created: function() {
     //this.items = [];
+    let self = this;
     axios
       .get("/lists")
       .then(function(data) {
-        this.haveitems=true;
+        self.haveitems=true;
         data.forEach(i => {
-          this.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
+          self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
           if (i.status == "true") {
-            this.model.push(`"${i.uuid}"`);
+            self.model.push(`"${i.uuid}"`);
           }
         });
       })
       .catch(function() {
         // console.log(e);
-        this.haveitems=false;
-        this.items = [];
+        self.haveitems=false;
+        self.items = [];
       });
   },
 };
