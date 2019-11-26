@@ -32,7 +32,7 @@
       <template v-slot:append>
         <div class="pa-2">
           <v-btn @click="logout" color="amber" block>
-            <v-icon dark left>mdi-arrow-left</v-icon>登出
+            <v-icon dark left>mdi-arrow-left</v-icon> <router-link to="/signin" tag="button" replace>登出</router-link> 
           </v-btn>
         </div>
       </template>
@@ -144,7 +144,7 @@ export default {
   },
   methods: {
     logout: () => {
-      window.location.replace("#/signin");
+      window.location.replace("./signin");
     }
   }
 };
