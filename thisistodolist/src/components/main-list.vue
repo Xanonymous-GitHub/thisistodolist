@@ -36,21 +36,18 @@
 import axios from "axios";
 export default {
   data: () => ({
-    haveitems:false,
-    items: [
-      { uuid: "123123", text: "test" },
-
-    ],
+    haveitems: true,
+    items: [{ item_id: "123123", user_input: "test", status: true }],
     model: ["123123"]
   }),
   created: function() {
     //this.items = [];
-    let self = this;
+    var self = this;
     axios
       .get("/lists")
       .then(function(data) {
-        self.haveitems=true;
-        self.items=data;
+        self.haveitems = true;
+        self.items = data;
         data.forEach(i => {
           //self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
           if (i.status == true) {
@@ -60,10 +57,10 @@ export default {
       })
       .catch(function() {
         // console.log(e);
-        self.haveitems=false;
-        self.items = [];
+        //self.haveitems=false;
+        //self.items = [];
       });
-  },
+  }
 };
 </script>
 
