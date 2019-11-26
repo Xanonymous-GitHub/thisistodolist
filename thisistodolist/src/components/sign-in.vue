@@ -58,6 +58,7 @@ export default {
   methods: {
     validate: function() {
       if (this.$refs.form.validate()) {
+
         let sha256 = require("js-sha256").sha256;
         this.pswd = sha256(this.pswd);
         axios
@@ -77,6 +78,8 @@ export default {
             //
           });
       }
+      this.$refs.form.reset();
+      this.$refs.form.resetValidation();
     }
   }
 };
