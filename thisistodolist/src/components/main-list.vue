@@ -51,10 +51,10 @@ export default {
         self.items = [];
         for (let i = 0; i < data.length; i++) {
           self.items.unshift(
-            `{item_id:"${data[i].item_id}",user_input:"${data[i].user_input}"`
+            {item_id:data[i].item_id,user_input:data[i].user_input}
           );
           if (data[i].status == true) {
-            self.model.push(`"${data[i].item_id}"`);
+            self.model.push(data[i].item_id);
           }
         }
       })
