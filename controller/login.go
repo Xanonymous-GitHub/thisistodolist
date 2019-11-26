@@ -80,7 +80,7 @@ func CreateNewuser(c *gin.Context) {
 	if err != nil {
 		c.String(403, "")
 	} else {
-		c.Redirect(302, "/login")
+		c.Redirect(302, "/signin")
 	}
 
 }
