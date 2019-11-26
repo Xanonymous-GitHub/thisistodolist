@@ -30,11 +30,17 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        <div @click="logout" class="pa-2">
+        
+        <div @click="logout" class="pa-5 text-center">
+          <router-link to="/signin" tag="button" replace>
           <v-btn  color="amber" block>
-            <v-icon dark left>mdi-arrow-left</v-icon> <router-link to="/signin" tag="button" replace>登出</router-link> 
+            
+            <v-icon dark left>mdi-arrow-left</v-icon> 登出
+            
           </v-btn>
+          </router-link> 
         </div>
+        
       </template>
     </v-navigation-drawer>
 
@@ -46,7 +52,9 @@
     </v-app-bar>
 
     <v-content>
+      <transition>
       <router-view></router-view>
+      </transition>
       <!-- <v-container class="fill-height" fluid>
         
       </v-container>-->
@@ -93,11 +101,12 @@
 </template>
 
 <script>
+//import Cookies from "https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"
 export default {
   name: "home",
   components: {},
   data: () => ({
-    version: "0.1.alpha",
+    version: "alpha",
     items: [
       { title: "Dashboard", icon: "dashboard" },
       { title: "Account", icon: "account_box" },
@@ -144,7 +153,10 @@ export default {
   },
   methods: {
     logout: () => {
-      this.$cookie.delete('test');
+      // Cookies.set("sessionID", "", { domain: '35.189.167.203' });
+      // Cookies.remove('sessionID');
+      window.$cookies.set('sessionID','-1');
+      document.cookie='';
       window.location.replace("./signin");
     }
   }

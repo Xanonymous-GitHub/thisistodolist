@@ -37,8 +37,8 @@ import axios from "axios";
 export default {
   data: () => ({
     haveitems: false,
-    items: [{ item_id: "123123", user_input: "test", status: true }],
-    model: ["123123"]
+    items: [],
+    model: []
   }),
   created: function() {
     //this.items = [];
