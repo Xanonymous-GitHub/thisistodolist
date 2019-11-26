@@ -30,8 +30,8 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        <div class="pa-2">
-          <v-btn @click="logout" color="amber" block>
+        <div @click="logout" class="pa-2">
+          <v-btn  color="amber" block>
             <v-icon dark left>mdi-arrow-left</v-icon> <router-link to="/signin" tag="button" replace>登出</router-link> 
           </v-btn>
         </div>
