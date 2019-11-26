@@ -14,7 +14,7 @@ func main() {
 	router.Static("/css", "./css")
 	router.Static("/js", "./js")
 	router.Use(controller.CheckCookie())
-	router.GET("/*any", controller.Gettingtodolist)
+	router.NoRoute(controller.Gettingtodolist)
 	router.POST("/todolist", controller.Newtodo)
 	router.PUT("/todolist/:id/describe", controller.ChangeDescribe)
 	router.PUT("/todolist/:id/status", controller.ChangeStatus)
