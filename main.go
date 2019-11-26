@@ -13,6 +13,7 @@ func main() {
 	router.LoadHTMLGlob("./*.html")
 	router.Static("/css", "./css")
 	router.Static("/js", "./js")
+	router.StaticFile("/favicon.ico", "./favicon.ico")
 	router.Use(controller.CheckCookie())
 	router.GET("/lists", controller.Getlists)
 	router.POST("/todolist", controller.Newtodo)
