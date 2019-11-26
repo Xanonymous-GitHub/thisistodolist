@@ -7,13 +7,13 @@
 
           <v-list-item
             v-else
-            :key="`${item.uuid}`"
-            :value="item.uuid"
+            :key="`${item.item_id}`"
+            :value="item.item_id"
             active-class="deep-purple--text text--accent-4"
           >
             <template v-slot:default="{ active, toggle }">
               <v-list-item-content>
-                <v-list-item-title v-text="item.text"></v-list-item-title>
+                <v-list-item-title v-text="item.user_input"></v-list-item-title>
               </v-list-item-content>
 
               <v-list-item-action>
@@ -36,7 +36,7 @@
 import axios from "axios";
 export default {
   data: () => ({
-    haveitems:true,
+    haveitems:false,
     items: [
       { uuid: "123123", text: "test" },
 
@@ -52,8 +52,8 @@ export default {
         self.haveitems=true;
         self.items=data;
         data.forEach(i => {
-          // self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
-          if (i.status == "true") {
+          //self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
+          if (i.status == true) {
             self.model.push(`"${i.uuid}"`);
           }
         });
