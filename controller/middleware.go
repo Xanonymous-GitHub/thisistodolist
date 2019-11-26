@@ -11,7 +11,7 @@ import (
 func CheckCookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Cache-Control", "no-cache")
-		if c.Request.URL.Path == "/signin" {
+		if c.Request.URL.Path == "/signin" || c.Request.URL.Path == "/signup" {
 			sessionID, err := c.Cookie("sessionID")
 			if err != nil {
 				c.Next()
@@ -41,12 +41,10 @@ func CheckCookie() gin.HandlerFunc {
 				return
 			}
 			c.Redirect(302, "/todolist")
+			c.Abort()
 			return
 		}
-		if c.Request.URL.Path == "/signup" {
-			c.Next()
-			return
-		}
+
 		sessionID, err := c.Cookie("sessionID")
 		if err != nil {
 			c.Redirect(302, "/signin")
