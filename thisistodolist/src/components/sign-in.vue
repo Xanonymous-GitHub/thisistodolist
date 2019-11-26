@@ -61,7 +61,15 @@ export default {
         let sha256 = require("js-sha256").sha256;
         this.pswd = sha256(this.pswd);
         axios
-          .post("/signin", `{"username":${this.id},"password":${this.pswd}}`)
+          .post(
+            "/signin",
+            JSON.stringify({ username: this.id, password: this.pswd }),
+            {
+              headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+              }
+            }
+          )
           .then(function() {
             window.location.replace("./");
           })
