@@ -36,7 +36,7 @@
 import axios from "axios";
 export default {
   data: () => ({
-    haveitems: true,
+    haveitems: false,
     items: [{ item_id: "123123", user_input: "test", status: true }],
     model: ["123123"]
   }),
@@ -47,13 +47,16 @@ export default {
       .get("/lists")
       .then(function(data) {
         self.haveitems = true;
-        self.items = data;
-        data.forEach(i => {
-          //self.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
-          if (i.status == true) {
-            self.model.push(`"${i.uuid}"`);
+        //self.items = data;
+        self.items = [];
+        for (let i = 0; i < data.length; i++) {
+          self.items.unshift(
+            `{item_id:"${data[i].item_id}",user_input:"${data[i].user_input}"`
+          );
+          if (data[i].status == true) {
+            self.model.push(`"${data[i].item_id}"`);
           }
-        });
+        }
       })
       .catch(function() {
         // console.log(e);
