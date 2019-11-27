@@ -42,12 +42,19 @@
                   />
                   <v-btn
                     @click="validate"
-                    :disabled="!valid || !id || !pswd ||!pswd_s||!this.validateRecaptcha"
+                    :disabled="
+                      !valid ||
+                        !id ||
+                        !pswd ||
+                        !pswd_s ||
+                        !this.validateRecaptcha
+                    "
                     color="red"
-                  >註冊</v-btn>
+                    >註冊</v-btn
+                  >
                   <v-btn class="mx-2" @click="signin" color="amber">登入</v-btn>
                 </v-form>
-                <Recaptcha class="my-2" @validate="recapchavalidate"/>
+                <Recaptcha class="my-2" @validate="recapchavalidate" />
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -126,5 +133,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

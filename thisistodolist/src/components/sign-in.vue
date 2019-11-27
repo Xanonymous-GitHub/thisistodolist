@@ -10,7 +10,7 @@
                 <v-spacer />
               </v-toolbar>
               <v-card-text>
-                <v-form v-model="valid" ref="form" :lazy-validation="lazy"> 
+                <v-form v-model="valid" ref="form" :lazy-validation="lazy">
                   <v-text-field
                     v-model="id"
                     label="帳號"
@@ -35,7 +35,8 @@
                     @click="validate"
                     :disabled="!valid || !id || !pswd"
                     color="light-green accent-3"
-                  >登入</v-btn>
+                    >登入</v-btn
+                  >
                   <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
                 </v-form>
               </v-card-text>
@@ -63,9 +64,7 @@ export default {
         v => !!v || "請填入有效電子郵件!",
         v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
       ],
-      pswdRules: [
-        v => !!v || "請輸入密碼!",
-      ]
+      pswdRules: [v => !!v || "請輸入密碼!"]
     };
   },
   created: function() {
@@ -94,17 +93,15 @@ export default {
             window.location.replace("./");
           })
           .catch(function() {
-            alert("伺服器通訊失敗！");
+            alert("帳號或密碼錯誤！登入失敗！");
           });
-      }
-      else{
+      } else {
         alert("密碼或帳號驗證未通過！");
       }
-      this.$refs.form.reset()
+      this.$refs.form.reset();
     }
   }
 };
 </script>
 
-<style>
-</style>
+<style></style>

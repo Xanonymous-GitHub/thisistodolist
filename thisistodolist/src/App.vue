@@ -3,7 +3,7 @@
     <!-- <router-link to="/"></router-link>
     <router-link to="/about"></router-link> -->
     <transition>
-    <router-view />
+      <router-view />
     </transition>
   </div>
 </template>

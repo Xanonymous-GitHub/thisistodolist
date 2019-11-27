@@ -1,6 +1,11 @@
- <template>
-  <VueRecaptcha :sitekey="this.sitekey" :loadRecaptchaScript="true" @verify="validate" />
+<template>
+  <VueRecaptcha
+    :sitekey="this.sitekey"
+    :loadRecaptchaScript="true"
+    @verify="validate"
+  />
 </template>
+
 <script>
 import VueRecaptcha from "vue-recaptcha";
 import Validation from "@/services/recaptchaValidate.js";

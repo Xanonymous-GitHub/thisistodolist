@@ -30,17 +30,13 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        
         <div @click="logout" class="pa-5 text-center">
           <router-link to="/signin" tag="button" replace>
-          <v-btn  color="amber" block>
-            
-            <v-icon dark left>mdi-arrow-left</v-icon> 登出
-            
-          </v-btn>
-          </router-link> 
+            <v-btn color="amber" block>
+              <v-icon dark left>mdi-arrow-left</v-icon> 登出
+            </v-btn>
+          </router-link>
         </div>
-        
       </template>
     </v-navigation-drawer>
 
@@ -53,7 +49,7 @@
 
     <v-content>
       <transition>
-      <router-view></router-view>
+        <router-view></router-view>
       </transition>
       <!-- <v-container class="fill-height" fluid>
         
@@ -95,17 +91,19 @@
       </v-speed-dial>
     </v-card>
     <v-footer color="purple darken-3" app>
-      <span class="white--text">Copyright &copy; NPC GO version {{version}}</span>
+      <span class="white--text"
+        >Copyright &copy; NPC GO version {{ version }}</span
+      >
     </v-footer>
   </v-app>
 </template>
 
 <script>
-//import Cookies from "https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"
 export default {
   name: "home",
   components: {},
   data: () => ({
+    s_self:this,
     version: "alpha",
     items: [
       { title: "Dashboard", icon: "dashboard" },
@@ -152,20 +150,17 @@ export default {
     }
   },
   methods: {
-    logout: () => {
-      // Cookies.set("sessionID", "", { domain: '35.189.167.203' });
-      // Cookies.remove('sessionID');
-      window.$cookies.set('sessionID','-1');
-      document.cookie='';
+    logout: function() {
+      this.$cookie.delete("sessionID");
       window.location.replace("./signin");
     }
-  }
+  },
 };
 </script>
 <style scoped>
 #create .v-speed-dial {
   position: fixed;
-  z-index:5;
+  z-index: 5;
 }
 
 #create .v-btn--floating {
