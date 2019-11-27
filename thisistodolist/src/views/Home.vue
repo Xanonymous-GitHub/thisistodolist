@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer class="py-10" v-model="drawer" app>
       <v-list dense>
-        <v-list-item link>
+        <v-list-item @click="toppage">
           <v-list-item-action>
             <v-icon>mdi-apple</v-icon>
           </v-list-item-action>
@@ -22,6 +22,15 @@
 
         <v-list-item link>
           <v-list-item-action>
+            <v-icon>mdi-trash-can</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>垃圾桶</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item link>
+          <v-list-item-action>
             <v-icon>mdi-settings</v-icon>
           </v-list-item-action>
           <v-list-item-content>
@@ -33,7 +42,7 @@
         <div @click="logout" class="pa-5 text-center">
           <router-link to="/signin" tag="button" replace>
             <v-btn color="amber" block>
-              <v-icon dark left>mdi-arrow-left</v-icon> 登出
+              <v-icon dark left>mdi-arrow-left</v-icon>登出
             </v-btn>
           </router-link>
         </div>
@@ -48,7 +57,7 @@
     </v-app-bar>
 
     <v-content>
-      <transition>
+      <transition name="fade">
         <router-view></router-view>
       </transition>
       <!-- <v-container class="fill-height" fluid>
@@ -72,6 +81,7 @@
         :direction="direction"
         :open-on-hover="hover"
         :transition="transition"
+        class="my-7"
       >
         <template v-slot:activator>
           <v-btn v-model="fab" color="blue darken-2" dark fab>
@@ -91,9 +101,7 @@
       </v-speed-dial>
     </v-card>
     <v-footer color="purple darken-3" app>
-      <span class="white--text"
-        >Copyright &copy; NPC GO version {{ version }}</span
-      >
+      <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -103,7 +111,7 @@ export default {
   name: "home",
   components: {},
   data: () => ({
-    s_self:this,
+    s_self: this,
     version: "alpha",
     items: [
       { title: "Dashboard", icon: "dashboard" },
@@ -150,11 +158,14 @@ export default {
     }
   },
   methods: {
+    toppage:function(){
+      window.location.replace("./todolist");
+    },
     logout: function() {
       this.$cookie.delete("sessionID");
       window.location.replace("./signin");
     }
-  },
+  }
 };
 </script>
 <style scoped>

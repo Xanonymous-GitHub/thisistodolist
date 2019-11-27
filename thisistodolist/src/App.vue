@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <router-link to="/"></router-link>
     <router-link to="/about"></router-link> -->
-    <transition>
+    <transition name="fade">
       <router-view />
     </transition>
   </div>
