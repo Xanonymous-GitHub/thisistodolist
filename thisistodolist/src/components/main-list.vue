@@ -36,8 +36,8 @@
 import axios from "axios";
 export default {
   data: () => ({
-    haveitems: true,
-    items: [{user_input:'test'}],
+    haveitems: false,
+    items: [],
     model: []
   }),
   created: function() {
@@ -51,7 +51,7 @@ export default {
         .then(function(response) {
           let data = response.data;
           self.haveitems = true;
-          //self.items = [];
+          self.items = [];
           for (let i = 0; i < data.length; i++) {
             self.items.unshift({
               item_id: data[i].item_id,
@@ -63,7 +63,7 @@ export default {
           }
         })
         .catch(function() {
-          //alert("伺服器通訊失敗");
+          alert("伺服器通訊失敗");
         });
     }
   }
