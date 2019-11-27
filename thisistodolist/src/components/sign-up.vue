@@ -42,11 +42,19 @@
                   />
                   <v-btn
                     @click="validate"
-                    :disabled="!valid || !id || !pswd ||!pswd_s"
+                    :disabled="
+                      !valid ||
+                        !id ||
+                        !pswd ||
+                        !pswd_s ||
+                        !this.validateRecaptcha
+                    "
                     color="red"
-                  >註冊</v-btn>
+                    >註冊</v-btn
+                  >
                   <v-btn class="mx-2" @click="signin" color="amber">登入</v-btn>
                 </v-form>
+                <Recaptcha class="my-2" @validate="recapchavalidate" />
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -58,11 +66,13 @@
     </v-content>
   </v-app>
 </template>
-
 <script>
 import axios from "axios";
+import Recaptcha from "@/components/Recaptcha";
 export default {
+  components: { Recaptcha },
   data: () => ({
+    validateRecaptcha: false,
     s_self: null,
     lazy: true,
     valid: true,
@@ -85,6 +95,9 @@ export default {
   methods: {
     signin: function() {
       window.location.replace("./signin");
+    },
+    recapchavalidate() {
+      this.validateRecaptcha = true;
     },
     validate: function() {
       if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
@@ -120,5 +133,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

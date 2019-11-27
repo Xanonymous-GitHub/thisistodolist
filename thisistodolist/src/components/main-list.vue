@@ -37,34 +37,35 @@ import axios from "axios";
 export default {
   data: () => ({
     haveitems: false,
-    items: [{ item_id: "123123", user_input: "test", status: true }],
-    model: ["123123"]
+    items: [],
+    model: []
   }),
   created: function() {
-    //this.items = [];
-    var self = this;
-    axios
-      .get("/lists")
-      .then(function(response) {
-        let data = response.data;
-        self.haveitems = true;
-        //self.items = data;
-        self.items = [];
-        for (let i = 0; i < data.length; i++) {
-          self.items.unshift({
-            item_id: data[i].item_id,
-            user_input: data[i].user_input
-          });
-          if (data[i].status == true) {
-            self.model.push(data[i].item_id);
+    this.sync_data();
+  },
+  methods: {
+    sync_data: function() {
+      var self = this;
+      axios
+        .get("/lists")
+        .then(function(response) {
+          let data = response.data;
+          self.haveitems = true;
+          self.items = [];
+          for (let i = 0; i < data.length; i++) {
+            self.items.unshift({
+              item_id: data[i].item_id,
+              user_input: data[i].user_input
+            });
+            if (data[i].status == true) {
+              self.model.push(data[i].item_id);
+            }
           }
-        }
-      })
-      .catch(function() {
-        // console.log(e);
-        //self.haveitems=false;
-        //self.items = [];
-      });
+        })
+        .catch(function() {
+          alert("伺服器通訊失敗");
+        });
+    }
   }
 };
 </script>

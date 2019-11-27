@@ -37,19 +37,19 @@ import axios from "axios";
 export default {
   created: function() {
     axios
-    .get('/lists')
-    .then(function(data){
-      data.forEach(i => {
-        if(i.status=='true'){
-          this.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
-          this.model.push(`"${i.uuid}"`);
-        }
+      .get("/lists")
+      .then(function(data) {
+        data.forEach(i => {
+          if (i.status == "true") {
+            this.items.unshift(`{uuid:"${i.item_id}",text:"${i.user_input}"`);
+            this.model.push(`"${i.uuid}"`);
+          }
+        });
+      })
+      .catch(function() {
+        // console.log(e);
+        this.items = [];
       });
-    })
-    .catch(function(){
-      // console.log(e);
-      this.items=[];
-    });
   },
   data: () => ({
     items: [{ uuid: "123123", text: "test" }],

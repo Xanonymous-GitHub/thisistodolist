@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer class="py-10" v-model="drawer" app>
       <v-list dense>
-        <v-list-item link>
+        <v-list-item @click="toppage">
           <v-list-item-action>
             <v-icon>mdi-apple</v-icon>
           </v-list-item-action>
@@ -22,6 +22,15 @@
 
         <v-list-item link>
           <v-list-item-action>
+            <v-icon>mdi-trash-can</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>垃圾桶</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item link>
+          <v-list-item-action>
             <v-icon>mdi-settings</v-icon>
           </v-list-item-action>
           <v-list-item-content>
@@ -30,10 +39,12 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        <div @click="logout" class="pa-2">
-          <v-btn  color="amber" block>
-            <v-icon dark left>mdi-arrow-left</v-icon> <router-link to="/signin" tag="button" replace>登出</router-link> 
-          </v-btn>
+        <div @click="logout" class="pa-5 text-center">
+          <router-link to="/signin" tag="button" replace>
+            <v-btn color="amber" block>
+              <v-icon dark left>mdi-arrow-left</v-icon>登出
+            </v-btn>
+          </router-link>
         </div>
       </template>
     </v-navigation-drawer>
@@ -46,7 +57,9 @@
     </v-app-bar>
 
     <v-content>
-      <router-view></router-view>
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
       <!-- <v-container class="fill-height" fluid>
         
       </v-container>-->
@@ -68,6 +81,7 @@
         :direction="direction"
         :open-on-hover="hover"
         :transition="transition"
+        class="my-7"
       >
         <template v-slot:activator>
           <v-btn v-model="fab" color="blue darken-2" dark fab>
@@ -87,7 +101,7 @@
       </v-speed-dial>
     </v-card>
     <v-footer color="purple darken-3" app>
-      <span class="white--text">Copyright &copy; NPC GO version {{version}}</span>
+      <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -97,7 +111,8 @@ export default {
   name: "home",
   components: {},
   data: () => ({
-    version: "0.1.alpha",
+    s_self: this,
+    version: "alpha",
     items: [
       { title: "Dashboard", icon: "dashboard" },
       { title: "Account", icon: "account_box" },
@@ -143,8 +158,11 @@ export default {
     }
   },
   methods: {
-    logout: () => {
-      this.$cookie.delete('test');
+    toppage:function(){
+      window.location.replace("./todolist");
+    },
+    logout: function() {
+      this.$cookie.delete("sessionID");
       window.location.replace("./signin");
     }
   }
@@ -153,7 +171,7 @@ export default {
 <style scoped>
 #create .v-speed-dial {
   position: fixed;
-  z-index:5;
+  z-index: 5;
 }
 
 #create .v-btn--floating {
