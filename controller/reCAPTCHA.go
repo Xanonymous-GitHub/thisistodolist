@@ -33,7 +33,6 @@ func vailUser(token string, userIP string) (success bool, err error) {
 		log.Printf("Transfer json error:%s\n", err)
 		return
 	}
-	fmt.Println(recaptchaRES)
 	success = recaptchaRES.Success
 	return
 }
