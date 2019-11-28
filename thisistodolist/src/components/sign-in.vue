@@ -35,10 +35,10 @@
                     @click="validate"
                     :disabled="!valid || !id || !pswd"
                     color="light-green accent-3"
-                    >登入</v-btn
-                  >
+                  >登入</v-btn>
                   <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
                 </v-form>
+                <Recaptcha class="my-2" @validate="recapchavalidate" />
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -52,9 +52,13 @@
 </template>
 <script>
 import axios from "axios";
+import Recaptcha from "@/components/Recaptcha";
 export default {
+  components: { Recaptcha },
   data: function() {
     return {
+      recapchatoken: "",
+      validateRecaptcha: false,
       valid: true,
       lazy: true,
       id: "",
@@ -72,6 +76,10 @@ export default {
     this.valid = false;
   },
   methods: {
+    recapchavalidate(response) {
+      this.recapchatoken=response;
+      this.validateRecaptcha = true;
+    },
     signup: function() {
       window.location.replace("./signup");
     },
@@ -82,7 +90,7 @@ export default {
         axios
           .post(
             "/signin",
-            JSON.stringify({ username: this.id.trim(), password: this.pswd }),
+            JSON.stringify({ username: this.id.trim(), password: this.pswd,recapchatoken:this.recapchatoken }),
             {
               headers: {
                 "Content-Type": "application/json;charset=UTF-8"
@@ -93,7 +101,7 @@ export default {
             window.location.replace("./");
           })
           .catch(function() {
-            alert("帳號或密碼錯誤！登入失敗！");
+            alert("帳號或密碼錯誤，或未通過機器人驗證！登入失敗！");
           });
       } else {
         alert("密碼或帳號驗證未通過！");
