@@ -100,7 +100,6 @@ export default {
     recapchavalidate(response) {
       this.recapchatoken=response;
       this.validateRecaptcha = true;
-      //alert(this.recapchatoken);
     },
     validate: function() {
       if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
@@ -121,7 +120,7 @@ export default {
             window.location.replace("./signin");
           })
           .catch(function() {
-            alert("伺服器通訊失敗！");
+            alert("伺服器通訊失敗或未通過機器人驗證！");
           });
       } else {
         alert("密碼或帳號驗證未通過！");
