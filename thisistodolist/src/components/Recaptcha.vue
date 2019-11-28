@@ -8,7 +8,7 @@
 
 <script>
 import VueRecaptcha from "vue-recaptcha";
-import Validation from "@/services/recaptchaValidate.js";
+//import Validation from "@/services/recaptchaValidate.js";
 export default {
   components: { VueRecaptcha },
   data() {
@@ -18,11 +18,13 @@ export default {
   },
   methods: {
     validate(response) {
-      Validation.validate({ Response: response })
-        .then(result => {
-          this.$emit("validate", result.objectResult.success);
-        })
-        .catch();
+
+      this.$emit("validate", response);
+      // Validation.validate({ Response: response })
+      //   .then(result => {
+      //     this.$emit("validate", result.objectResult.success);
+      //   })
+      //   .catch();
     }
   }
 };
