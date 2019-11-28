@@ -2,8 +2,9 @@ package model
 
 type (
 	LoginForm struct {
-		Username string `json:"username" gorm : "primary_key;column:username"`
-		Password string `json:"password" gorm : "column : password" `
+		Username       string `json:"username" gorm : "primary_key;column:username"`
+		Password       string `json:"password" gorm : "column : password" `
+		RecaptchaToken string `json:"recapchatoken" gorm:"-"`
 	}
 	TodoSQLmodel struct {
 		Describe string `json:"user_input" gorm:"column:todo_describe"`

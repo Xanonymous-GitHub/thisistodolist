@@ -42,6 +42,14 @@ func CreateNewuser(c *gin.Context) {
 	}
 	var newuser model.LoginForm
 	c.BindJSON(&newuser)
+	isSeccece, err := vailUser(newuser.RecaptchaToken, c.ClientIP())
+	if err != nil {
+		c.String(503, "")
+	}
+	if !isSeccece {
+		c.String(404, "")
+		return
+	}
 	err = db.Create(&newuser).Error
 	if err != nil {
 		c.String(403, "")
