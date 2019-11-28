@@ -33,7 +33,8 @@
                   <v-btn
                     class="mx-2"
                     @click="validate"
-                    :disabled="!valid || !id || !pswd"
+                    :disabled="!valid || !id || !pswd||
+                        !this.validateRecaptcha"
                     color="light-green accent-3"
                   >登入</v-btn>
                   <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
@@ -77,7 +78,7 @@ export default {
   },
   methods: {
     recapchavalidate(response) {
-      this.recapchatoken=response;
+      this.recapchatoken = response;
       this.validateRecaptcha = true;
     },
     signup: function() {
@@ -90,7 +91,11 @@ export default {
         axios
           .post(
             "/signin",
-            JSON.stringify({ username: this.id.trim(), password: this.pswd,recapchatoken:this.recapchatoken }),
+            JSON.stringify({
+              username: this.id.trim(),
+              password: this.pswd,
+              recapchatoken: this.recapchatoken
+            }),
             {
               headers: {
                 "Content-Type": "application/json;charset=UTF-8"
