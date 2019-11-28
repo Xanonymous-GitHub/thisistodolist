@@ -72,6 +72,7 @@ import Recaptcha from "@/components/Recaptcha";
 export default {
   components: { Recaptcha },
   data: () => ({
+    recapchatoken:'',
     validateRecaptcha: false,
     s_self: null,
     lazy: true,
@@ -96,8 +97,10 @@ export default {
     signin: function() {
       window.location.replace("./signin");
     },
-    recapchavalidate() {
+    recapchavalidate(response) {
+      this.recapchatoken=response;
       this.validateRecaptcha = true;
+      //alert(this.recapchatoken);
     },
     validate: function() {
       if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
@@ -107,7 +110,7 @@ export default {
         axios
           .post(
             "/signup",
-            JSON.stringify({ username: this.id.trim(), password: this.pswd }),
+            JSON.stringify({ username: this.id.trim(), password: this.pswd,recapchatoken:this.recapchatoken }),
             {
               headers: {
                 "Content-Type": "application/json;charset=UTF-8"
