@@ -10,6 +10,14 @@ func VerifiesUser(c *gin.Context) {
 	var userinfo model.LoginForm
 	var session model.SessionMysqlModel
 	c.BindJSON(&userinfo)
+	isSucceed, err := vailUser(userinfo.RecaptchaToken, c.ClientIP())
+	if err != nil {
+		c.String(503, "")
+	}
+	if !isSucceed {
+		c.String(404, "")
+		return
+	}
 	password := userinfo.Password
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
@@ -35,20 +43,20 @@ func Getsignup(c *gin.Context) {
 	c.HTML(200, "signup.html", nil)
 }
 func CreateNewuser(c *gin.Context) {
+	var newuser model.LoginForm
+	c.BindJSON(&newuser)
+	isSucceed, err := vailUser(newuser.RecaptchaToken, c.ClientIP())
+	if err != nil {
+		c.String(503, "")
+	}
+	if !isSucceed {
+		c.String(404, "")
+		return
+	}
 	db, err := gorm.Open("mysql", "wayne:Fuck06050@/todolist?charset=utf8&parseTime=True&loc=Local")
 	defer db.Close()
 	if err != nil {
 		panic("failed to connect database")
-	}
-	var newuser model.LoginForm
-	c.BindJSON(&newuser)
-	isSeccece, err := vailUser(newuser.RecaptchaToken, c.ClientIP())
-	if err != nil {
-		c.String(503, "")
-	}
-	if !isSeccece {
-		c.String(404, "")
-		return
 	}
 	err = db.Create(&newuser).Error
 	if err != nil {
