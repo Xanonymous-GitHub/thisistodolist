@@ -47,7 +47,9 @@ export default {
     this.sync_data();
   },
   methods: {
-    
+    async checked(){
+
+    },
     async sync_data() {
       var vm = this;
       try {

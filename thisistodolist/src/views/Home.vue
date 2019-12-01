@@ -60,17 +60,7 @@
       <transition name="fade">
         <router-view></router-view>
       </transition>
-      <!-- <v-container class="fill-height" fluid>
-        
-      </v-container>-->
     </v-content>
-    <!-- <v-card-text style="height: 100px; position: fixed;right:1%;bottom:0%">
-      <v-fab-transition>
-        <v-btn v-show="!hidden" color="pink" dark absolute top right fab>
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-fab-transition>
-    </v-card-text>-->
     <v-card id="create">
       <v-speed-dial
         v-model="fab"
@@ -92,7 +82,7 @@
         <v-btn fab dark small color="green">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn fab dark small color="indigo">
+        <v-btn fab dark small color="indigo" @click="overlay=!overlay;drawer=false">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-btn fab dark small color="red">
@@ -100,6 +90,43 @@
         </v-btn>
       </v-speed-dial>
     </v-card>
+    <v-overlay absolute="false" opacity="0.5" :value="overlay" :z-index="zIndex">
+      <v-form>
+        <v-text-field filled outlined label="新增項目" auto-grow value></v-text-field>
+        <v-btn calss="text-center mr-5" color="primary" @click="overlay = false">新增</v-btn>
+        <v-btn calss="text-center mr-5" color="error" @click="overlay = false">取消</v-btn>
+      </v-form>
+
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
+
+        <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+
+        <v-select
+          v-model="select"
+          :items="items"
+          :rules="[v => !!v || 'Item is required']"
+          label="Item"
+          required
+        ></v-select>
+
+        <v-checkbox
+          v-model="checkbox"
+          :rules="[v => !!v || 'You must agree to continue!']"
+          label="Do you agree?"
+          required
+        ></v-checkbox>
+
+        <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
+
+        <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
+
+        <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
+      </v-form>
+      <!-- <v-card raised>
+        
+      </v-card>-->
+    </v-overlay>
     <v-footer color="purple darken-3" app>
       <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
     </v-footer>
@@ -111,6 +138,7 @@ export default {
   name: "home",
   components: {},
   data: () => ({
+    overlay: false,
     s_self: this,
     version: "alpha",
     items: [
@@ -118,7 +146,7 @@ export default {
       { title: "Account", icon: "account_box" },
       { title: "Admin", icon: "gavel" }
     ],
-    drawer: null,
+    drawer: false,
     direction: "top",
     fab: false,
     fling: false,
@@ -158,7 +186,7 @@ export default {
     }
   },
   methods: {
-    toppage(){
+    toppage() {
       window.location.replace("./todolist");
     },
     logout() {
