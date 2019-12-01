@@ -158,10 +158,10 @@ export default {
     }
   },
   methods: {
-    toppage:function(){
+    toppage(){
       window.location.replace("./todolist");
     },
-    logout: function() {
+    logout() {
       this.$cookie.delete("sessionID");
       window.location.replace("./signin");
     }

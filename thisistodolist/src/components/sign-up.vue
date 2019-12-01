@@ -50,8 +50,7 @@
                         !this.validateRecaptcha
                     "
                     color="red"
-                    >註冊</v-btn
-                  >
+                  >註冊</v-btn>
                   <v-btn class="mx-2" @click="signin" color="amber">登入</v-btn>
                 </v-form>
                 <Recaptcha class="my-2" @validate="recapchavalidate" />
@@ -72,7 +71,7 @@ import Recaptcha from "@/components/Recaptcha";
 export default {
   components: { Recaptcha },
   data: () => ({
-    recapchatoken:'',
+    recapchatoken: "",
     validateRecaptcha: false,
     s_self: null,
     lazy: true,
@@ -94,41 +93,45 @@ export default {
     ]
   }),
   methods: {
-    signin: function() {
+    signin() {
       window.location.replace("./signin");
     },
     recapchavalidate(response) {
-      this.recapchatoken=response;
+      this.recapchatoken = response;
       this.validateRecaptcha = true;
     },
-    validate: function() {
+    async validate() {
       if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
         this.snackbar = true;
         let sha256 = require("js-sha256").sha256;
         this.pswd = sha256(this.pswd);
-        axios
-          .post(
+        try {
+          await axios.post(
             "/signup",
-            JSON.stringify({ username: this.id.trim(), password: this.pswd,recapchatoken:this.recapchatoken }),
+            JSON.stringify({
+              username: this.id.trim(),
+              password: this.pswd,
+              recapchatoken: this.recapchatoken
+            }),
             {
               headers: {
                 "Content-Type": "application/json;charset=UTF-8"
               }
             }
-          )
-          .then(function() {
-            window.location.replace("./signin");
-          })
-          .catch(function() {
-            alert("伺服器通訊失敗或未通過機器人驗證！");
-          });
+          );
+          window.location.replace("./signin");
+        } catch (e) {
+          console.log(e);
+          alert("伺服器通訊失敗或未通過機器人驗證！");
+        }
       } else {
         alert("密碼或帳號驗證未通過！");
       }
       this.$refs.form.reset();
+      window.location.replace("./signup");
     }
   },
-  created: function() {
+  created() {
     this.s_self = this;
     this.valid = false;
   }

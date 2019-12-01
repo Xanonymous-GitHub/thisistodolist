@@ -72,7 +72,7 @@ export default {
       pswdRules: [v => !!v || "請輸入密碼!"]
     };
   },
-  created: function() {
+  created() {
     this.s_self = this;
     this.valid = false;
   },
@@ -81,15 +81,15 @@ export default {
       this.recapchatoken = response;
       this.validateRecaptcha = true;
     },
-    signup: function() {
+    signup() {
       window.location.replace("./signup");
     },
-    validate: function() {
+    async validate() {
       if (this.$refs.form.validate()) {
         let sha256 = require("js-sha256").sha256;
         this.pswd = sha256(this.pswd);
-        axios
-          .post(
+        try {
+          await axios.post(
             "/signin",
             JSON.stringify({
               username: this.id.trim(),
@@ -101,17 +101,16 @@ export default {
                 "Content-Type": "application/json;charset=UTF-8"
               }
             }
-          )
-          .then(function() {
-            window.location.replace("./");
-          })
-          .catch(function() {
-            alert("帳號或密碼錯誤，或未通過機器人驗證！登入失敗！");
-          });
+          );
+        } catch (e) {
+          console.log(e);
+          alert("帳號或密碼錯誤，或未通過機器人驗證！登入失敗！");
+        }
       } else {
         alert("密碼或帳號驗證未通過！");
       }
       this.$refs.form.reset();
+      window.location.replace("./");
     }
   }
 };

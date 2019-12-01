@@ -21,7 +21,7 @@
                   :input-value="active"
                   :true-value="item"
                   color="deep-purple accent-4"
-                  @click="toggle"
+                  @click="checked"
                 ></v-checkbox>
               </v-list-item-action>
             </template>
@@ -36,35 +36,37 @@
 import axios from "axios";
 export default {
   data: () => ({
-    haveitems: false,
-    items: [],
-    model: []
+    haveitems: true,
+    active:[],
+    //test
+    items: [{user_input:'test'}],
+    model: [],
+    selected: []
   }),
   created: function() {
     this.sync_data();
   },
   methods: {
-    sync_data: function() {
-      var self = this;
-      axios
-        .get("/lists")
-        .then(function(response) {
-          let data = response.data;
-          self.haveitems = true;
-          self.items = [];
-          for (let i = 0; i < data.length; i++) {
-            self.items.unshift({
-              item_id: data[i].item_id,
-              user_input: data[i].user_input
-            });
-            if (data[i].status == true) {
-              self.model.push(data[i].item_id);
-            }
+    
+    async sync_data() {
+      var vm = this;
+      try {
+        let data = (await axios.get("/lists")).data;
+        vm.items = [];
+        for (let i = 0; i < data.length; i++) {
+          vm.haveitems = true;
+          vm.items.unshift({
+            item_id: data[i].item_id,
+            user_input: data[i].user_input
+          });
+          if (data[i].status) {
+            vm.model.push(data[i].item_id);
           }
-        })
-        .catch(function() {
-          alert("伺服器通訊失敗");
-        });
+        }
+      } catch (e) {
+        console.log(e);
+        alert("伺服器通訊失敗");
+      }
     }
   }
 };
