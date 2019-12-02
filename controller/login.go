@@ -32,7 +32,7 @@ func VerifiesUser(c *gin.Context) {
 	}
 	if password == userinfo.Password {
 		session.SetSession(userinfo.Username, c.ClientIP())
-		c.SetCookie("sessionID", session.SessionID, 1000, "/", "35.189.167.203", false, false)
+		c.SetCookie("sessionID", session.SessionID, 1000, "/", "trusaidlin.tk", false, false)
 		c.JSON(200, `{ mes:"ok"}`)
 	} else {
 		c.String(403, "")

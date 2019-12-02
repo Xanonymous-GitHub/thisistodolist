@@ -25,18 +25,18 @@ func CheckCookie() gin.HandlerFunc {
 			}
 			var session model.SessionMysqlModel
 			if db.Table("session").Where("sessionId = ?", sessionID).First(&session).RecordNotFound() {
-				c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+				c.SetCookie("sessionID", "", -1, "/", "trusaidlin.tk", false, false)
 				c.Next()
 				return
 			}
 			if session.ClientIP != c.ClientIP() {
-				c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+				c.SetCookie("sessionID", "", -1, "/", "trusaidlin.tk", false, false)
 				c.Next()
 				return
 			}
 			diff := time.Now().Sub(session.CreateTime)
 			if diff.Seconds() > 1000 {
-				c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+				c.SetCookie("sessionID", "", -1, "/", "trusaidlin.tk", false, false)
 				c.Next()
 				return
 			}
@@ -59,20 +59,20 @@ func CheckCookie() gin.HandlerFunc {
 		}
 		var session model.SessionMysqlModel
 		if db.Table("session").Where("sessionId = ?", sessionID).First(&session).RecordNotFound() {
-			c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+			c.SetCookie("sessionID", "", -1, "/", "trusaidlin.tk", false, false)
 			c.Redirect(302, "/signin")
 			c.Abort()
 			return
 		}
 		if session.ClientIP != c.ClientIP() {
-			c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+			c.SetCookie("sessionID", "", -1, "/", "trusaidlin.tk", false, false)
 			c.Redirect(302, "/signin")
 			c.Abort()
 			return
 		}
 		diff := time.Now().Sub(session.CreateTime)
 		if diff.Seconds() > 1000 {
-			c.SetCookie("sessionID", "", -1, "/", "35.189.167.203", false, false)
+			c.SetCookie("sessionID", "", -1, "/", "trusaidlin.tk", false, false)
 			c.Redirect(302, "/signin")
 			c.Abort()
 			return
