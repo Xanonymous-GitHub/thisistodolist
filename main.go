@@ -9,6 +9,7 @@ import (
 func main() {
 
 	router := gin.Default()
+	router.Use(controller.SecureFunc())
 	router.Delims("[[", "]]")
 	router.LoadHTMLGlob("./*.html")
 	router.Static("/css", "./css")
@@ -23,6 +24,7 @@ func main() {
 	router.POST("/signin", controller.VerifiesUser)
 	router.POST("/signup", controller.CreateNewuser)
 	router.NoRoute(controller.Gettingtodolist)
+	go router.Run(":80")
 	router.RunTLS(":443", "./certs/server.crt", "./certs/server.key")
 
 }
