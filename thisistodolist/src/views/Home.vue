@@ -82,7 +82,7 @@
         <v-btn fab dark small color="green">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn fab dark small color="indigo" @click="overlay=!overlay;drawer=false">
+        <v-btn fab dark small color="indigo" @click.stop="dialog=!dialog">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-btn fab dark small color="red">
@@ -90,55 +90,35 @@
         </v-btn>
       </v-speed-dial>
     </v-card>
-    <v-overlay absolute="false" opacity="0.5" :value="overlay" :z-index="zIndex">
-      <v-form>
-        <v-text-field filled outlined label="新增項目" auto-grow value></v-text-field>
-        <v-btn calss="text-center mr-5" color="primary" @click="overlay = false">新增</v-btn>
-        <v-btn calss="text-center mr-5" color="error" @click="overlay = false">取消</v-btn>
-      </v-form>
-
-      <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
-
-        <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-
-        <v-select
-          v-model="select"
-          :items="items"
-          :rules="[v => !!v || 'Item is required']"
-          label="Item"
-          required
-        ></v-select>
-
-        <v-checkbox
-          v-model="checkbox"
-          :rules="[v => !!v || 'You must agree to continue!']"
-          label="Do you agree?"
-          required
-        ></v-checkbox>
-
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
-
-        <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
-
-        <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
-      </v-form>
-      <!-- <v-card raised>
-        
-      </v-card>-->
-    </v-overlay>
+    <v-dialog v-model="dialog" scrollable="true" width="500">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>新增待辦項目</v-card-title>
+        <v-textarea auto-grow class="mx-5" v-model="inputarea"></v-textarea>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click.stop="submitinputarea">確定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-footer color="purple darken-3" app>
       <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
     </v-footer>
+    <main-list></main-list>
   </v-app>
 </template>
 
 <script>
+import axios from "axios";
+import MainList from "@/components/main-list";
 export default {
   name: "home",
-  components: {},
+  components: {
+    MainList
+  },
   data: () => ({
-    overlay: false,
+    dialog: false,
+    inputarea: "",
     s_self: this,
     version: "alpha",
     items: [
@@ -186,11 +166,29 @@ export default {
     }
   },
   methods: {
+    async submitinputarea() {
+      try {
+        let data = (
+          await axios.post(
+            "/todolist",
+            JSON.stringify({ user_input: this.inputarea.trim() })
+          )
+        ).data;
+          this.items.unshift({
+          item_id: data.item_id,
+          user_input: data.user_input
+        });
+        this.inputarea = "";
+        this.dialog = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     toppage() {
       window.location.replace("./todolist");
     },
     logout() {
-      this.$cookie.delete("sessionID");
+      this.$cookies.set("sessionID", "null");
       window.location.replace("./signin");
     }
   }

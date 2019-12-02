@@ -35,6 +35,7 @@
 <script>
 import axios from "axios";
 export default {
+  props:['items'],
   data: () => ({
     haveitems: true,
     active:[],

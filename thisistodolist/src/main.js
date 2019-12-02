@@ -3,8 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-var VueCookie = require("vue-cookie");
-Vue.use(VueCookie);
+var VueCookies = require("vue-cookies");
+Vue.use(VueCookies);
 Vue.config.productionTip = false;
 
 new Vue({
