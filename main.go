@@ -23,6 +23,6 @@ func main() {
 	router.POST("/signin", controller.VerifiesUser)
 	router.POST("/signup", controller.CreateNewuser)
 	router.NoRoute(controller.Gettingtodolist)
-	router.Run(":443")
+	router.RunTLS(":443", "./certs/server.crt", "./certs/server.key")
 
 }
