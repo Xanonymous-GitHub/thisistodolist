@@ -90,7 +90,7 @@
         </v-btn>
       </v-speed-dial>
     </v-card>
-    <v-dialog v-model="dialog" scrollable="true" width="500">
+    <v-dialog v-model="dialog" width="500">
       <v-card>
         <v-card-title class="headline grey lighten-2" primary-title>新增待辦項目</v-card-title>
         <v-textarea auto-grow class="mx-5" v-model="inputarea"></v-textarea>
@@ -104,7 +104,6 @@
     <v-footer color="purple darken-3" app>
       <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
     </v-footer>
-    <main-list></main-list>
   </v-app>
 </template>
 
@@ -113,10 +112,8 @@ import axios from "axios";
 import MainList from "@/components/main-list";
 export default {
   name: "home",
-  components: {
-    MainList
-  },
   data: () => ({
+    listdata: MainList.items,
     dialog: false,
     inputarea: "",
     s_self: this,
@@ -167,6 +164,12 @@ export default {
   },
   methods: {
     async submitinputarea() {
+      /*test area*/
+      MainList.items.unshift({
+        item_id: "test",
+        user_input: this.inputarea
+      });
+
       try {
         let data = (
           await axios.post(
@@ -174,7 +177,7 @@ export default {
             JSON.stringify({ user_input: this.inputarea.trim() })
           )
         ).data;
-          this.items.unshift({
+        this.$children[0].items.unshift({
           item_id: data.item_id,
           user_input: data.user_input
         });

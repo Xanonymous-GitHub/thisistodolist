@@ -35,7 +35,6 @@
 <script>
 import axios from "axios";
 export default {
-  props:['items'],
   data: () => ({
     haveitems: true,
     active:[],
@@ -49,7 +48,6 @@ export default {
   },
   methods: {
     async checked(){
-
     },
     async sync_data() {
       var vm = this;
@@ -71,7 +69,14 @@ export default {
         alert("伺服器通訊失敗");
       }
     }
-  }
+  },
+  // mounted:{
+  //   RecieveChanges(){
+  //     this.$on('submitinputarea',()=>{
+  //       alert('032323123123133213222222');
+  //     });
+  //   }
+  // }
 };
 </script>
 
