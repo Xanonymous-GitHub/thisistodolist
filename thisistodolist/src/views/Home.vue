@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer class="py-10" v-model="drawer" app>
+    <v-navigation-drawer class="py-10" v-model="drawer" clipped app>
       <v-list dense>
         <v-list-item @click="toppage">
           <v-list-item-action>
@@ -42,14 +42,14 @@
         <div @click="logout" class="pa-5 text-center">
           <router-link to="/signin" tag="button" replace>
             <v-btn color="amber" block>
-              <v-icon dark left>mdi-arrow-left</v-icon>登出
+              <v-icon  left>mdi-arrow-left</v-icon>登出
             </v-btn>
           </router-link>
         </div>
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar app color="purple darken-3" dark>
+    <v-app-bar app dark clipped-left color="purple darken-3" >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
         <b>ThisIsToDoList</b>
@@ -74,18 +74,18 @@
         class="my-7"
       >
         <template v-slot:activator>
-          <v-btn v-model="fab" color="blue darken-2" dark fab>
+          <v-btn v-model="fab" color="blue darken-2" fab>
             <v-icon v-if="fab">mdi-close</v-icon>
             <v-icon v-else>mdi-account-circle</v-icon>
           </v-btn>
         </template>
-        <v-btn fab dark small color="green">
+        <v-btn fab  small color="green">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn fab dark small color="indigo" @click.stop="dialog=!dialog">
+        <v-btn fab  small color="indigo" @click.stop="dialog=!dialog">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-        <v-btn fab dark small color="red">
+        <v-btn fab  small color="red">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-speed-dial>
@@ -97,7 +97,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" >確定</v-btn>
+          <v-btn color="primary">確定</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -123,7 +123,7 @@ export default {
       { title: "Account", icon: "account_box" },
       { title: "Admin", icon: "gavel" }
     ],
-    drawer: false,
+    drawer: true,
     direction: "top",
     fab: false,
     fling: false,
@@ -147,6 +147,9 @@ export default {
           return {};
       }
     }
+  },
+  created() {
+    this.$vuetify.theme.dark = true;
   },
   watch: {
     top(val) {

@@ -53,7 +53,7 @@
                   >註冊</v-btn>
                   <v-btn class="mx-2" @click="signin" color="amber">登入</v-btn>
                 </v-form>
-                <Recaptcha class="my-2" @validate="recapchavalidate" />
+                <Recaptcha theme="dark" size="100%" class="my-2" @validate="recapchavalidate" />
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -134,6 +134,7 @@ export default {
   created() {
     this.s_self = this;
     this.valid = false;
+    this.$vuetify.theme.dark = true;
   }
 };
 </script>

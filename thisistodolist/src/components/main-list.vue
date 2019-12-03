@@ -4,17 +4,22 @@
       <v-list-item-group v-model="selected" multiple>
         <template v-for="(item) in items">
           <!-- <v-divider v-if="!item" :key="`divider-${i}`"></v-divider> -->
-          <v-list-item
+          <v-list-item 
             :key="`${item.uid}`"
             :value="item.uid"
-            active-class="deep-purple--text text--accent-4"
+            active-class="green"
+            class="my-3"
           >
             <template v-slot:default="{ active, toggle }">
               <v-list-item-content>
                 <v-list-item-title v-text="item.content"></v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
-                <v-checkbox :input-value="active" :true-value="item" color="deep-purple accent-4"></v-checkbox>
+                <v-checkbox
+                  :input-value="active"
+                  :true-value="item"
+                  color="deep-purple accent-4"
+                ></v-checkbox>
               </v-list-item-action>
             </template>
           </v-list-item>
@@ -28,16 +33,21 @@
 import { mapState, mapActions } from "vuex";
 export default {
   data: () => ({
-    haveitems: true,
     selected: []
   }),
-  computed: mapState({
-    items: state => state.todo.unfinished
-  }),
-  methods:{
-    ...mapActions([
-      'syncTest'
-    ]),
+  computed: {
+    ...mapState({
+      items: state => state.todo.unfinished,
+      haveitems: state => Boolean(state.todo.unfinished !== [])
+    })
+  },
+  methods: {
+    ...mapActions({
+      SyncTest: "SyncTest"
+    })
+  },
+  mounted(){
+    this.SyncTest();
   }
 };
 </script>

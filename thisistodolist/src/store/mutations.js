@@ -1,24 +1,25 @@
 import states from './states';
 export default {
-    PushItemFinished(data, index) {
+    PushItemFinished(state, data, index) {
         //insert a new item to finished
         states.todo.finished.splice(index, 0, data);
     },
-    PopItemFinished(index) {
+    PopItemFinished(state, index) {
         states.todo.finished.splice(index, 1);
     },
-    PushItemUnfinished(data, index) {
+    PushItemUnfinished(state, data, index) {
         //insert a new item to unfinished
         states.todo.unfinished.splice(index, 0, data);
+        console.log(states.todo.unfinished);
     },
-    PopItemUnfinished(index) {
+    PopItemUnfinished(state, index) {
         states.todo.unfinished.splice(index, 1);
     },
-    SetItemFinished(data, index) {
+    SetItemFinished(state, data, index) {
         //change the exists item
         states.todo.finished[index].text = data;
     },
-    SetItemUnfinished(data, index) {
+    SetItemUnfinished(state, data, index) {
         //change the exists item
         states.todo.unfinished[index].text = data;
     },

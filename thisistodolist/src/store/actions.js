@@ -1,6 +1,6 @@
 import axios from 'axios';
 export default {
-    async SyncData({ commit }) {
+    SyncData: async ({ commit }) => {
         try {
             let data = (await axios.get("/lists")).data;
             for (let i = 0; i < data.length; i++) {
@@ -24,9 +24,9 @@ export default {
             console.log(e + "\nerror@Vuex.action.sync_data\n");
         }
     },
-    syncTest({commit}) {
-        commit('DelItemUnfinished');
-        commit('PushItemUnfinished', { user_id: 'String', uid: 'String', status: false, delete: false, content: 'gg' }, 0);
+    SyncTest: async ({ commit }) => {
+        //await commit('DelItemUnfinished');
+        await commit('PushItemUnfinished', { user_id: 'String', uid: 'String2', status: false, delete: false, content: 'gg' }, 0);
     }
 };
 /*

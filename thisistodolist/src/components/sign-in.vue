@@ -75,6 +75,7 @@ export default {
   created() {
     this.s_self = this;
     this.valid = false;
+    this.$vuetify.theme.dark = true;
   },
   methods: {
     recapchavalidate(response) {
