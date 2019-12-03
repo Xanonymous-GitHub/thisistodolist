@@ -1,36 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import state from "./states";
+import mutation from "./mutations";
+import getter from "./getters";
+import action from "./actions";
 Vue.use(Vuex);
 export default new Vuex.Store({
-  state: {
-    list: {
-      unfinished: [],
-      finished: [
-        { key: 'fhwiehfwie', text: 'A', uuid: '12345' },
-        { key: 'wegjkjbgksj', text: 'B', uuid: '12345' }
-      ]
-    },
-  },
-  mutations: {
-
-  },
-  actions: {
-    SetFinished(data, position) {
-      //put only one data to the position of state.list.finished[]
-    },
-    SetUnfinished(data) {
-      //
-    },
-  },
-  modules: {},
-  getters: {
-    GetFinished() {
-
-    },
-    GetUnfinished() {
-
-    }
-  },
-  strict: true,
-  plugin: []
+  state,
+  mutation,
+  getter,
+  action,
+  strict: true
 });

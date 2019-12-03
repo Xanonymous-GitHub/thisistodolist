@@ -97,7 +97,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click.stop="submitinputarea">確定</v-btn>
+          <v-btn color="primary" >確定</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
