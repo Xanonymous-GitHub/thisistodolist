@@ -33,7 +33,7 @@
                   <v-btn
                     class="mx-2"
                     @click="validate"
-                    :disabled="!valid || !id || !pswd||
+                    :disabled="!valid || !(id.trim()) || !pswd||
                         !this.validateRecaptcha"
                     color="light-green accent-3"
                   >登入</v-btn>

@@ -42,14 +42,14 @@
         <div @click="logout" class="pa-5 text-center">
           <router-link to="/signin" tag="button" replace>
             <v-btn color="amber" block>
-              <v-icon  left>mdi-arrow-left</v-icon>登出
+              <v-icon left>mdi-arrow-left</v-icon>登出
             </v-btn>
           </router-link>
         </div>
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar app dark clipped-left color="purple darken-3" >
+    <v-app-bar app dark clipped-left color="purple darken-3">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
         <b>ThisIsToDoList</b>
@@ -79,27 +79,30 @@
             <v-icon v-else>mdi-account-circle</v-icon>
           </v-btn>
         </template>
-        <v-btn fab  small color="green">
+        <v-btn fab small color="green">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn fab  small color="indigo" @click.stop="dialog=!dialog">
+        <v-btn fab small color="indigo" @click.stop="dialog=!dialog">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-        <v-btn fab  small color="red">
+        <v-btn fab small color="red">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-speed-dial>
     </v-card>
     <v-dialog v-model="dialog" width="500">
-      <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>新增待辦項目</v-card-title>
-        <v-textarea auto-grow class="mx-5" v-model="inputarea"></v-textarea>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary">確定</v-btn>
-        </v-card-actions>
-      </v-card>
+      <v-form v-model="valid">
+        <v-card>
+          <v-card-title class="headline purple darken-3" primary-title>新增待辦項目</v-card-title>
+          <v-textarea required auto-grow class="mx-5" v-model="inputarea"></v-textarea>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn :disabled="!valid || !(inputarea.trim())" color="primary">確定</v-btn>
+            <v-btn @click="dialog=false" color="error">取消</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </v-dialog>
     <v-footer color="purple darken-3" app>
       <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
@@ -113,6 +116,7 @@ import MainList from "@/components/main-list";
 export default {
   name: "home",
   data: () => ({
+    valid: true,
     listdata: MainList.items,
     dialog: false,
     inputarea: "",

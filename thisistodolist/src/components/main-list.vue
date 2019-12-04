@@ -38,7 +38,7 @@ export default {
   computed: {
     ...mapState({
       items: state => state.todo.unfinished,
-      haveitems: state => Boolean(state.todo.unfinished !== [])
+      haveitems: state => Boolean(state.todo.unfinished.length)
     })
   },
   methods: {

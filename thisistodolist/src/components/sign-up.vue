@@ -44,7 +44,7 @@
                     @click="validate"
                     :disabled="
                       !valid ||
-                        !id ||
+                        !(id.trim()) ||
                         !pswd ||
                         !pswd_s ||
                         !this.validateRecaptcha
