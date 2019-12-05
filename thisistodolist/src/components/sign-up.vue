@@ -41,19 +41,25 @@
                     required
                   />
                   <v-btn
-                    @click="validate"
-                    :disabled="
+                          @click="validate"
+                          :disabled="
                       !valid ||
-                        !(id.trim()) ||
+                        !id.trim() ||
                         !pswd ||
                         !pswd_s ||
                         !this.validateRecaptcha
                     "
-                    color="red"
-                  >註冊</v-btn>
+                          color="red"
+                  >註冊
+                  </v-btn>
                   <v-btn class="mx-2" @click="signin" color="amber">登入</v-btn>
                 </v-form>
-                <Recaptcha theme="dark" size="100%" class="my-2" @validate="recapchavalidate" />
+                <Recaptcha
+                        @validate="recapchavalidate"
+                        class="my-2"
+                        size="100%"
+                        theme="dark"
+                />
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -66,19 +72,20 @@
   </v-app>
 </template>
 <script>
-import axios from "axios";
-import Recaptcha from "@/components/Recaptcha";
-export default {
-  components: { Recaptcha },
-  data: () => ({
-    recapchatoken: "",
-    validateRecaptcha: false,
-    s_self: null,
-    lazy: true,
-    valid: true,
-    id: "",
-    pswd: "",
-    pswd_s: "",
+  import axios from "axios";
+  import Recaptcha from "@/components/Recaptcha";
+
+  export default {
+    components: {Recaptcha},
+    data: () => ({
+      recapchatoken: "",
+      validateRecaptcha: false,
+      s_self: null,
+      lazy: true,
+      valid: true,
+      id: "",
+      pswd: "",
+      pswd_s: "",
     emailRules: [
       v => !!v || "請填入一組有效電子郵件!",
       v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
@@ -89,7 +96,7 @@ export default {
     ],
     pswd_sRules: [
       v => !!v || "密碼不相符!",
-      v => (v && v == self.pswd) || "密碼不相符!"
+      v => (v && v === self.pswd) || "密碼不相符!"
     ]
   }),
   methods: {
@@ -100,17 +107,17 @@ export default {
       this.recapchatoken = response;
       this.validateRecaptcha = true;
     },
-    async validate() {
+    validate: async function () {
       if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
         this.snackbar = true;
         let sha256 = require("js-sha256").sha256;
         this.pswd = sha256(this.pswd);
         try {
           await axios.post(
-            "/signup",
-            JSON.stringify({
-              username: this.id.trim(),
-              password: this.pswd,
+                  "/signup",
+                  JSON.stringify({
+                    username: this.id.trim(),
+                    password: this.pswd,
               recapchatoken: this.recapchatoken
             }),
             {
@@ -139,4 +146,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style/>

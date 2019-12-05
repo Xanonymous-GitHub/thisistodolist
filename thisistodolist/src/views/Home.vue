@@ -58,7 +58,7 @@
 
     <v-content>
       <transition name="fade">
-        <router-view></router-view>
+        <router-view/>
       </transition>
     </v-content>
     <v-card id="create">
@@ -94,10 +94,10 @@
       <v-form v-model="valid">
         <v-card>
           <v-card-title class="headline purple darken-3" primary-title>新增待辦項目</v-card-title>
-          <v-textarea required auto-grow class="mx-5" v-model="inputarea"></v-textarea>
-          <v-divider></v-divider>
+          <v-textarea auto-grow class="mx-5" required v-model="inputarea"/>
+          <v-divider/>
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-btn :disabled="!valid || !(inputarea.trim())" color="primary">確定</v-btn>
             <v-btn @click="dialog=false" color="error">取消</v-btn>
           </v-card-actions>
@@ -111,19 +111,20 @@
 </template>
 
 <script>
-import axios from "axios";
-import MainList from "@/components/main-list";
-export default {
-  name: "home",
-  data: () => ({
-    valid: true,
-    listdata: MainList.items,
-    dialog: false,
-    inputarea: "",
-    s_self: this,
-    version: "alpha",
-    items: [
-      { title: "Dashboard", icon: "dashboard" },
+  import axios from "axios";
+  import MainList from "@/components/main-list";
+
+  export default {
+    name: "home",
+    data: () => ({
+      valid: true,
+      listdata: MainList.items,
+      dialog: false,
+      inputarea: "",
+      s_self: this,
+      version: "alpha",
+      items: [
+        {title: "Dashboard", icon: "dashboard"},
       { title: "Account", icon: "account_box" },
       { title: "Admin", icon: "gavel" }
     ],

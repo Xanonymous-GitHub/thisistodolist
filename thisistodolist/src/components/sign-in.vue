@@ -31,12 +31,15 @@
                     required
                   />
                   <v-btn
-                    class="mx-2"
-                    @click="validate"
-                    :disabled="!valid || !(id.trim()) || !pswd||
-                        !this.validateRecaptcha"
-                    color="light-green accent-3"
-                  >登入</v-btn>
+                          :disabled="
+                      !valid || !id.trim() || !pswd || !this.validateRecaptcha
+                    "
+                          @click="validate"
+                          class="mx-2"
+                          color="light-green accent-3"
+                  >登入
+                  </v-btn
+                  >
                   <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
                 </v-form>
                 <Recaptcha class="my-2" @validate="recapchavalidate" />
@@ -52,19 +55,20 @@
   </v-app>
 </template>
 <script>
-import axios from "axios";
-import Recaptcha from "@/components/Recaptcha";
-export default {
-  components: { Recaptcha },
-  data: function() {
-    return {
-      recapchatoken: "",
-      validateRecaptcha: false,
-      valid: true,
-      lazy: true,
-      id: "",
-      pswd: "",
-      self,
+  import axios from "axios";
+  import Recaptcha from "@/components/Recaptcha";
+
+  export default {
+    components: {Recaptcha},
+    data: function () {
+      return {
+        recapchatoken: "",
+        validateRecaptcha: false,
+        valid: true,
+        lazy: true,
+        id: "",
+        pswd: "",
+        self,
       emailRules: [
         v => !!v || "請填入有效電子郵件!",
         v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
@@ -117,4 +121,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style/>

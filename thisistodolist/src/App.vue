@@ -8,8 +8,8 @@
   </div>
 </template>
 
-<style scope>
-#app {
-  font-family: Arial, Helvetica, sans-serif;
-}
+<style scoped>
+  #app {
+    font-family: Arial, Helvetica, sans-serif;
+  }
 </style>
