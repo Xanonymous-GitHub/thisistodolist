@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import mainlist from "@/components/main-list.vue";
 import signin from "@/components/sign-in.vue";
 import signup from "@/components/sign-up.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -26,7 +27,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+        import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
   {
     path: "/signin",

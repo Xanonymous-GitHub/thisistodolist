@@ -41,7 +41,6 @@
                     required
                   />
                   <v-btn
-                          @click="validate"
                           :disabled="
                       !valid ||
                         !id.trim() ||
@@ -49,17 +48,18 @@
                         !pswd_s ||
                         !this.validateRecaptcha
                     "
+                          @click="validate"
                           color="red"
                   >註冊
                   </v-btn>
                   <v-btn class="mx-2" @click="signin" color="amber">登入</v-btn>
                 </v-form>
-                <Recaptcha
-                        @validate="recapchavalidate"
-                        class="my-2"
-                        size="100%"
-                        theme="dark"
-                />
+                  <Recaptcha
+                          @validate="recapchavalidate"
+                          class="my-2"
+                          size="100%"
+                          theme="dark"
+                  />
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -72,30 +72,30 @@
   </v-app>
 </template>
 <script>
-  import axios from "axios";
-  import Recaptcha from "@/components/Recaptcha";
+    import axios from "axios";
+    import Recaptcha from "@/components/Recaptcha";
 
-  export default {
-    components: {Recaptcha},
-    data: () => ({
-      recapchatoken: "",
-      validateRecaptcha: false,
-      s_self: null,
-      lazy: true,
-      valid: true,
-      id: "",
-      pswd: "",
-      pswd_s: "",
-    emailRules: [
-      v => !!v || "請填入一組有效電子郵件!",
-      v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
-    ],
-    pswdRules: [
-      v => !!v || "請輸入一組8個字以上的密碼!",
-      v => (v && v.length > 7) || "密碼至少8個字元"
-    ],
-    pswd_sRules: [
-      v => !!v || "密碼不相符!",
+    export default {
+        components: {Recaptcha},
+        data: () => ({
+            recapchatoken: "",
+            validateRecaptcha: false,
+            s_self: null,
+            lazy: true,
+            valid: true,
+            id: "",
+            pswd: "",
+            pswd_s: "",
+            emailRules: [
+                v => !!v || "請填入一組有效電子郵件!",
+                v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
+            ],
+            pswdRules: [
+                v => !!v || "請輸入一組8個字以上的密碼!",
+                v => (v && v.length > 7) || "密碼至少8個字元"
+            ],
+            pswd_sRules: [
+                v => !!v || "密碼不相符!",
       v => (v && v === self.pswd) || "密碼不相符!"
     ]
   }),
@@ -107,25 +107,25 @@
       this.recapchatoken = response;
       this.validateRecaptcha = true;
     },
-    validate: async function () {
-      if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
-        this.snackbar = true;
-        let sha256 = require("js-sha256").sha256;
-        this.pswd = sha256(this.pswd);
-        try {
-          await axios.post(
-                  "/signup",
-                  JSON.stringify({
-                    username: this.id.trim(),
-                    password: this.pswd,
-              recapchatoken: this.recapchatoken
-            }),
-            {
-              headers: {
-                "Content-Type": "application/json;charset=UTF-8"
-              }
-            }
-          );
+      validate: async function () {
+          if (this.$refs.form.validate() && this.pswd === this.pswd_s) {
+              this.snackbar = true;
+              let sha256 = require("js-sha256").sha256;
+              this.pswd = sha256(this.pswd);
+              try {
+                  await axios.post(
+                      "/signup",
+                      JSON.stringify({
+                          username: this.id.trim(),
+                          password: this.pswd,
+                          recapchatoken: this.recapchatoken
+                      }),
+                      {
+                          headers: {
+                              "Content-Type": "application/json;charset=UTF-8"
+                          }
+                      }
+                  );
           window.location.replace("./signin");
         } catch (e) {
           console.log(e);

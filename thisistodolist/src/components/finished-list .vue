@@ -46,17 +46,17 @@
                     this.model.push(`"${i.uuid}"`);
                   }
                 });
-      })
-      .catch(function() {
-        // console.log(e);
-        this.items = [];
-      });
-  },
-  data: () => ({
-    items: [{ uuid: "123123", text: "test" }],
-    model: ["123123"]
-  })
-};
+              })
+              .catch(function () {
+                // console.log(e);
+                this.items = [];
+              });
+    },
+    data: () => ({
+      items: [{uuid: "123123", text: "test"}],
+      model: ["123123"]
+    })
+  };
 </script>
 
 <style/>

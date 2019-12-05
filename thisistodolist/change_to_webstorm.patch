@@ -1,0 +1,258 @@
+Index: thisistodolist/src/components/sign-up.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- thisistodolist/src/components/sign-up.vue	(revision d4cc4ba97c698a965e87fbf038b0444ed0a1dd15)
++++ thisistodolist/src/components/sign-up.vue	(date 1575526925452)
+@@ -41,7 +41,6 @@
+                     required
+                   />
+                   <v-btn
+-                          @click="validate"
+                           :disabled="
+                       !valid ||
+                         !id.trim() ||
+@@ -49,6 +48,7 @@
+                         !pswd_s ||
+                         !this.validateRecaptcha
+                     "
++                          @click="validate"
+                           color="red"
+                   >註冊
+                   </v-btn>
+@@ -86,16 +86,16 @@
+       id: "",
+       pswd: "",
+       pswd_s: "",
+-    emailRules: [
+-      v => !!v || "請填入一組有效電子郵件!",
+-      v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
+-    ],
+-    pswdRules: [
+-      v => !!v || "請輸入一組8個字以上的密碼!",
+-      v => (v && v.length > 7) || "密碼至少8個字元"
+-    ],
+-    pswd_sRules: [
+-      v => !!v || "密碼不相符!",
++      emailRules: [
++        v => !!v || "請填入一組有效電子郵件!",
++        v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
++      ],
++      pswdRules: [
++        v => !!v || "請輸入一組8個字以上的密碼!",
++        v => (v && v.length > 7) || "密碼至少8個字元"
++      ],
++      pswd_sRules: [
++        v => !!v || "密碼不相符!",
+       v => (v && v === self.pswd) || "密碼不相符!"
+     ]
+   }),
+@@ -118,13 +118,13 @@
+                   JSON.stringify({
+                     username: this.id.trim(),
+                     password: this.pswd,
+-              recapchatoken: this.recapchatoken
+-            }),
+-            {
+-              headers: {
+-                "Content-Type": "application/json;charset=UTF-8"
+-              }
+-            }
++                    recapchatoken: this.recapchatoken
++                  }),
++                  {
++                    headers: {
++                      "Content-Type": "application/json;charset=UTF-8"
++                    }
++                  }
+           );
+           window.location.replace("./signin");
+         } catch (e) {
+Index: thisistodolist/src/components/finished-list .vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- thisistodolist/src/components/finished-list .vue	(revision d4cc4ba97c698a965e87fbf038b0444ed0a1dd15)
++++ thisistodolist/src/components/finished-list .vue	(date 1575526925623)
+@@ -46,16 +46,16 @@
+                     this.model.push(`"${i.uuid}"`);
+                   }
+                 });
+-      })
+-      .catch(function() {
+-        // console.log(e);
+-        this.items = [];
+-      });
+-  },
+-  data: () => ({
+-    items: [{ uuid: "123123", text: "test" }],
+-    model: ["123123"]
+-  })
++              })
++              .catch(function () {
++                // console.log(e);
++                this.items = [];
++              });
++    },
++    data: () => ({
++      items: [{uuid: "123123", text: "test"}],
++      model: ["123123"]
++    })
+ };
+ </script>
+ 
+Index: thisistodolist/src/views/Home.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- thisistodolist/src/views/Home.vue	(revision d4cc4ba97c698a965e87fbf038b0444ed0a1dd15)
++++ thisistodolist/src/views/Home.vue	(date 1575526925487)
+@@ -82,7 +82,7 @@
+         <v-btn fab small color="green">
+           <v-icon>mdi-pencil</v-icon>
+         </v-btn>
+-        <v-btn fab small color="indigo" @click.stop="dialog=!dialog">
++        <v-btn @click.stop="dialog = !dialog" color="indigo" fab small>
+           <v-icon>mdi-plus</v-icon>
+         </v-btn>
+         <v-btn fab small color="red">
+@@ -93,19 +93,27 @@
+     <v-dialog v-model="dialog" width="500">
+       <v-form v-model="valid">
+         <v-card>
+-          <v-card-title class="headline purple darken-3" primary-title>新增待辦項目</v-card-title>
++          <v-card-title class="headline purple darken-3" primary-title
++          >新增待辦項目
++          </v-card-title
++          >
+           <v-textarea auto-grow class="mx-5" required v-model="inputarea"/>
+           <v-divider/>
+           <v-card-actions>
+             <v-spacer/>
+-            <v-btn :disabled="!valid || !(inputarea.trim())" color="primary">確定</v-btn>
+-            <v-btn @click="dialog=false" color="error">取消</v-btn>
++            <v-btn :disabled="!valid || !inputarea.trim()" color="primary"
++            >確定
++            </v-btn
++            >
++            <v-btn @click="dialog = false" color="error">取消</v-btn>
+           </v-card-actions>
+         </v-card>
+       </v-form>
+     </v-dialog>
+     <v-footer color="purple darken-3" app>
+-      <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
++      <span class="white--text"
++      >Copyright &copy; NPC GO version {{ version }}</span
++      >
+     </v-footer>
+   </v-app>
+ </template>
+@@ -125,16 +133,16 @@
+       version: "alpha",
+       items: [
+         {title: "Dashboard", icon: "dashboard"},
+-      { title: "Account", icon: "account_box" },
+-      { title: "Admin", icon: "gavel" }
+-    ],
+-    drawer: true,
+-    direction: "top",
+-    fab: false,
+-    fling: false,
+-    hover: true,
+-    tabs: null,
+-    top: false,
++        {title: "Account", icon: "account_box"},
++        {title: "Admin", icon: "gavel"}
++      ],
++      drawer: true,
++      direction: "top",
++      fab: false,
++      fling: false,
++      hover: true,
++      tabs: null,
++      top: false,
+     right: true,
+     bottom: true,
+     left: false
+Index: thisistodolist/src/App.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- thisistodolist/src/App.vue	(revision d4cc4ba97c698a965e87fbf038b0444ed0a1dd15)
++++ thisistodolist/src/App.vue	(date 1575526860491)
+@@ -9,7 +9,7 @@
+ </template>
+ 
+ <style scoped>
+-  #app {
+-    font-family: Arial, Helvetica, sans-serif;
+-  }
++#app {
++  font-family: Arial, Helvetica, sans-serif;
++}
+ </style>
+Index: thisistodolist/src/components/sign-in.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- thisistodolist/src/components/sign-in.vue	(revision d4cc4ba97c698a965e87fbf038b0444ed0a1dd15)
++++ thisistodolist/src/components/sign-in.vue	(date 1575526925521)
+@@ -38,8 +38,7 @@
+                           class="mx-2"
+                           color="light-green accent-3"
+                   >登入
+-                  </v-btn
+-                  >
++                  </v-btn>
+                   <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
+                 </v-form>
+                 <Recaptcha class="my-2" @validate="recapchavalidate" />
+@@ -69,16 +68,16 @@
+         id: "",
+         pswd: "",
+         self,
+-      emailRules: [
+-        v => !!v || "請填入有效電子郵件!",
+-        v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
+-      ],
+-      pswdRules: [v => !!v || "請輸入密碼!"]
+-    };
+-  },
+-  created() {
+-    this.s_self = this;
+-    this.valid = false;
++        emailRules: [
++          v => !!v || "請填入有效電子郵件!",
++          v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
++        ],
++        pswdRules: [v => !!v || "請輸入密碼!"]
++      };
++    },
++    created() {
++      this.s_self = this;
++      this.valid = false;
+     this.$vuetify.theme.dark = true;
+   },
+   methods: {
+Index: thisistodolist/src/components/main-list.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- thisistodolist/src/components/main-list.vue	(revision d4cc4ba97c698a965e87fbf038b0444ed0a1dd15)
++++ thisistodolist/src/components/main-list.vue	(date 1575526925555)
+@@ -53,7 +53,7 @@
+     mounted() {
+       this.SyncTest();
+     }
+-};
++  };
+ </script>
+ 
+ <style></style>

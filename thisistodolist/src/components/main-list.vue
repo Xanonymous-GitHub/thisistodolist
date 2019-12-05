@@ -53,7 +53,7 @@
     mounted() {
       this.SyncTest();
     }
-};
+  };
 </script>
 
 <style></style>

@@ -38,8 +38,7 @@
                           class="mx-2"
                           color="light-green accent-3"
                   >登入
-                  </v-btn
-                  >
+                  </v-btn>
                   <v-btn class="mx-2" @click="signup" color="amber">註冊</v-btn>
                 </v-form>
                 <Recaptcha class="my-2" @validate="recapchavalidate" />
@@ -69,26 +68,26 @@
         id: "",
         pswd: "",
         self,
-      emailRules: [
-        v => !!v || "請填入有效電子郵件!",
-        v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
-      ],
-      pswdRules: [v => !!v || "請輸入密碼!"]
-    };
-  },
-  created() {
-    this.s_self = this;
-    this.valid = false;
-    this.$vuetify.theme.dark = true;
-  },
-  methods: {
-    recapchavalidate(response) {
-      this.recapchatoken = response;
-      this.validateRecaptcha = true;
+        emailRules: [
+          v => !!v || "請填入有效電子郵件!",
+          v => /.+@.+\..+/.test(v) || "電子郵件格式不正確！"
+        ],
+        pswdRules: [v => !!v || "請輸入密碼!"]
+      };
     },
-    signup() {
-      window.location.replace("./signup");
+    created() {
+      this.s_self = this;
+      this.valid = false;
+      this.$vuetify.theme.dark = true;
     },
+    methods: {
+      recapchavalidate(response) {
+        this.recapchatoken = response;
+        this.validateRecaptcha = true;
+      },
+      signup() {
+        window.location.replace("./signup");
+      },
     async validate() {
       if (this.$refs.form.validate()) {
         let sha256 = require("js-sha256").sha256;
