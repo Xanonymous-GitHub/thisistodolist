@@ -118,7 +118,6 @@
 </template>
 
 <script>
-    import axios from "axios";
     import MainList from "@/components/main-list";
 
     export default {
@@ -146,20 +145,6 @@
             bottom: true,
             left: false
         }),
-        computed: {
-            activeFab() {
-                switch (this.tabs) {
-                    case "one":
-                        return {class: "purple", icon: "account_circle"};
-                    case "two":
-                        return {class: "red", icon: "edit"};
-                    case "three":
-                        return {class: "green", icon: "keyboard_arrow_up"};
-                    default:
-                        return {};
-                }
-            }
-        },
         created() {
             this.$vuetify.theme.dark = true;
         },
@@ -178,30 +163,6 @@
             }
         },
         methods: {
-            async submitinputarea() {
-                /*test area*/
-                MainList.items.unshift({
-                    item_id: "test",
-                    user_input: this.inputarea
-                });
-
-                try {
-                    let data = (
-                        await axios.post(
-                            "/todolist",
-                            JSON.stringify({user_input: this.inputarea.trim()})
-                        )
-                    ).data;
-                    this.$children[0].items.unshift({
-                        item_id: data.item_id,
-                        user_input: data.user_input
-                    });
-                    this.inputarea = "";
-                    this.dialog = false;
-                } catch (error) {
-                    console.log(error);
-                }
-            },
             toppage() {
                 window.location.replace("./todolist");
             },

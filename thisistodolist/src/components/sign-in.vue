@@ -97,16 +97,16 @@
                     JSON.stringify({
                       username: this.id.trim(),
                       password: this.pswd,
-              recapchatoken: this.recapchatoken
-            }),
-            {
-              headers: {
-                "Content-Type": "application/json;charset=UTF-8"
-              }
-            }
-          );
-        } catch (e) {
-          console.log(e);
+                      recapchatoken: this.recapchatoken
+                    }),
+                    {
+                      headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                      }
+                    }
+            );
+          } catch (e) {
+            console.log(e);
           alert("帳號或密碼錯誤，或未通過機器人驗證！登入失敗！");
         }
       } else {
