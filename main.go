@@ -11,6 +11,6 @@ func main() {
 	}
 	server := echo.New()
 	server.Pre(middleware.HTTPSNonWWWRedirect())
-
+	server.Use(middleware.Logger())
 	server.StartTLS(":443", "./certs/server.crt", "./certs/server.key")
 }
