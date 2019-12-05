@@ -10,5 +10,10 @@ export default {
         content: "String"
       }
     ]
+  },
+  userinfo: {
+    id: '',
+    username: '',
+    email: '',
   }
 };

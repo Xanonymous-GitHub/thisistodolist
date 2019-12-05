@@ -6,5 +6,8 @@ export default {
   },
   GetItemUnfinished() {
     return states.todo.unfinished;
+  },
+  GetUserInfo() {
+    return states.userinfo;
   }
 };

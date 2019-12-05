@@ -76,7 +76,6 @@
       };
     },
     created() {
-      this.s_self = this;
       this.valid = false;
       this.$vuetify.theme.dark = true;
     },
@@ -88,16 +87,16 @@
       signup() {
         window.location.replace("./signup");
       },
-    async validate() {
-      if (this.$refs.form.validate()) {
-        let sha256 = require("js-sha256").sha256;
-        this.pswd = sha256(this.pswd);
-        try {
-          await axios.post(
-            "/signin",
-            JSON.stringify({
-              username: this.id.trim(),
-              password: this.pswd,
+      async validate() {
+        if (this.$refs.form.validate()) {
+          let sha256 = require("js-sha256").sha256;
+          this.pswd = sha256(this.pswd);
+          try {
+            await axios.post(
+                    "/signin",
+                    JSON.stringify({
+                      username: this.id.trim(),
+                      password: this.pswd,
               recapchatoken: this.recapchatoken
             }),
             {

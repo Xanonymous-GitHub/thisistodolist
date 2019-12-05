@@ -29,5 +29,5 @@ export default {
   },
   DelItemUnfinished() {
     states.todo.unfinished = [];
-  }
+  },
 };
