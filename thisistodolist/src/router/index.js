@@ -1,56 +1,49 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import mainlist from "@/components/main-list.vue";
-import unfinished from "@/components/unfinished-list.vue";
-import finished from "@/components/finished-list.vue";
-import trashcan from "@/components/trashcan.vue";
-import settings from "@/components/settings.vue";
-import signin from "@/components/sign-in.vue";
-import signup from "@/components/sign-up.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-    {
-        path: "/",
-        name: "home",
-        component: () => import("../views/Home.vue"),
-        redirect: "todolist",
-        children: [
-            {
-                path: "/todolist",
-                component: mainlist
-            },
-            {
-                path: "/todolist/unfinished",
-                component: unfinished
-            },
-            {
-                path: "/todolist/finished",
-                component: finished
-            },
-            {
-                path: "/todolist/trashcan",
-                component: trashcan
-            },
-            {
-                path: "/todolist/settings",
-                component: settings
-            }
-        ]
+  {
+    path: "/",
+    name: "home",
+    component: () => import("../views/Home.vue"),
+    redirect: "todolist",
+    children: [
+      {
+        path: "/todolist",
+        component: () => import("@/components/MainList.vue")
+      },
+      {
+        path: "/todolist/unfinished",
+        component: () => import("@/components/UnfinishedList.vue")
+      },
+      {
+        path: "/todolist/finished",
+        component: () => import("@/components/FinishedList.vue")
+      },
+      {
+        path: "/todolist/trashcan",
+        component: () => import("@/components/Trashcan.vue")
+      },
+      {
+        path: "/todolist/settings",
+        component: () => import("@/components/Settings.vue")
+      }
+    ]
   },
   {
     path: "/about",
     name: "about",
-      component: () => import("../views/About.vue")
+    component: () => import("../views/About.vue")
   },
   {
     path: "/signin",
-    component: signin
+    component: () => import("@/components/SignIn.vue")
   },
   {
     path: "/signup",
-    component: signup
+    component: () => import("@/components/SignUp.vue")
   }
 ];
 const router = new VueRouter({

@@ -1,17 +1,15 @@
 <template>
     <v-app>
         <p>
-            trashcan
+            seetings
         </p>
     </v-app>
 </template>
 
 <script>
     export default {
-        name: "trashcan"
-    }
+        name: "settings"
+    };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped/>
