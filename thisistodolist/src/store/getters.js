@@ -8,5 +8,4 @@ export default {
   getItemExsist(state) {
     return state.todo.unfinished.concat(state.todo.finished);
   },
-  getUserInfo: states => states.userinfo
 };

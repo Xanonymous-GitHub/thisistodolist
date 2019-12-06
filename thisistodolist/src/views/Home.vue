@@ -108,6 +108,7 @@
           <v-divider />
           <v-card-actions>
             <v-spacer />
+            <v-switch class="mx-4" inset label="已完成" ></v-switch>
             <v-btn
               :disabled="!valid || !inputarea.trim()"
               @click="AddItem"
@@ -116,6 +117,7 @@
             </v-btn>
             <v-btn @click="dialog = false" color="error">取消</v-btn>
           </v-card-actions>
+
         </v-card>
       </v-form>
     </v-dialog>
@@ -178,10 +180,10 @@
       window.location.replace("./signin");
     },
     AddItem() {
-      this.dialog = false;
       let data = this.inputarea;
       this.inputarea = "";
-      return this.$store.dispatch("testAddNewItemUnfinished", data);
+      this.$store.dispatch("addNewItemUnfinished", data);
+      this.dialog = false;
     }
   }
 };
