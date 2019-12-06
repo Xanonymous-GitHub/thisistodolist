@@ -4,20 +4,20 @@
       <v-list-item-group multiple v-model="selected">
         <template v-for="item in items">
           <v-list-item
-                  :key="`${item.uid}`"
-                  :value="item.uid"
-                  active-class="green"
-                  class="my-3"
+            :key="`${item.uid}`"
+            :value="item.uid"
+            active-class="green"
+            class="my-3"
           >
             <template v-slot:default="{ active }">
               <v-list-item-content>
-                <v-list-item-title v-text="item.content"/>
+                <v-list-item-title v-text="item.content" />
               </v-list-item-content>
               <v-list-item-action>
                 <v-checkbox
-                        :input-value="active"
-                        :true-value="item"
-                        color="deep-purple accent-4"
+                  :input-value="active"
+                  :true-value="item"
+                  color="deep-purple accent-4"
                 />
               </v-list-item-action>
             </template>
@@ -32,12 +32,12 @@
   import {mapGetters} from "vuex";
 
   export default {
-    computed: {
-      ...mapGetters({
-        items: "getItemExsist"
-      })
-    }
-  };
+  computed: {
+    ...mapGetters({
+      items: "getItemExsist"
+    })
+  }
+};
 </script>
 
-<style/>
+<style />

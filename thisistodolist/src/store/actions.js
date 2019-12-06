@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default {
-  syncData: async ({commit}) => {
+  syncData: async ({ commit }) => {
     try {
       let data = (await axios.get("/lists")).data;
       commit("delItemFinished");
@@ -25,7 +25,7 @@ export default {
       console.log(e + "\nerror@Vuex.action.sync_data\n");
     }
   },
-  addNewItemUnfinished: async ({commit, state}, text) => {
+  addNewItemUnfinished: async ({ commit, state }, text) => {
     let encrypted = data => {
       let sha256 = require("js-sha256").sha256;
       return sha256(data);
@@ -44,7 +44,7 @@ export default {
       console.log(e + "\nerror@Vuex.action.addNewItemUnfinished\n");
     }
   },
-  testAddNewItemUnfinished: ({commit, state}, text) => {
+  testAddNewItemUnfinished: ({ commit, state }, text) => {
     let encrypted = data => {
       let sha256 = require("js-sha256").sha256;
       return sha256(data);
@@ -58,20 +58,20 @@ export default {
     };
     commit("pushItemUnfinished", data, 0);
   },
-  TestSyncData: ({commit}) => {
+  TestSyncData: ({ commit }) => {
     commit("delItemFinished");
     commit("delItemUnfinished");
     commit("cleanItemTrashcan");
     commit(
-        "pushItemUnfinished",
-        {
-          author: "String",
-          uid: "String2",
-          completed: false,
-          deleted: false,
-          content: "gg"
-        },
-        0
+      "pushItemUnfinished",
+      {
+        author: "String",
+        uid: "String2",
+        completed: false,
+        deleted: false,
+        content: "gg"
+      },
+      0
     );
   }
 };

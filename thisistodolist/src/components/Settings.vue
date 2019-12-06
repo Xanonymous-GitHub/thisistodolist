@@ -1,15 +1,15 @@
 <template>
-    <v-app>
-        <p>
-            seetings
-        </p>
-    </v-app>
+  <v-app>
+    <p>
+      seetings
+    </p>
+  </v-app>
 </template>
 
 <script>
-    export default {
-        name: "settings"
-    };
+export default {
+  name: "settings"
+};
 </script>
 
-<style scoped/>
+<style scoped />

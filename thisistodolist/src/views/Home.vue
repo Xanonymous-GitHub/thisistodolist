@@ -60,28 +60,26 @@
     </v-navigation-drawer>
 
     <v-app-bar app clipped-left color="purple darken-3" dark>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
         <b>ThisIsToDoList</b>
       </v-toolbar-title>
     </v-app-bar>
 
     <v-content>
-      <transition name="fade">
-        <router-view/>
-      </transition>
+      <router-view />
     </v-content>
     <v-card id="create">
       <v-speed-dial
-              :bottom="bottom"
-              :direction="direction"
-              :left="left"
-              :open-on-hover="hover"
-              :right="right"
-              :top="top"
-              :transition="transition"
-              class="my-7"
-              v-model="fab"
+        :bottom="bottom"
+        :direction="direction"
+        :left="left"
+        :open-on-hover="hover"
+        :right="right"
+        :top="top"
+        :transition="transition"
+        class="my-7"
+        v-model="fab"
       >
         <template v-slot:activator>
           <v-btn color="blue darken-2" fab v-model="fab">
@@ -104,17 +102,17 @@
       <v-form v-model="valid">
         <v-card>
           <v-card-title class="headline purple darken-3" primary-title
-          >新增待辦項目
+            >新增待辦項目
           </v-card-title>
-          <v-textarea auto-grow class="mx-5" required v-model="inputarea"/>
-          <v-divider/>
+          <v-textarea auto-grow class="mx-5" required v-model="inputarea" />
+          <v-divider />
           <v-card-actions>
-            <v-spacer/>
+            <v-spacer />
             <v-btn
-                    :disabled="!valid || !inputarea.trim()"
-                    @click="AddItem"
-                    color="primary"
-            >確定
+              :disabled="!valid || !inputarea.trim()"
+              @click="AddItem"
+              color="primary"
+              >確定
             </v-btn>
             <v-btn @click="dialog = false" color="error">取消</v-btn>
           </v-card-actions>
@@ -123,7 +121,7 @@
     </v-dialog>
     <v-footer app color="purple darken-3">
       <span class="white--text"
-      >Copyright &copy; NPC GO version {{ version }}</span
+        >Copyright &copy; NPC GO version {{ version }}</span
       >
     </v-footer>
   </v-app>
@@ -133,68 +131,68 @@
   import MainList from "@/components/MainList";
 
   export default {
-    name: "home",
-    data: () => ({
-      valid: true,
-      listdata: MainList.items,
-      dialog: false,
-      inputarea: "",
-      s_self: this,
-      version: "alpha",
-      items: [
-        {title: "Dashboard", icon: "dashboard"},
-        {title: "Account", icon: "account_box"},
-        {title: "Admin", icon: "gavel"}
-      ],
-      drawer: null,
-      direction: "top",
-      fab: false,
-      fling: false,
-      hover: true,
-      tabs: null,
-      top: false,
-      right: true,
-      bottom: true,
-      left: false
-    }),
-    created() {
-      this.$vuetify.theme.dark = true;
+  name: "home",
+  data: () => ({
+    valid: true,
+    listdata: MainList.items,
+    dialog: false,
+    inputarea: "",
+    s_self: this,
+    version: "alpha",
+    items: [
+      { title: "Dashboard", icon: "dashboard" },
+      { title: "Account", icon: "account_box" },
+      { title: "Admin", icon: "gavel" }
+    ],
+    drawer: null,
+    direction: "top",
+    fab: false,
+    fling: false,
+    hover: true,
+    tabs: null,
+    top: false,
+    right: true,
+    bottom: true,
+    left: false
+  }),
+  created() {
+    this.$vuetify.theme.dark = true;
+  },
+  watch: {
+    top(val) {
+      this.bottom = !val;
     },
-    watch: {
-      top(val) {
-        this.bottom = !val;
-      },
-      right(val) {
-        this.left = !val;
-      },
-      bottom(val) {
-        this.top = !val;
-      },
-      left(val) {
-        this.right = !val;
-      }
+    right(val) {
+      this.left = !val;
     },
-    methods: {
-      logout() {
-        this.$cookies.set("sessionID", "null");
-        window.location.replace("./signin");
-      },
-      AddItem() {
-        this.dialog = false;
-        let data = this.inputarea;
-        this.inputarea = "";
-        return this.$store.dispatch("testAddNewItemUnfinished", data);
-      }
+    bottom(val) {
+      this.top = !val;
+    },
+    left(val) {
+      this.right = !val;
     }
-  };
+  },
+  methods: {
+    logout() {
+      this.$cookies.set("sessionID", "null");
+      window.location.replace("./signin");
+    },
+    AddItem() {
+      this.dialog = false;
+      let data = this.inputarea;
+      this.inputarea = "";
+      return this.$store.dispatch("testAddNewItemUnfinished", data);
+    }
+  }
+};
 </script>
 <style scoped>
-  #create .v-speed-dial {
-    position: fixed;
-    z-index: 5;
-  }
+#create .v-speed-dial {
+  position: fixed;
+  z-index: 5;
+}
 
-  #create .v-btn--floating {
-    position: fixed;
-  }
+#create .v-btn--floating {
+  position: fixed;
+}
 </style>

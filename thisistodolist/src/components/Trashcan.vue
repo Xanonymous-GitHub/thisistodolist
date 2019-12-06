@@ -1,15 +1,15 @@
 <template>
-    <v-app>
-        <p>
-            trashcan
-        </p>
-    </v-app>
+  <v-app>
+    <p>
+      trashcan
+    </p>
+  </v-app>
 </template>
 
 <script>
-    export default {
-        name: "trashcan"
-    };
+export default {
+  name: "trashcan"
+};
 </script>
 
-<style scoped/>
+<style scoped />
