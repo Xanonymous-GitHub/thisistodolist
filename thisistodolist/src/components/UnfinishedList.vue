@@ -9,7 +9,7 @@
                   active-class="green"
                   class="my-3"
           >
-            <template v-slot:default="{ active}">
+            <template v-slot:default="{ active }">
               <v-list-item-content>
                 <v-list-item-title v-text="item.content"/>
               </v-list-item-content>

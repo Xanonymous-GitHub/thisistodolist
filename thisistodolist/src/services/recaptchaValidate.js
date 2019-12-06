@@ -6,18 +6,18 @@ export default {
       axios
           .post("./recapcha", params)
           .then(response => {
-            if (response.data.hasErrors) {
-              reject(response.data.message);
-            } else {
-              resolve(response.data);
-            }
+              if (response.data.hasErrors) {
+                  reject(response.data.message);
+              } else {
+                  resolve(response.data);
+              }
           })
           .catch(error => {
-            if (error.response.data.hasOwnProperty("")) {
-              reject(error.response.data.message);
-            } else {
-              reject(error.message);
-            }
+              if (error.response.data.hasOwnProperty("")) {
+                  reject(error.response.data.message);
+              } else {
+                  reject(error.message);
+              }
           });
     });
   }
