@@ -1,33 +1,48 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 import mainlist from "@/components/main-list.vue";
+import unfinished from "@/components/unfinished-list.vue";
+import finished from "@/components/finished-list.vue";
+import trashcan from "@/components/trashcan.vue";
+import settings from "@/components/settings.vue";
 import signin from "@/components/sign-in.vue";
 import signup from "@/components/sign-up.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: Home,
-    redirect: "todolist",
-    children: [
-      {
-        path: "todolist",
-        component: mainlist
-      }
-    ]
+    {
+        path: "/",
+        name: "home",
+        component: () => import("../views/Home.vue"),
+        redirect: "todolist",
+        children: [
+            {
+                path: "/todolist",
+                component: mainlist
+            },
+            {
+                path: "/todolist/unfinished",
+                component: unfinished
+            },
+            {
+                path: "/todolist/finished",
+                component: finished
+            },
+            {
+                path: "/todolist/trashcan",
+                component: trashcan
+            },
+            {
+                path: "/todolist/settings",
+                component: settings
+            }
+        ]
   },
   {
     path: "/about",
     name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-        import(/* webpackChunkName: "about" */ "../views/About.vue")
+      component: () => import("../views/About.vue")
   },
   {
     path: "/signin",

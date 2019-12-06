@@ -1,7 +1,7 @@
 <template>
     <v-card class="mx-2 my-2" max-width="98%">
         <v-list shaped v-show="items.length">
-            <v-list-item-group v-model="selected" multiple>
+            <v-list-item-group multiple v-model="selected">
                 <template v-for="item in items">
                     <v-list-item
                             :key="`${item.uid}`"
@@ -34,7 +34,7 @@
     export default {
         computed: {
             ...mapGetters({
-                items: 'getItemExsist',
+                items: 'getItemFinished',
             }),
         },
     };

@@ -2,16 +2,28 @@
     <v-app id="inspire">
         <v-navigation-drawer app class="py-10" clipped v-model="drawer">
             <v-list dense>
-                <v-list-item @click="toppage">
+
+                <v-list-item to="/todolist">
                     <v-list-item-action>
                         <v-icon>mdi-apple</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>所有項目</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+
+                <v-list-item to="/todolist/unfinished">
+                    <v-list-item-action>
+                        <v-icon>mdi-book</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>待辦事項</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link>
+
+                <v-list-item to="/todolist/finished">
                     <v-list-item-action>
                         <v-icon>mdi-check</v-icon>
                     </v-list-item-action>
@@ -20,7 +32,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link>
+                <v-list-item to="/todolist/trashcan">
                     <v-list-item-action>
                         <v-icon>mdi-trash-can</v-icon>
                     </v-list-item-action>
@@ -29,7 +41,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link>
+                <v-list-item to="/todolist/settings">
                     <v-list-item-action>
                         <v-icon>mdi-settings</v-icon>
                     </v-list-item-action>
@@ -41,7 +53,7 @@
             <template v-slot:append>
                 <div @click="logout" class="pa-5 text-center">
                     <router-link replace tag="button" to="/signin">
-                        <v-btn block color="amber">
+                        <v-btn block color="amber darken-3">
                             <v-icon left>mdi-arrow-left</v-icon>
                             登出
                         </v-btn>
@@ -77,7 +89,7 @@
                 <template v-slot:activator>
                     <v-btn color="blue darken-2" fab v-model="fab">
                         <v-icon v-if="fab">mdi-close</v-icon>
-                        <v-icon v-else>mdi-account-circle</v-icon>
+                        <v-icon v-else>mdi-star</v-icon>
                     </v-btn>
                 </template>
                 <v-btn color="green" fab small>
@@ -163,9 +175,6 @@
             }
         },
         methods: {
-            toppage() {
-                window.location.replace("./todolist");
-            },
             logout() {
                 this.$cookies.set("sessionID", "null");
                 window.location.replace("./signin");
@@ -174,7 +183,7 @@
                 this.dialog = false;
                 let data = this.inputarea;
                 this.inputarea = "";
-                return this.$store.dispatch('TestAddNewItemUnfinished', data)
+                return this.$store.dispatch('testAddNewItemUnfinished', data)
             }
         }
     };

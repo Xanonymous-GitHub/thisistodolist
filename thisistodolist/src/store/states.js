@@ -1,14 +1,10 @@
 export default {
     todo: {
-        finished: [],
+        finished: [
+            {author: 'String', uid: 'String', completed: false, deleted: false, content: 'String2'}
+        ],
         unfinished: [
-            {
-                user_id: "String",
-                uid: "String",
-                status: false,
-                delete: false,
-                content: "String"
-            }
+            {author: 'String', uid: 'String', completed: false, deleted: false, content: 'String'}
         ]
     },
     trashcan: [],

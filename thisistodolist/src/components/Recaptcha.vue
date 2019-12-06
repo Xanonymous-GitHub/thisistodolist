@@ -13,6 +13,7 @@
         components: {VueRecaptcha},
         data() {
             return {
+                theme: 'dark',
                 sitekey: "6LeVCsQUAAAAAF1v-pYnAZer6Nr0_SN6HBzEiY-D"
             };
         },
