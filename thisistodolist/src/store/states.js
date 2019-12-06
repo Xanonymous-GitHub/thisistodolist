@@ -4,7 +4,7 @@ export default {
     finished: [
       {
         author: "String",
-        uid: "String",
+        uid: "String2",
         completed: false,
         deleted: false,
         content: "String2"

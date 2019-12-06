@@ -2,12 +2,14 @@
   <v-app id="inspire">
     <v-navigation-drawer app class="py-10" clipped v-model="drawer">
       <v-list dense>
-        <v-list-item to="/todolist">
+        <v-list-item to="/">
           <v-list-item-action>
             <v-icon>mdi-apple</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>所有項目</v-list-item-title>
+            <v-list-item-title class="amber--text font-weight-bold"
+              >所有項目</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
 
@@ -102,13 +104,13 @@
       <v-form v-model="valid">
         <v-card>
           <v-card-title class="headline purple darken-3" primary-title
-            >新增待辦項目
+            >新增項目
           </v-card-title>
           <v-textarea auto-grow class="mx-5" required v-model="inputarea" />
           <v-divider />
           <v-card-actions>
             <v-spacer />
-            <v-switch class="mx-4" inset label="已完成" ></v-switch>
+            <v-switch v-model="newItemType" class="mx-4" inset label="已完成" />
             <v-btn
               :disabled="!valid || !inputarea.trim()"
               @click="AddItem"
@@ -117,7 +119,6 @@
             </v-btn>
             <v-btn @click="dialog = false" color="error">取消</v-btn>
           </v-card-actions>
-
         </v-card>
       </v-form>
     </v-dialog>
@@ -135,11 +136,11 @@
   export default {
   name: "home",
   data: () => ({
+    newItemType: false,
     valid: true,
     listdata: MainList.items,
     dialog: false,
     inputarea: "",
-    s_self: this,
     version: "alpha",
     items: [
       { title: "Dashboard", icon: "dashboard" },
@@ -182,7 +183,10 @@
     AddItem() {
       let data = this.inputarea;
       this.inputarea = "";
-      this.$store.dispatch("addNewItemUnfinished", data);
+      this.$store.dispatch("testAddNewItem", {
+        text: data,
+        type: this.newItemType
+      });
       this.dialog = false;
     }
   }

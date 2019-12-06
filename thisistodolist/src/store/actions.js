@@ -25,38 +25,30 @@ export default {
       console.log(e + "\nerror@Vuex.action.sync_data\n");
     }
   },
-  addNewItemUnfinished: async ({ commit, state }, text) => {
-    let encrypted = data => {
-      let sha256 = require("js-sha256").sha256;
-      return sha256(data);
-    };
+  addNewItem: async ({ commit, state }, dataPack) => {
     let data = {
       author: state.userinfo.id,
-      uid: encrypted(text + Date.now()),
-      completed: false,
+      uid: require("js-sha256").sha256(dataPack.text + Date.now()),
+      completed: dataPack.type,
       deleted: false,
-      content: text
+      content: dataPack.text
     };
     try {
       await axios.post("/lists", data);
-      commit("pushItemUnfinished", data, 0);
+      commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", data, 0);
     } catch (e) {
-      console.log(e + "\nerror@Vuex.action.addNewItemUnfinished\n");
+      console.log(e + "\nerror@Vuex.action.addNewItem\n");
     }
   },
-  testAddNewItemUnfinished: ({ commit, state }, text) => {
-    let encrypted = data => {
-      let sha256 = require("js-sha256").sha256;
-      return sha256(data);
-    };
+  testAddNewItem: ({ commit, state }, dataPack) => {
     let data = {
       author: state.userinfo.id,
-      uid: encrypted(text + Date.now()),
-      completed: false,
+      uid: require("js-sha256").sha256(dataPack.text + Date.now()),
+      completed: dataPack.type,
       deleted: false,
-      content: text
+      content: dataPack.text
     };
-    commit("pushItemUnfinished", data, 0);
+    commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", data, 0);
   },
   TestSyncData: ({ commit }) => {
     commit("delItemFinished");
