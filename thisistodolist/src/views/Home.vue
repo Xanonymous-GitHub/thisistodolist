@@ -101,10 +101,10 @@
                     <v-divider/>
                     <v-card-actions>
                         <v-spacer/>
-                        <v-btn :disabled="!valid || !inputarea.trim()" color="primary"
+                        <v-btn @click="AddItem" :disabled="!valid || !inputarea.trim()" color="primary"
                         >確定
                         </v-btn>
-                        <v-btn @click="dialog = false" color="error">取消</v-btn>
+                        <v-btn @click="dialog=false" color="error">取消</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -134,7 +134,7 @@
                 {title: "Account", icon: "account_box"},
                 {title: "Admin", icon: "gavel"}
             ],
-            drawer: true,
+            drawer: null,
             direction: "top",
             fab: false,
             fling: false,
@@ -169,6 +169,12 @@
             logout() {
                 this.$cookies.set("sessionID", "null");
                 window.location.replace("./signin");
+            },
+            AddItem() {
+                this.dialog = false;
+                let data = this.inputarea;
+                this.inputarea = "";
+                return this.$store.dispatch('TestAddNewItemUnfinished', data)
             }
         }
     };

@@ -1,19 +1,20 @@
 export default {
-  todo: {
-    finished: [],
-    unfinished: [
-      {
-        user_id: "String",
-        uid: "String",
-        status: false,
-        delete: false,
-        content: "String"
-      }
-    ]
-  },
-  userinfo: {
-    id: '',
-    username: '',
-    email: '',
-  }
+    todo: {
+        finished: [],
+        unfinished: [
+            {
+                user_id: "String",
+                uid: "String",
+                status: false,
+                delete: false,
+                content: "String"
+            }
+        ]
+    },
+    trashcan: [],
+    userinfo: {
+        id: '123',
+        username: '',
+        email: '',
+    }
 };

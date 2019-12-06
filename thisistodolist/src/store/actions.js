@@ -4,17 +4,19 @@ export default {
     SyncData: async ({commit}) => {
         try {
             let data = (await axios.get("/lists")).data;
+            commit("DelItemFinished");
+            commit("DelItemUnfinished");
+            commit("CleanItemTrashcan");
             for (let i = 0; i < data.length; i++) {
                 if (data[i].deleted) {
                     //deleted -> true : inTrashcan
+                    commit("PushItemTrashcan", data[i]);
                 } else {
                     if (data[i].completed) {
                         //completed -> true : finished
-                        commit("DelItemFinished");
                         commit("PushItemFinished", data[i], 0);
                     } else {
                         //completed -> false : unfinished
-                        commit("DelItemUnfinished");
                         commit("PushItemUnfinished", data[i], 0);
                     }
                 }
@@ -23,9 +25,44 @@ export default {
             console.log(e + "\nerror@Vuex.action.sync_data\n");
         }
     },
-    SyncTest: async ({commit}) => {
-        //await commit('DelItemUnfinished');
-        await commit(
+    AddNewItemUnfinished: async ({commit, state}, text) => {
+        let encrypted = (data) => {
+            let sha256 = require("js-sha256").sha256;
+            return sha256(data);
+        };
+        let data = {
+            author: state.userinfo.id,
+            uid: encrypted(text + Date.now()),
+            completed: false,
+            deleted: false,
+            content: text
+        };
+        try {
+            await axios.post('/lists', data);
+            commit("PushItemUnfinished", data, 0);
+        } catch (e) {
+            console.log(e + "\nerror@Vuex.action.AddNewItemUnfinished\n");
+        }
+    },
+    TestAddNewItemUnfinished: ({commit, state}, text) => {
+        let encrypted = (data) => {
+            let sha256 = require("js-sha256").sha256;
+            return sha256(data);
+        };
+        let data = {
+            author: state.userinfo.id,
+            uid: encrypted(text + Date.now()),
+            completed: false,
+            deleted: false,
+            content: text
+        };
+        commit("PushItemUnfinished", data, 0);
+    },
+    TestSyncData: ({commit}) => {
+        commit("DelItemFinished");
+        commit("DelItemUnfinished");
+        commit("CleanItemTrashcan");
+        commit(
             "PushItemUnfinished",
             {
                 author: "String",
@@ -35,20 +72,7 @@ export default {
                 content: "gg"
             },
             0
-        );
-    },
-    AddNewItemUnfinished: ({commit}, data) => {
-        commit(
-            "PushItemUnfinished",
-            {
-                author: "String",
-                uid: "String2",
-                completed: false,
-                deleted: false,
-                content: data
-            },
-            0
-        );
+        )
     }
 };
 /*

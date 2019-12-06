@@ -44,14 +44,14 @@
         },
         methods: {
             ...mapActions({
-                SyncTest: "SyncTest"
+                TestSyncData: "TestSyncData"
             }),
             AddNewItemUnfinished() {
                 return this.$store.dispatch("");
             }
         },
         mounted() {
-            this.SyncTest();
+            this.TestSyncData();
         }
     };
 </script>

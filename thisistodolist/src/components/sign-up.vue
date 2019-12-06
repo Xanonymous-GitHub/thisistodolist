@@ -93,10 +93,6 @@
             pswdRules: [
                 v => !!v || "請輸入一組8個字以上的密碼!",
                 v => (v && v.length > 7) || "密碼至少8個字元"
-            ],
-            pswd_sRules: [
-                v => !!v || "密碼不相符!",
-                v => (v && v === self.pswd) || "密碼不相符!"
             ]
         }),
         methods: {
