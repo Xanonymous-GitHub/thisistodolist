@@ -1,6 +1,15 @@
 import axios from "axios";
 
 export default {
+  delItem({ commit }, data) {
+    commit();
+  },
+  itemSelectedChange: ({ commit }, data) => {
+    commit("changeItemStatus", data);
+  },
+  setCurrentStatus: ({ commit }, data) => {
+    commit("setStatus", data);
+  },
   syncData: async ({ commit }) => {
     try {
       let data = (await axios.get("/lists")).data;
@@ -31,11 +40,16 @@ export default {
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
-      content: dataPack.text
+      content: dataPack.text,
+      selected: false
     };
     try {
-      await axios.post("/lists", data);
-      commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", data, 0);
+      await axios.post("/lists", JSON.stringify(data));
+      commit(
+        dataPack.type ? "pushItemFinished" : "pushItemUnfinished",
+        data,
+        0
+      );
     } catch (e) {
       console.log(e + "\nerror@Vuex.action.addNewItem\n");
     }
@@ -46,25 +60,10 @@ export default {
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
-      content: dataPack.text
+      content: dataPack.text,
+      selected: false
     };
     commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", data, 0);
-  },
-  TestSyncData: ({ commit }) => {
-    commit("delItemFinished");
-    commit("delItemUnfinished");
-    commit("cleanItemTrashcan");
-    commit(
-      "pushItemUnfinished",
-      {
-        author: "String",
-        uid: "String2",
-        completed: false,
-        deleted: false,
-        content: "gg"
-      },
-      0
-    );
   }
 };
 /*

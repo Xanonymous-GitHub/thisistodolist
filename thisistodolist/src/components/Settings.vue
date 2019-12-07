@@ -8,7 +8,10 @@
 
 <script>
 export default {
-  name: "settings"
+  name: "settings",
+  beforeCreate() {
+    this.$store.dispatch("setCurrentStatus", "set");
+  }
 };
 </script>
 

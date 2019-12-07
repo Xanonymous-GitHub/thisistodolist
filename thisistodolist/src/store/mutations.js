@@ -32,5 +32,21 @@ export default {
   },
   cleanItemTrashcan(state) {
     state.trashcan = [];
+  },
+  setStatus(state, data) {
+    state.currentStatus = data;
+  },
+  changeItemStatus(state, data) {
+    if (data.where === "unfin") {
+      let tmpStatus = state.todo.unfinished[data.index].selected;
+      state.todo.unfinished[data.index].selected = !tmpStatus;
+    } else if (data.where === "fin") {
+      let tmpStatus = state.todo.finished[data.index].selected;
+      state.todo.finished[data.index].selected = !tmpStatus;
+    } else if (data.where === "tra") {
+      let tmpStatus = state.trashcan[data.index].selected;
+      state.trashcan[data.index].selected = !tmpStatus;
+    }
+    console.log(state.todo);
   }
 };

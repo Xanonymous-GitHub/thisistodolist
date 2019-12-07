@@ -8,7 +8,10 @@
 
 <script>
 export default {
-  name: "trashcan"
+  name: "trashcan",
+  beforeCreate() {
+    this.$store.dispatch("setCurrentStatus", "tra");
+  }
 };
 </script>
 

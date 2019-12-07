@@ -8,26 +8,26 @@ const routes = [
     path: "/",
     name: "main",
     component: () => import("../views/Home.vue"),
-    redirect: "/todolist",
+    redirect: "/",
     children: [
       {
-        path: "/todolist",
+        path: "/",
         component: () => import("@/components/MainList.vue")
       },
       {
-        path: "/todolist/unfinished",
+        path: "/unfinished",
         component: () => import("@/components/UnfinishedList.vue")
       },
       {
-        path: "/todolist/finished",
+        path: "/finished",
         component: () => import("@/components/FinishedList.vue")
       },
       {
-        path: "/todolist/trashcan",
+        path: "/trashcan",
         component: () => import("@/components/Trashcan.vue")
       },
       {
-        path: "/todolist/settings",
+        path: "/settings",
         component: () => import("@/components/Settings.vue")
       }
     ]

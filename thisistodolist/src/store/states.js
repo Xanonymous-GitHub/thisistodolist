@@ -1,13 +1,13 @@
 export default {
-  selected: [],
   todo: {
     finished: [
       {
         author: "String",
         uid: "String2",
-        completed: false,
+        completed: true,
         deleted: false,
-        content: "String2"
+        content: "String2",
+        selected: false
       }
     ],
     unfinished: [
@@ -16,14 +16,19 @@ export default {
         uid: "String",
         completed: false,
         deleted: false,
-        content: "String"
+        content: "String",
+        selected: false
       }
     ]
   },
   trashcan: [],
   userinfo: {
-    id: "123",
-    username: "",
-    email: ""
-  }
+    id: "Xanonymous",
+    username: "TeU",
+    email: "trusaidlin@gmail.com",
+    pic: "https://avatars2.githubusercontent.com/u/47718989?s=460&v=4",
+    type: "administrator", //[administrator,super,user,restricted]
+    verified:true
+  },
+  currentStatus: "full" //[full,unfin,fin,tra,set]
 };
