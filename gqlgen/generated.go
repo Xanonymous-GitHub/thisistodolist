@@ -12,6 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/Xanonymous-GitHub/thisistodolist/model"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -43,10 +44,10 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		CompleteTodo func(childComplexity int, input DoTodo) int
-		CreateTodo   func(childComplexity int, input NewTodo) int
-		CreateUser   func(childComplexity int, input NewUser) int
-		DeleteTodo   func(childComplexity int, input DoTodo) int
+		CompleteTodo func(childComplexity int, input model.DoTodo) int
+		CreateTodo   func(childComplexity int, input model.NewTodo) int
+		CreateUser   func(childComplexity int, input model.NewUser) int
+		DeleteTodo   func(childComplexity int, input model.DoTodo) int
 	}
 
 	Query struct {
@@ -84,14 +85,14 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateTodo(ctx context.Context, input NewTodo) (*Todo, error)
-	CreateUser(ctx context.Context, input NewUser) (*UserNoPassword, error)
-	DeleteTodo(ctx context.Context, input DoTodo) (*Todo, error)
-	CompleteTodo(ctx context.Context, input DoTodo) (*Todo, error)
+	CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error)
+	CreateUser(ctx context.Context, input model.NewUser) (*model.UserNoPassword, error)
+	DeleteTodo(ctx context.Context, input model.DoTodo) (*model.Todo, error)
+	CompleteTodo(ctx context.Context, input model.DoTodo) (*model.Todo, error)
 }
 type QueryResolver interface {
-	Todos(ctx context.Context) ([]*Todo, error)
-	User(ctx context.Context) (*UserNoPassword, error)
+	Todos(ctx context.Context) ([]*model.Todo, error)
+	User(ctx context.Context) (*model.UserNoPassword, error)
 }
 
 type executableSchema struct {
@@ -119,7 +120,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CompleteTodo(childComplexity, args["input"].(DoTodo)), true
+		return e.complexity.Mutation.CompleteTodo(childComplexity, args["input"].(model.DoTodo)), true
 
 	case "Mutation.createTodo":
 		if e.complexity.Mutation.CreateTodo == nil {
@@ -131,7 +132,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTodo(childComplexity, args["input"].(NewTodo)), true
+		return e.complexity.Mutation.CreateTodo(childComplexity, args["input"].(model.NewTodo)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -143,7 +144,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(NewUser)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewUser)), true
 
 	case "Mutation.deleteTodo":
 		if e.complexity.Mutation.DeleteTodo == nil {
@@ -155,7 +156,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteTodo(childComplexity, args["input"].(DoTodo)), true
+		return e.complexity.Mutation.DeleteTodo(childComplexity, args["input"].(model.DoTodo)), true
 
 	case "Query.todos":
 		if e.complexity.Query.Todos == nil {
@@ -406,9 +407,9 @@ type Mutation {
 func (ec *executionContext) field_Mutation_completeTodo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 DoTodo
+	var arg0 model.DoTodo
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNDoTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐDoTodo(ctx, tmp)
+		arg0, err = ec.unmarshalNDoTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐDoTodo(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -420,9 +421,9 @@ func (ec *executionContext) field_Mutation_completeTodo_args(ctx context.Context
 func (ec *executionContext) field_Mutation_createTodo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 NewTodo
+	var arg0 model.NewTodo
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐNewTodo(ctx, tmp)
+		arg0, err = ec.unmarshalNNewTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐNewTodo(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -434,9 +435,9 @@ func (ec *executionContext) field_Mutation_createTodo_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 NewUser
+	var arg0 model.NewUser
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -448,9 +449,9 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_deleteTodo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 DoTodo
+	var arg0 model.DoTodo
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNDoTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐDoTodo(ctx, tmp)
+		arg0, err = ec.unmarshalNDoTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐDoTodo(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -535,7 +536,7 @@ func (ec *executionContext) _Mutation_createTodo(ctx context.Context, field grap
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateTodo(rctx, args["input"].(NewTodo))
+		return ec.resolvers.Mutation().CreateTodo(rctx, args["input"].(model.NewTodo))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -547,10 +548,10 @@ func (ec *executionContext) _Mutation_createTodo(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*Todo)
+	res := resTmp.(*model.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodo(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -579,7 +580,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUser(rctx, args["input"].(NewUser))
+		return ec.resolvers.Mutation().CreateUser(rctx, args["input"].(model.NewUser))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -591,10 +592,10 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*UserNoPassword)
+	res := resTmp.(*model.UserNoPassword)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐUserNoPassword(ctx, field.Selections, res)
+	return ec.marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐUserNoPassword(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteTodo(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -623,7 +624,7 @@ func (ec *executionContext) _Mutation_deleteTodo(ctx context.Context, field grap
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteTodo(rctx, args["input"].(DoTodo))
+		return ec.resolvers.Mutation().DeleteTodo(rctx, args["input"].(model.DoTodo))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -635,10 +636,10 @@ func (ec *executionContext) _Mutation_deleteTodo(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*Todo)
+	res := resTmp.(*model.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodo(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_completeTodo(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -667,7 +668,7 @@ func (ec *executionContext) _Mutation_completeTodo(ctx context.Context, field gr
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CompleteTodo(rctx, args["input"].(DoTodo))
+		return ec.resolvers.Mutation().CompleteTodo(rctx, args["input"].(model.DoTodo))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -679,10 +680,10 @@ func (ec *executionContext) _Mutation_completeTodo(ctx context.Context, field gr
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*Todo)
+	res := resTmp.(*model.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodo(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -716,10 +717,10 @@ func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*Todo)
+	res := resTmp.([]*model.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNTodo2ᚕᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodoᚄ(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚕᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodoᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_user(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -753,10 +754,10 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*UserNoPassword)
+	res := resTmp.(*model.UserNoPassword)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐUserNoPassword(ctx, field.Selections, res)
+	return ec.marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐUserNoPassword(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -834,7 +835,7 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Session_user_id(ctx context.Context, field graphql.CollectedField, obj *Session) (ret graphql.Marshaler) {
+func (ec *executionContext) _Session_user_id(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -871,7 +872,7 @@ func (ec *executionContext) _Session_user_id(ctx context.Context, field graphql.
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Session_token(ctx context.Context, field graphql.CollectedField, obj *Session) (ret graphql.Marshaler) {
+func (ec *executionContext) _Session_token(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -908,7 +909,7 @@ func (ec *executionContext) _Session_token(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.CollectedField, obj *Todo) (ret graphql.Marshaler) {
+func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -945,7 +946,7 @@ func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Todo_content(ctx context.Context, field graphql.CollectedField, obj *Todo) (ret graphql.Marshaler) {
+func (ec *executionContext) _Todo_content(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -982,7 +983,7 @@ func (ec *executionContext) _Todo_content(ctx context.Context, field graphql.Col
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Todo_completed(ctx context.Context, field graphql.CollectedField, obj *Todo) (ret graphql.Marshaler) {
+func (ec *executionContext) _Todo_completed(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1019,7 +1020,7 @@ func (ec *executionContext) _Todo_completed(ctx context.Context, field graphql.C
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Todo_deleted(ctx context.Context, field graphql.CollectedField, obj *Todo) (ret graphql.Marshaler) {
+func (ec *executionContext) _Todo_deleted(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1056,7 +1057,7 @@ func (ec *executionContext) _Todo_deleted(ctx context.Context, field graphql.Col
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Todo_author(ctx context.Context, field graphql.CollectedField, obj *Todo) (ret graphql.Marshaler) {
+func (ec *executionContext) _Todo_author(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1087,13 +1088,13 @@ func (ec *executionContext) _Todo_author(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*UserNoPassword)
+	res := resTmp.(*model.UserNoPassword)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐUserNoPassword(ctx, field.Selections, res)
+	return ec.marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐUserNoPassword(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1130,7 +1131,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1167,7 +1168,7 @@ func (ec *executionContext) _User_username(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_isVerify(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_isVerify(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1204,7 +1205,7 @@ func (ec *executionContext) _User_isVerify(ctx context.Context, field graphql.Co
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1241,7 +1242,7 @@ func (ec *executionContext) _User_email(ctx context.Context, field graphql.Colle
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_password(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_password(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1278,7 +1279,7 @@ func (ec *executionContext) _User_password(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserNoPassword_id(ctx context.Context, field graphql.CollectedField, obj *UserNoPassword) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserNoPassword_id(ctx context.Context, field graphql.CollectedField, obj *model.UserNoPassword) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1315,7 +1316,7 @@ func (ec *executionContext) _UserNoPassword_id(ctx context.Context, field graphq
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserNoPassword_username(ctx context.Context, field graphql.CollectedField, obj *UserNoPassword) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserNoPassword_username(ctx context.Context, field graphql.CollectedField, obj *model.UserNoPassword) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1352,7 +1353,7 @@ func (ec *executionContext) _UserNoPassword_username(ctx context.Context, field 
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserNoPassword_isVerify(ctx context.Context, field graphql.CollectedField, obj *UserNoPassword) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserNoPassword_isVerify(ctx context.Context, field graphql.CollectedField, obj *model.UserNoPassword) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1389,7 +1390,7 @@ func (ec *executionContext) _UserNoPassword_isVerify(ctx context.Context, field 
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserNoPassword_email(ctx context.Context, field graphql.CollectedField, obj *UserNoPassword) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserNoPassword_email(ctx context.Context, field graphql.CollectedField, obj *model.UserNoPassword) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2577,8 +2578,8 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputDoTodo(ctx context.Context, obj interface{}) (DoTodo, error) {
-	var it DoTodo
+func (ec *executionContext) unmarshalInputDoTodo(ctx context.Context, obj interface{}) (model.DoTodo, error) {
+	var it model.DoTodo
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -2595,8 +2596,8 @@ func (ec *executionContext) unmarshalInputDoTodo(ctx context.Context, obj interf
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputNewTodo(ctx context.Context, obj interface{}) (NewTodo, error) {
-	var it NewTodo
+func (ec *executionContext) unmarshalInputNewTodo(ctx context.Context, obj interface{}) (model.NewTodo, error) {
+	var it model.NewTodo
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -2613,8 +2614,8 @@ func (ec *executionContext) unmarshalInputNewTodo(ctx context.Context, obj inter
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj interface{}) (NewUser, error) {
-	var it NewUser
+func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj interface{}) (model.NewUser, error) {
+	var it model.NewUser
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -2757,7 +2758,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 var sessionImplementors = []string{"Session"}
 
-func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, obj *Session) graphql.Marshaler {
+func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, obj *model.Session) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.RequestContext, sel, sessionImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2789,7 +2790,7 @@ func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, 
 
 var todoImplementors = []string{"Todo"}
 
-func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj *Todo) graphql.Marshaler {
+func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj *model.Todo) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.RequestContext, sel, todoImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2836,7 +2837,7 @@ func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj
 
 var userImplementors = []string{"User"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *User) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.RequestContext, sel, userImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2883,7 +2884,7 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 
 var userNoPasswordImplementors = []string{"UserNoPassword"}
 
-func (ec *executionContext) _UserNoPassword(ctx context.Context, sel ast.SelectionSet, obj *UserNoPassword) graphql.Marshaler {
+func (ec *executionContext) _UserNoPassword(ctx context.Context, sel ast.SelectionSet, obj *model.UserNoPassword) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.RequestContext, sel, userNoPasswordImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -3182,7 +3183,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNDoTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐDoTodo(ctx context.Context, v interface{}) (DoTodo, error) {
+func (ec *executionContext) unmarshalNDoTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐDoTodo(ctx context.Context, v interface{}) (model.DoTodo, error) {
 	return ec.unmarshalInputDoTodo(ctx, v)
 }
 
@@ -3200,11 +3201,11 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐNewTodo(ctx context.Context, v interface{}) (NewTodo, error) {
+func (ec *executionContext) unmarshalNNewTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐNewTodo(ctx context.Context, v interface{}) (model.NewTodo, error) {
 	return ec.unmarshalInputNewTodo(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐNewUser(ctx context.Context, v interface{}) (NewUser, error) {
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	return ec.unmarshalInputNewUser(ctx, v)
 }
 
@@ -3222,11 +3223,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodo(ctx context.Context, sel ast.SelectionSet, v Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v model.Todo) graphql.Marshaler {
 	return ec._Todo(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodoᚄ(ctx context.Context, sel ast.SelectionSet, v []*Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Todo) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3250,7 +3251,7 @@ func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋXanonymousᚑGitHu
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodo(ctx, sel, v[i])
+			ret[i] = ec.marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3263,7 +3264,7 @@ func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋXanonymousᚑGitHu
 	return ret
 }
 
-func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐTodo(ctx context.Context, sel ast.SelectionSet, v *Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
 	if v == nil {
 		if !ec.HasError(graphql.GetResolverContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3273,11 +3274,11 @@ func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋXanonymousᚑGitHub�
 	return ec._Todo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserNoPassword2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐUserNoPassword(ctx context.Context, sel ast.SelectionSet, v UserNoPassword) graphql.Marshaler {
+func (ec *executionContext) marshalNUserNoPassword2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐUserNoPassword(ctx context.Context, sel ast.SelectionSet, v model.UserNoPassword) graphql.Marshaler {
 	return ec._UserNoPassword(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋgqlgenᚐUserNoPassword(ctx context.Context, sel ast.SelectionSet, v *UserNoPassword) graphql.Marshaler {
+func (ec *executionContext) marshalNUserNoPassword2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐUserNoPassword(ctx context.Context, sel ast.SelectionSet, v *model.UserNoPassword) graphql.Marshaler {
 	if v == nil {
 		if !ec.HasError(graphql.GetResolverContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

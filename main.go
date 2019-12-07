@@ -10,7 +10,8 @@ func main() {
 		return c.File("./index.html")
 	}
 	server := echo.New()
-	server.Pre(middleware.HTTPSNonWWWRedirect())
-	server.Use(middleware.Logger()) //balabala
-	server.StartTLS(":443", "./certs/server.crt", "./certs/server.key")
+	//server.Pre(middleware.HTTPSNonWWWRedirect())
+	server.Use(middleware.Logger())
+	server.Use(middleware.Recover())
+	//server.StartTLS(":443", "./certs/server.crt", "./certs/server.key")
 }

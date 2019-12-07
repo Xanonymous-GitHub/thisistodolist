@@ -8,7 +8,7 @@ schema:
 exec:
   filename: ./gqlgen/generated.go
 model:
-  filename: ./gqlgen/models_gen.go
+  filename: ./model/gqlgenmodel.go
 resolver:
   filename: ./gqlgen/resolver.go
   type: Resolver
