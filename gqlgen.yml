@@ -9,7 +9,15 @@ exec:
   filename: ./gqlgen/generated.go
 model:
   filename: ./model/gqlgenmodel.go
+models:
+  Todo:
+    model: github.com/Xanonymous-GitHub/thisistodolist/model.Todo
+  User:
+    model: github.com/Xanonymous-GitHub/thisistodolist/model.User
+  UserNoPassword:
+    model: github.com/Xanonymous-GitHub/thisistodolist/model.UserNoPassword
+  Session:
+    model: github.com/Xanonymous-GitHub/thisistodolist/model.Session
 resolver:
   filename: ./gqlgen/resolver.go
   type: Resolver
-autobind: []

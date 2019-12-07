@@ -1,17 +1,18 @@
 package main
 
 import (
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/99designs/gqlgen/handler"
+	"github.com/Xanonymous-GitHub/thisistodolist/gqlgen"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"net/http"
 )
 
 func main() {
-	echo.NotFoundHandler = func(c echo.Context) error {
-		return c.File("./index.html")
-	}
-	server := echo.New()
-	//server.Pre(middleware.HTTPSNonWWWRedirect())
-	server.Use(middleware.Logger())
-	server.Use(middleware.Recover())
-	//server.StartTLS(":443", "./certs/server.crt", "./certs/server.key")
+	router := chi.NewRouter()
+	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
+	router.Post("/query", handler.GraphQL(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: &gqlgen.Resolver{}})))
+	router.Get("/", handler.Playground("GraphQL playground", "/query"))
+	http.ListenAndServe(":8888", router)
 }
