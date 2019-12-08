@@ -76,6 +76,7 @@
   import Recaptcha from "@/components/Recaptcha";
 
   export default {
+  name: "signup",
   components: { Recaptcha },
   data: () => ({
     recapchatoken: "",

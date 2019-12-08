@@ -1,13 +1,14 @@
 <template>
   <v-list shaped v-show="items.length" class="transparent mx-2">
-    <v-list-item-group multiple v-model="selected">
-      <template v-for="(item, i) in items">
-        <v-card :key="`${item.uid}`" @click="actionChange(i)">
+    <v-list-item-group multiple>
+      <template v-for="item in items">
+        <v-card :key="`${item.uid}`">
           <v-list-item
-            :value="i"
+                  @click="test"
+            :ref="item.uid"
+            :value="item.uid"
             active-class="amber"
             class="my-3"
-            :isActive="item.selected"
           >
             <template v-slot:default="{ active }">
               <v-icon :color="getIconColor(item.completed)" left>{{
@@ -35,10 +36,13 @@
   import {mapGetters} from "vuex";
 
   export default {
+  name: "mainlist",
+  // data: () => ({
+  //   ref: this.$refs
+  // }),
   computed: {
     ...mapGetters({
-      items: "getItemExsist",
-      unfin: "getItemUnfinished"
+      items: "getItemExsist"
     })
   },
   methods: {
@@ -48,19 +52,17 @@
     getIconColor(type) {
       return type ? "green" : "red";
     },
-    actionChange(data) {
-      let whereToChange = data > this.unfin.length-1 ? "fin" : "unfin";
-      console.log(whereToChange);
-      console.log(data - this.unfin.length);
-      this.$store.dispatch("itemSelectedChange", {
-        where: whereToChange,
-        index: whereToChange === "unfin" ? data : data - this.unfin.length
-      });
+    test(){
+      console.log(this.$refs);
     }
+
   },
   beforeCreate() {
     this.$store.dispatch("setCurrentStatus", "full");
-  }
+  },
+  // mounted(){
+  //   this.$emit();
+  // }
 };
 </script>
 

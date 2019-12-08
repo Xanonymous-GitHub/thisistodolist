@@ -1,14 +1,14 @@
 export default {
-  pushItemFinished(state, data, index) {
+  pushItemFinished(state, data) {
     //insert a new item to finished
-    state.todo.finished.splice(index, 0, data);
+    state.todo.finished.splice(0, 0, data.data);
   },
   popItemFinished(state, index) {
     state.todo.finished.splice(index, 1);
   },
-  pushItemUnfinished(state, data, index) {
+  pushItemUnfinished(state, data) {
     //insert a new item to unfinished
-    state.todo.unfinished.splice(index, 0, data);
+    state.todo.unfinished.splice(0, 0, data.data);
   },
   popItemUnfinished(state, index) {
     state.todo.unfinished.splice(index, 1);
@@ -47,6 +47,5 @@ export default {
       let tmpStatus = state.trashcan[data.index].selected;
       state.trashcan[data.index].selected = !tmpStatus;
     }
-    console.log(state.todo);
   }
 };

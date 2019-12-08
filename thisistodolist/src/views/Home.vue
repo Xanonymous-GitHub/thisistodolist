@@ -4,7 +4,7 @@
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
-            <img :src="user.pic" />
+            <img :src="user.pic"  alt=""/>
           </v-list-item-avatar>
           <v-list-item-content class="font-weight-bold">
             <v-list-item-title
@@ -14,10 +14,10 @@
                 :color="user.badgeClass"
                 left
                 >{{ user.special }}</v-icon
-              >{{ user.username }}</v-list-item-title
+              >{{ user.user }}</v-list-item-title
             >
             <v-list-item-subtitle
-              >{{ "@" + user.id
+              >{{ "@" + user.username
               }}<v-icon v-if="user.verified" color="blue" right x-small
                 >mdi-check-decagram</v-icon
               ></v-list-item-subtitle
@@ -109,7 +109,7 @@
     </v-app-bar>
 
     <v-content>
-      <router-view />
+      <router-view ref="child" />
     </v-content>
     <v-card id="create" dark>
       <v-speed-dial
@@ -141,7 +141,13 @@
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-        <v-btn v-show="currentStatus !== 'set'" color="red" fab small>
+        <v-btn
+          v-show="currentStatus !== 'set'"
+          color="red"
+          @click="deleteItem"
+          fab
+          small
+        >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-speed-dial>
@@ -182,15 +188,13 @@
 </template>
 
 <script>
-  import MainList from "@/components/MainList";
-  import {mapGetters} from "vuex";
+    import {mapGetters} from "vuex";
 
-  export default {
+    export default {
   name: "home",
   data: () => ({
     newItemType: false,
     valid: true,
-    listdata: MainList.items,
     dialog: false,
     inputarea: "",
     drawer: null,
@@ -236,22 +240,12 @@
       this.dialog = false;
     },
     deleteItem() {
-      if (this.currentStatus==='full'||this.currentStatus==='unfin'){
-        let actionList=[];
-        for(let i=0;i<this.unfinLength;i++){
-          let tmpItem=this.$store.todo.unfinished[i];
-          if (tmpItem.selected===true){
-            actionList.append(tmpItem.uid);
-          }
-        }
-        //use the id list to delete the item!!
-      }
-      else if(this.currentStatus==='full'||this.currentStatus==='fin'){
-
-      }
-      else if (this.currentStatus==='tra'){
-
-      }
+      let test = this.$refs.child.$refs;
+      console.log(
+        test[
+          "6504e57eae199255731e66834f0c8cae3f1cc5e69aca3a51180430f220738fe1"
+        ][0].isActive
+      );
     }
   },
   computed: {

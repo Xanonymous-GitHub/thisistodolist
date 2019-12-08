@@ -58,6 +58,7 @@
   import Recaptcha from "@/components/Recaptcha";
 
   export default {
+  name: "signin",
   components: { Recaptcha },
   data: function() {
     return {

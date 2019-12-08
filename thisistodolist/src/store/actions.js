@@ -1,9 +1,9 @@
 import axios from "axios";
 
 export default {
-  delItem({ commit }, data) {
-    commit();
-  },
+  // delItem({ commit }, data) {
+  //   commit();
+  // },
   itemSelectedChange: ({ commit }, data) => {
     commit("changeItemStatus", data);
   },
@@ -36,7 +36,7 @@ export default {
   },
   addNewItem: async ({ commit, state }, dataPack) => {
     let data = {
-      author: state.userinfo.id,
+      author: state.userinfo.username,
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
@@ -45,25 +45,27 @@ export default {
     };
     try {
       await axios.post("/lists", JSON.stringify(data));
-      commit(
-        dataPack.type ? "pushItemFinished" : "pushItemUnfinished",
-        data,
-        0
-      );
+      commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", {
+        data: data,
+        index: 0
+      });
     } catch (e) {
       console.log(e + "\nerror@Vuex.action.addNewItem\n");
     }
   },
   testAddNewItem: ({ commit, state }, dataPack) => {
     let data = {
-      author: state.userinfo.id,
+      author: state.userinfo.username,
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
       content: dataPack.text,
       selected: false
     };
-    commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", data, 0);
+    commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", {
+      data: data,
+      index: 0
+    });
   }
 };
 /*

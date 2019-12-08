@@ -3,26 +3,26 @@
     <v-list-item-group multiple v-model="selected">
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
-        <v-list-item
-          :key="`${item.uid}`"
-          :value="item.uid"
-          active-class="amber"
-          class="my-3"
-        >
-          <template v-slot:default="{ active }">
-            <v-icon color="red" left>mdi-alert-circle-outline</v-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.content" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-checkbox
-                :input-value="active"
-                :true-value="item"
-                color="white"
-              />
-            </v-list-item-action>
-          </template>
-        </v-list-item>
+          <v-list-item
+            :key="`${item.uid}`"
+            :value="item.uid"
+            active-class="amber"
+            class="my-3"
+          >
+            <template v-slot:default="{ active }">
+              <v-icon color="red" left>mdi-alert-circle-outline</v-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.content" />
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-checkbox
+                  :input-value="active"
+                  :true-value="item"
+                  color="white"
+                />
+              </v-list-item-action>
+            </template>
+          </v-list-item>
         </v-card>
       </template>
     </v-list-item-group>
@@ -33,6 +33,7 @@
   import {mapGetters} from "vuex";
 
   export default {
+  name: "unfinishedlist",
   computed: {
     ...mapGetters({
       items: "getItemUnfinished"
