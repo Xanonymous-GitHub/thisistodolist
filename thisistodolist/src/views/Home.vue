@@ -1,26 +1,69 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer class="py-10" v-model="drawer" app>
+    <v-navigation-drawer app class="py-2" clipped v-model="drawer">
+      <template v-slot:prepend>
+        <v-list-item two-line>
+          <v-list-item-avatar>
+            <img :src="user.pic"  alt=""/>
+          </v-list-item-avatar>
+          <v-list-item-content class="font-weight-bold">
+            <v-list-item-title
+              ><v-icon
+                v-if="user.special"
+                small
+                :color="user.badgeClass"
+                left
+                >{{ user.special }}</v-icon
+              >{{ user.user }}</v-list-item-title
+            >
+            <v-list-item-subtitle
+              >{{ "@" + user.username
+              }}<v-icon v-if="user.verified" color="blue" right x-small
+                >mdi-check-decagram</v-icon
+              ></v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </v-list-item>
+        <div @click="logout" class="pa-2 text-center">
+          <v-btn outlined block color="amber darken-3">
+            <v-icon left>mdi-logout</v-icon>
+            登出
+          </v-btn>
+        </div>
+      </template>
+
+      <v-divider />
       <v-list dense>
-        <v-list-item @click="toppage">
+        <v-list-item to="/">
           <v-list-item-action>
-            <v-icon>mdi-apple</v-icon>
+            <v-icon>mdi-clipboard-list</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-bold"
+              >所有項目</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item to="/unfinished">
+          <v-list-item-action>
+            <v-icon>mdi-clipboard-alert</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>待辦事項</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item link>
+        <v-list-item to="/finished">
           <v-list-item-action>
-            <v-icon>mdi-check</v-icon>
+            <v-icon>mdi-clipboard-check</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>已完成</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item link>
+        <v-list-item to="/trashcan">
           <v-list-item-action>
             <v-icon>mdi-trash-can</v-icon>
           </v-list-item-action>
@@ -29,7 +72,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item link>
+        <v-list-item to="/settings">
           <v-list-item-action>
             <v-icon>mdi-settings</v-icon>
           </v-list-item-action>
@@ -39,17 +82,26 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        <div @click="logout" class="pa-5 text-center">
-          <router-link to="/signin" tag="button" replace>
-            <v-btn color="amber" block>
-              <v-icon dark left>mdi-arrow-left</v-icon>登出
-            </v-btn>
-          </router-link>
-        </div>
+        <v-card v-if="false">
+          <v-lazy
+            v-model="isActive"
+            :options="{
+              threshold: 0.5
+            }"
+            transition="fade-transition"
+          >
+            <v-card class="mx-auto">
+              <v-card-title>Card title</v-card-title>
+              <v-card-text>
+                Phasellus magna.
+              </v-card-text>
+            </v-card>
+          </v-lazy>
+        </v-card>
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar app color="purple darken-3" dark>
+    <v-app-bar app clipped-left color="purple darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
         <b>ThisIsToDoList</b>
@@ -57,67 +109,94 @@
     </v-app-bar>
 
     <v-content>
-      <transition name="fade">
-        <router-view></router-view>
-      </transition>
-      <!-- <v-container class="fill-height" fluid>
-        
-      </v-container>-->
+      <router-view ref="child" />
     </v-content>
-    <!-- <v-card-text style="height: 100px; position: fixed;right:1%;bottom:0%">
-      <v-fab-transition>
-        <v-btn v-show="!hidden" color="pink" dark absolute top right fab>
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-fab-transition>
-    </v-card-text>-->
-    <v-card id="create">
+    <v-card id="create" dark>
       <v-speed-dial
-        v-model="fab"
-        :top="top"
         :bottom="bottom"
-        :right="right"
-        :left="left"
         :direction="direction"
+        :left="left"
         :open-on-hover="hover"
+        :right="right"
+        :top="top"
         :transition="transition"
         class="my-7"
+        v-model="fab"
       >
         <template v-slot:activator>
-          <v-btn v-model="fab" color="blue darken-2" dark fab>
+          <v-btn color="blue darken-2" fab v-model="fab">
             <v-icon v-if="fab">mdi-close</v-icon>
-            <v-icon v-else>mdi-account-circle</v-icon>
+            <v-icon v-else>mdi-cat</v-icon>
           </v-btn>
         </template>
-        <v-btn fab dark small color="green">
+        <v-btn v-show="currentStatus !== 'set'" color="green" fab small>
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn fab dark small color="indigo">
+        <v-btn
+          v-show="currentStatus !== 'tra' && currentStatus !== 'set'"
+          @click.stop="dialog = !dialog"
+          color="indigo"
+          fab
+          small
+        >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-        <v-btn fab dark small color="red">
+        <v-btn
+          v-show="currentStatus !== 'set'"
+          color="red"
+          @click="deleteItem"
+          fab
+          small
+        >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-speed-dial>
     </v-card>
-    <v-footer color="purple darken-3" app>
-      <span class="white--text">Copyright &copy; NPC GO version {{ version }}</span>
+    <v-dialog v-model="dialog" width="500">
+      <v-form v-model="valid">
+        <v-card>
+          <v-card-title
+            class="headline purple darken-3 white--text"
+            primary-title
+            >新增項目
+          </v-card-title>
+          <v-textarea auto-grow class="mx-5" required v-model="inputarea" />
+          <v-divider />
+          <v-card-actions>
+            <v-spacer />
+            <v-switch
+              v-model="newItemType"
+              class="mx-4 text-sm-center"
+              inset
+              label="達成"
+            />
+            <v-btn
+              :disabled="!valid || !inputarea.trim()"
+              @click="AddItem"
+              color="primary"
+              >確定
+            </v-btn>
+            <v-btn @click="dialog = false" color="error">取消</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
+    </v-dialog>
+    <v-footer app color="purple darken-3">
+      <span class="white--text">Copyright &copy; NPC GO Dev Team</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-export default {
+  import {mapGetters} from "vuex";
+
+  export default {
   name: "home",
-  components: {},
   data: () => ({
-    s_self: this,
-    version: "alpha",
-    items: [
-      { title: "Dashboard", icon: "dashboard" },
-      { title: "Account", icon: "account_box" },
-      { title: "Admin", icon: "gavel" }
-    ],
+    newItemType: false,
+    valid: true,
+    dialog: false,
+    inputarea: "",
     drawer: null,
     direction: "top",
     fab: false,
@@ -129,19 +208,8 @@ export default {
     bottom: true,
     left: false
   }),
-  computed: {
-    activeFab() {
-      switch (this.tabs) {
-        case "one":
-          return { class: "purple", icon: "account_circle" };
-        case "two":
-          return { class: "red", icon: "edit" };
-        case "three":
-          return { class: "green", icon: "keyboard_arrow_up" };
-        default:
-          return {};
-      }
-    }
+  created() {
+    this.$vuetify.theme.dark = true;
   },
   watch: {
     top(val) {
@@ -158,13 +226,31 @@ export default {
     }
   },
   methods: {
-    toppage:function(){
-      window.location.replace("./todolist");
-    },
-    logout: function() {
-      this.$cookie.delete("sessionID");
+    logout() {
+      this.$cookies.set("sessionID", "null");
       window.location.replace("./signin");
+    },
+    AddItem() {
+      let data = this.inputarea;
+      this.inputarea = "";
+      this.$store.dispatch("testAddNewItem", {
+        text: data,
+        type: this.newItemType
+      });
+      this.dialog = false;
+    },
+    deleteItem() {
+      this.$store.dispatch("delItem",{data:this.$refs.child.$refs,type:this.currentStatus});
     }
+  },
+  computed: {
+    ...mapGetters({
+      currentStatus: "getCurrentStatus",
+      user: "getUser",
+      unfinLength: "getUnfinLength",
+      finLength: "getFinLength",
+      traLength: "getTraLength"
+    })
   }
 };
 </script>
