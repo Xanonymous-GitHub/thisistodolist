@@ -3486,7 +3486,7 @@ copy-webpack-plugin@^5.0.5:
     normalize-path "^3.0.0"
     p-limit "^2.2.1"
     schema-utils "^1.0.0"
-    serialize-javascript "^2.1.0"
+    serialize-javascript "^2.1.1"
     webpack-log "^2.0.0"
 
 core-js-compat@^3.1.1:
@@ -8922,6 +8922,9 @@ serialize-javascript@^2.1.0:
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-2.1.0.tgz#9310276819efd0eb128258bb341957f6eb2fc570"
   integrity sha512-a/mxFfU00QT88umAJQsNWOnUKckhNCqOl028N48e7wFmo2/EHpTo9Wso+iJJCMrQnmFvcjto5RJdAHEvVhcyUQ==
 
+serialize-javascript@^2.1.1:
+  version "2.1.1"
+
 serve-index@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/serve-index/-/serve-index-1.9.1.tgz#d3768d69b1e7d82e5ce050fff5b453bea12a9239"
@@ -9632,7 +9635,7 @@ terser-webpack-plugin@^1.4.1:
     find-cache-dir "^2.1.0"
     is-wsl "^1.1.0"
     schema-utils "^1.0.0"
-    serialize-javascript "^1.7.0"
+    serialize-javascript "^2.1.1"
     source-map "^0.6.1"
     terser "^4.1.2"
     webpack-sources "^1.4.0"
@@ -9647,7 +9650,7 @@ terser-webpack-plugin@^2.2.1:
     find-cache-dir "^3.0.0"
     jest-worker "^24.9.0"
     schema-utils "^2.5.0"
-    serialize-javascript "^2.1.0"
+    serialize-javascript "^2.1.1"
     source-map "^0.6.1"
     terser "^4.3.9"
     webpack-sources "^1.4.3"
@@ -10231,7 +10234,7 @@ vue-apollo@^3.0.0-beta.11:
   integrity sha512-lrKyTT1L5mjDEp7nyqnTRJwD/kTpLDBIqFfZ+TGQVivjlUz6o5VA0pLYGCx5cGa1gEF/ERWc0AEdNSdKgs7Ygg==
   dependencies:
     chalk "^2.4.2"
-    serialize-javascript "^2.1.0"
+    serialize-javascript "^2.1.1"
     throttle-debounce "^2.1.0"
 
 vue-cli-plugin-apollo@^0.21.3:

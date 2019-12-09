@@ -4,7 +4,7 @@
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
-            <img :src="user.pic"  alt=""/>
+            <img :src="user.pic" alt="" />
           </v-list-item-avatar>
           <v-list-item-content class="font-weight-bold">
             <v-list-item-title
@@ -240,7 +240,10 @@
       this.dialog = false;
     },
     deleteItem() {
-      this.$store.dispatch("delItem",{data:this.$refs.child.$refs,type:this.currentStatus});
+      this.$store.dispatch("delItem", {
+        data: this.$refs.child.$refs,
+        type: this.currentStatus
+      });
     }
   },
   computed: {
