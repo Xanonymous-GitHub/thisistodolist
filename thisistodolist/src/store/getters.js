@@ -8,6 +8,9 @@ export default {
   getItemExsist(state) {
     return state.todo.unfinished.concat(state.todo.finished);
   },
+  getItemTrashcan(state){
+    return state.trashcan;
+  },
   getCurrentStatus(state) {
     return state.currentStatus;
   },

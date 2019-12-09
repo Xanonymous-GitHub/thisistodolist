@@ -4,7 +4,6 @@
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
           <v-list-item
-                  @click="test"
             :ref="item.uid"
             :value="item.uid"
             active-class="amber"
@@ -37,9 +36,6 @@
 
   export default {
   name: "mainlist",
-  // data: () => ({
-  //   ref: this.$refs
-  // }),
   computed: {
     ...mapGetters({
       items: "getItemExsist"
@@ -51,18 +47,11 @@
     },
     getIconColor(type) {
       return type ? "green" : "red";
-    },
-    test(){
-      console.log(this.$refs);
     }
-
   },
   beforeCreate() {
     this.$store.dispatch("setCurrentStatus", "full");
-  },
-  // mounted(){
-  //   this.$emit();
-  // }
+  }
 };
 </script>
 

@@ -1,10 +1,10 @@
 <template>
   <v-list shaped v-show="items.length" class="transparent mx-2">
-    <v-list-item-group multiple v-model="selected">
+    <v-list-item-group multiple>
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
           <v-list-item
-            :key="`${item.uid}`"
+            :ref="item.uid"
             :value="item.uid"
             active-class="green"
             class="my-3"

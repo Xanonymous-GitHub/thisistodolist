@@ -1,9 +1,47 @@
 import axios from "axios";
 
 export default {
-  // delItem({ commit }, data) {
-  //   commit();
-  // },
+  delItem({ commit, state }, data) {
+    if (data.type === "unfin") {
+      for (let i = 0; i < state.todo.unfinished.length; i++) {
+        let transferBox = state.todo.unfinished[i];
+        if (data.data[`${transferBox.uid}`][0].isActive === true) {
+          commit("popItemUnfinished", i--);
+          commit("pushItemTrashcan", transferBox);
+        }
+      }
+    } else if (data.type === "fin") {
+      for (let i = 0; i < state.todo.finished.length; i++) {
+        let transferBox = state.todo.finished[i];
+        if (data.data[`${transferBox.uid}`][0].isActive === true) {
+          commit("popItemFinished", i--);
+          commit("pushItemTrashcan", transferBox);
+        }
+      }
+    } else if (data.type === "full") {
+      for (let i = 0; i < state.todo.unfinished.length; i++) {
+        let transferBox = state.todo.unfinished[i];
+        if (data.data[`${transferBox.uid}`][0].isActive === true) {
+          commit("popItemUnfinished", i--);
+          commit("pushItemTrashcan", transferBox);
+        }
+      }
+      for (let j = 0; j < state.todo.finished.length; j++) {
+        let transferBox = state.todo.finished[j];
+        if (data.data[`${transferBox.uid}`][0].isActive === true) {
+          commit("popItemFinished", j--);
+          commit("pushItemTrashcan", transferBox);
+        }
+      }
+    } else if (data.type === "tra") {
+      for (let i = 0; i < state.trashcan.length; i++) {
+        let transferBox = state.trashcan[i];
+        if (data.data[`${transferBox.uid}`][0].isActive === true) {
+          commit("popItemTrashcan", i--);
+        }
+      }
+    }
+  },
   itemSelectedChange: ({ commit }, data) => {
     commit("changeItemStatus", data);
   },

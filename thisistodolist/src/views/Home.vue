@@ -188,9 +188,9 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+  import {mapGetters} from "vuex";
 
-    export default {
+  export default {
   name: "home",
   data: () => ({
     newItemType: false,
@@ -240,12 +240,7 @@
       this.dialog = false;
     },
     deleteItem() {
-      let test = this.$refs.child.$refs;
-      console.log(
-        test[
-          "6504e57eae199255731e66834f0c8cae3f1cc5e69aca3a51180430f220738fe1"
-        ][0].isActive
-      );
+      this.$store.dispatch("delItem",{data:this.$refs.child.$refs,type:this.currentStatus});
     }
   },
   computed: {
