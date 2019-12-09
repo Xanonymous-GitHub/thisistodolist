@@ -1,6 +1,9 @@
 import axios from "axios";
 
 export default {
+  changeConfig({ commit }, data) {
+    commit("updateConfig", data);
+  },
   delItem({ commit, state }, data) {
     if (data.type === "unfin") {
       for (let i = 0; i < state.todo.unfinished.length; i++) {
@@ -41,9 +44,6 @@ export default {
         }
       }
     }
-  },
-  itemSelectedChange: ({ commit }, data) => {
-    commit("changeItemStatus", data);
   },
   setCurrentStatus: ({ commit }, data) => {
     commit("setStatus", data);

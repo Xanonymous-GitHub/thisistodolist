@@ -31,5 +31,9 @@ export default {
     verified: true,
     emailVerified: true
   },
-  currentStatus: "full" //[full,unfin,fin,tra,set]
+  currentStatus: "full", //[full,unfin,fin,tra,set]
+  componentsConfig: {
+    inputAreaDialogStatus: false,
+    inputAreaMissionConfig: {}
+  }
 };

@@ -34,5 +34,8 @@ export default {
   },
   getTraLength(state) {
     return state.trashcan.length;
+  },
+  getComponentConfig(state) {
+    return state.componentsConfig;
   }
 };

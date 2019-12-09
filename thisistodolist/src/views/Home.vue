@@ -81,24 +81,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <template v-slot:append>
-        <v-card v-if="false">
-          <v-lazy
-            v-model="isActive"
-            :options="{
-              threshold: 0.5
-            }"
-            transition="fade-transition"
-          >
-            <v-card class="mx-auto">
-              <v-card-title>Card title</v-card-title>
-              <v-card-text>
-                Phasellus magna.
-              </v-card-text>
-            </v-card>
-          </v-lazy>
-        </v-card>
-      </template>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-left color="purple darken-3" dark>
@@ -119,7 +101,6 @@
         :open-on-hover="hover"
         :right="right"
         :top="top"
-        :transition="transition"
         class="my-7"
         v-model="fab"
       >
@@ -134,7 +115,9 @@
         </v-btn>
         <v-btn
           v-show="currentStatus !== 'tra' && currentStatus !== 'set'"
-          @click.stop="dialog = !dialog"
+          @click.stop="
+            callInputArea({ title: '新增項目', content: '', type: false })
+          "
           color="indigo"
           fab
           small
@@ -152,34 +135,8 @@
         </v-btn>
       </v-speed-dial>
     </v-card>
-    <v-dialog v-model="dialog" width="500">
-      <v-form v-model="valid">
-        <v-card>
-          <v-card-title
-            class="headline purple darken-3 white--text"
-            primary-title
-            >新增項目
-          </v-card-title>
-          <v-textarea auto-grow class="mx-5" required v-model="inputarea" />
-          <v-divider />
-          <v-card-actions>
-            <v-spacer />
-            <v-switch
-              v-model="newItemType"
-              class="mx-4 text-sm-center"
-              inset
-              label="達成"
-            />
-            <v-btn
-              :disabled="!valid || !inputarea.trim()"
-              @click="AddItem"
-              color="primary"
-              >確定
-            </v-btn>
-            <v-btn @click="dialog = false" color="error">取消</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-form>
+    <v-dialog v-model="config.inputAreaDialogStatus" width="600">
+      <inputArea :key="inputAreaKey" />
     </v-dialog>
     <v-footer app color="purple darken-3">
       <span class="white--text">Copyright &copy; NPC GO Dev Team</span>
@@ -189,14 +146,14 @@
 
 <script>
   import {mapGetters} from "vuex";
+  import inputArea from "@/components/InputArea.vue";
 
   export default {
+  components: {
+    inputArea
+  },
   name: "home",
   data: () => ({
-    newItemType: false,
-    valid: true,
-    dialog: false,
-    inputarea: "",
     drawer: null,
     direction: "top",
     fab: false,
@@ -206,7 +163,8 @@
     top: false,
     right: true,
     bottom: true,
-    left: false
+    left: false,
+    inputAreaKey: -1
   }),
   created() {
     this.$vuetify.theme.dark = true;
@@ -230,14 +188,16 @@
       this.$cookies.set("sessionID", "null");
       window.location.replace("./signin");
     },
-    AddItem() {
-      let data = this.inputarea;
-      this.inputarea = "";
-      this.$store.dispatch("testAddNewItem", {
-        text: data,
-        type: this.newItemType
+    callInputArea(data) {
+      this.$store.dispatch("changeConfig", {
+        name: "inputAreaMissionConfig",
+        value: data
       });
-      this.dialog = false;
+      this.inputAreaKey++;
+      this.$store.dispatch("changeConfig", {
+        name: "inputAreaDialogStatus",
+        value: true
+      });
     },
     deleteItem() {
       this.$store.dispatch("delItem", {
@@ -252,7 +212,8 @@
       user: "getUser",
       unfinLength: "getUnfinLength",
       finLength: "getFinLength",
-      traLength: "getTraLength"
+      traLength: "getTraLength",
+      config: "getComponentConfig"
     })
   }
 };
