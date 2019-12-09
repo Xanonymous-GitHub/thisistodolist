@@ -1,35 +1,46 @@
 # GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
-
+directive @hasLevel(level:[Level!]!) on FIELD_DEFINITION
+directive @auth on QUERY
+directive @authRestricted on MUTATION
 type Todo {
   id: ID!
   content: String!
   completed: Boolean!
   deleted: Boolean!
-  author: UserNoPassword!
+  author: User!
+  private: Boolean!
 }
-
-type UserNoPassword {
-  id: ID!
-  username: String!
-  isVerify: Boolean!
-  email: String!
+enum Level{
+  Admin
+  Super
+  User
+  Restricted
 }
 type User{
   id: ID!
   username: String!
-  isVerify: Boolean!
+  emailVerified: Boolean!
   email: String!
-  password: String!
+  nickname: String!
+  pictureUrl: String!
+  verified: Boolean!
+  userLevel: Int!
+  password: String! @deprecated(reason: "That is secret")
+  friend: [User!]
+  todos: [Todo!]!
 }
 type Session{
   user_id:ID!
-  token: String!
+  token: String! @deprecated(reason: "That is secret")
+  setTime: String!
 }
 type Query {
-  todos: [Todo!]!
-  user: UserNoPassword!
+  findTodoByAuthor: [Todo!]!
+  user: User!
+  findAllUsers:[User!]! @hasLevel(level:[Admin,Super])
+  findAllTodo:[Todo!]! @hasLevel(level:[Admin,Super])
 }
 
 input NewTodo {
@@ -40,12 +51,14 @@ input NewUser{
   email: String!
   password: String!
 }
-input DoTodo{
-  id: ID!
+input CTodo {
+  id:ID!
+  content: String
+  completed: Boolean
+  deleted: Boolean
 }
 type Mutation {
   createTodo(input: NewTodo!): Todo!
-  createUser(input: NewUser!): UserNoPassword!
-  deleteTodo(input: DoTodo!):Todo!
-  completeTodo(input: DoTodo!):Todo!
+  createUser(input: NewUser!): User!
+  changeTodo(input:CTodo):Todo!
 }
