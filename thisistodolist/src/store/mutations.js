@@ -28,10 +28,10 @@ export default {
     state.todo.unfinished = [];
   },
   pushItemTrashcan(state, data) {
-    data.delete=true;
+    data.delete = true;
     state.trashcan.splice(0, 0, data);
   },
-  popItemTrashcan(state,index){
+  popItemTrashcan(state, index) {
     state.trashcan.splice(index, 1);
   },
   cleanItemTrashcan(state) {

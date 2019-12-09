@@ -8,31 +8,31 @@ export default {
   getItemExsist(state) {
     return state.todo.unfinished.concat(state.todo.finished);
   },
-  getItemTrashcan(state){
+  getItemTrashcan(state) {
     return state.trashcan;
   },
   getCurrentStatus(state) {
     return state.currentStatus;
   },
-  getUser(state){
-    let user=state.userinfo;
-    if(user.type==='administrator'){
-      user.badgeClass='';
-      user.special='mdi-shield-star';
+  getUser(state) {
+    let user = state.userinfo;
+    if (user.type === "administrator") {
+      user.badgeClass = "";
+      user.special = "mdi-shield-star";
     }
-    if(user.type==='super'){
-      user.badgeClass='';
-      user.special='mdi-shield-account-outline';
+    if (user.type === "super") {
+      user.badgeClass = "";
+      user.special = "mdi-shield-account-outline";
     }
     return state.userinfo;
   },
-  getUnfinLength(state){
+  getUnfinLength(state) {
     return state.todo.unfinished.length;
   },
-  getFinLength(state){
+  getFinLength(state) {
     return state.todo.finished.length;
   },
-  getTraLength(state){
+  getTraLength(state) {
     return state.trashcan.length;
-  },
+  }
 };

@@ -28,8 +28,8 @@ export default {
     email: "trusaidlin@gmail.com",
     pic: "https://avatars2.githubusercontent.com/u/47718989?s=460&v=4",
     type: "administrator", //[administrator,super,user,restricted]
-    verified:true,
-    emailVerified:true,
+    verified: true,
+    emailVerified: true
   },
-  currentStatus: "full", //[full,unfin,fin,tra,set]
+  currentStatus: "full" //[full,unfin,fin,tra,set]
 };
