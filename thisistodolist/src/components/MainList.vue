@@ -1,6 +1,6 @@
 <template>
   <v-list shaped v-show="items.length" class="transparent mx-2">
-    <v-list-item-group multiple v-model="inActiveItem">
+    <v-list-item-group multiple v-model="inActiveItems">
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
           <v-list-item
@@ -38,7 +38,7 @@
   export default {
   name: "mainlist",
   data: () => ({
-    inActiveItem: []
+    inActiveItems: []
   }),
   computed: {
     ...mapGetters({
@@ -57,7 +57,7 @@
       this.$nextTick(() => {
         this.$store.dispatch("changeConfig", {
           name: "selected",
-          value: this.inActiveItem
+          value: this.inActiveItems
         });
       });
     }

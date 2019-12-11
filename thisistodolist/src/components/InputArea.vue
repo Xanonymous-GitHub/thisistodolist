@@ -38,20 +38,60 @@
   }),
   methods: {
     submit(type) {
-      if(type){
-        this.AddItem();
+      if (type) {
+        if (this.config.inputAreaMissionConfig.classes === "add") {
+          this.addItem();
+        } else if (this.config.inputAreaMissionConfig.classes === "edit") {
+          this.editItem();
+        }
       }
       this.$store.dispatch("changeConfig", {
         name: "inputAreaDialogStatus",
         value: false
       });
     },
-    AddItem() {
-      let data = this.inputarea;
+    addItem() {
       this.$store.dispatch("testAddNewItem", {
-        text: data,
+        text: this.inputarea,
         type: this.newItemType
       });
+    },
+    editItem() {
+      let tmpItem = this.config.inputAreaMissionConfig.item;
+      tmpItem.content = this.inputarea;
+      if (this.newItemType !== tmpItem.complete) {
+        this.$store.dispatch("testAddNewItem", {
+          text: this.inputarea,
+          type: this.newItemType
+        });
+        this.$store.dispatch("changeConfig", {
+          name: "selected",
+          value: Array(tmpItem.uid)
+        });
+        console.log(this.config.selected);
+        this.$store.dispatch("selectionHandler", {
+          listType: "unfin",
+          actions: {
+            name: "delItem",
+            act: { name: "unfin" }
+          }
+        });
+        this.$store.dispatch("selectionHandler", {
+          listType: "fin",
+          actions: {
+            name: "delItem",
+            act: { name: "fin" }
+          }
+        });
+        this.$store.dispatch("delItem", { name: "tra", pos: 0 });
+      }
+      // this.$store.dispatch("testEditItem",{
+      //   type:this.config.inputAreaMissionConfig.itemPos.list,
+      //   data:{
+      //     index:this.config.inputAreaMissionConfig.itemPos.pos,
+      //     data:tmpItem
+      //   }
+      // });
     }
   },
   computed: {

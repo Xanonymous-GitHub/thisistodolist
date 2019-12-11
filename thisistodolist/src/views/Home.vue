@@ -110,14 +110,9 @@
             <v-icon v-else>mdi-cat</v-icon>
           </v-btn>
         </template>
-        <v-btn v-show="currentStatus !== 'set'" color="green" fab small>
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
         <v-btn
           v-show="currentStatus !== 'tra' && currentStatus !== 'set'"
-          @click.stop="
-            callInputArea({ title: '新增項目', content: '', type: false })
-          "
+          @click.stop="callInputArea('addNew')"
           color="indigo"
           fab
           small
@@ -125,9 +120,21 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-btn
+          :disabled="config.selected.length !== 1"
+          v-show="currentStatus !== 'tra' && currentStatus !== 'set'"
+          @click.stop="callInputArea('edit')"
+          color="green"
+          fab
+          small
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+
+        <v-btn
           v-show="currentStatus !== 'set'"
           color="red"
           @click="deleteItem"
+          :disabled="!config.selected.length"
           fab
           small
         >
@@ -189,10 +196,28 @@
       window.location.replace("./signin");
     },
     callInputArea(data) {
-      this.$store.dispatch("changeConfig", {
-        name: "inputAreaMissionConfig",
-        value: data
-      });
+      if (data === "addNew") {
+        this.$store.dispatch("changeConfig", {
+          name: "inputAreaMissionConfig",
+          value: { title: "新增項目", content: "", type: false, classes: "add" }
+        });
+      }
+      if (data === "edit") {
+        this.$store.dispatch("selectionHandler", {
+          listType: "unfin",
+          actions: {
+            name: "setConfigForInputarea",
+            act: { name: "unfin" }
+          }
+        });
+        this.$store.dispatch("selectionHandler", {
+          listType: "fin",
+          actions: {
+            name: "setConfigForInputarea",
+            act: { name: "fin" }
+          }
+        });
+      }
       this.inputAreaKey++;
       this.$store.dispatch("changeConfig", {
         name: "inputAreaDialogStatus",
@@ -201,30 +226,27 @@
     },
     deleteItem() {
       //data:{listType:[int],actions:[name:String,act:{Json}]}
-      if(this.currentStatus==='full'){
-        this.$store.dispatch("selectionHandler", {
-          listType: "unfin",
-          actions: {
-            name: "delItem",
-            act: { name: "unfin" }
-          }
-        });
-        this.$store.dispatch("selectionHandler", {
-          listType: "fin",
-          actions: {
-            name: "delItem",
-            act: { name: "fin" }
-          }
-        });
-      }else{
-        this.$store.dispatch("selectionHandler", {
-          listType: this.currentStatus,
-          actions: {
-            name: "delItem",
-            act: { name: this.currentStatus }
-          }
-        });
-      }
+      this.$store.dispatch("selectionHandler", {
+        listType: "unfin",
+        actions: {
+          name: "delItem",
+          act: { name: "unfin" }
+        }
+      });
+      this.$store.dispatch("selectionHandler", {
+        listType: "fin",
+        actions: {
+          name: "delItem",
+          act: { name: "fin" }
+        }
+      });
+      this.$store.dispatch("selectionHandler", {
+        listType: "tra",
+        actions: {
+          name: "delItem",
+          act: { name: "tra" }
+        }
+      });
     }
   },
   computed: {

@@ -3,7 +3,7 @@ export default {
     //insert a new item to finished
     state.todo.finished.splice(0, 0, data.data);
   },
-  popItemFinished(state,index) {
+  popItemFinished(state, index) {
     state.todo.finished.splice(index, 1);
   },
   pushItemUnfinished(state, data) {
@@ -13,13 +13,13 @@ export default {
   popItemUnfinished(state, index) {
     state.todo.unfinished.splice(index, 1);
   },
-  setItemFinished(state, data, index) {
+  setItemFinished(state, data) {
     //change the exists item
-    state.todo.finished[index].text = data;
+    state.todo.finished[data.index] = data.data;
   },
-  setItemUnfinished(state, data, index) {
+  setItemUnfinished(state, data) {
     //change the exists item
-    state.todo.unfinished[index].text = data;
+    state.todo.unfinished[data.index] = data.data;
   },
   delItemFinished(state) {
     state.todo.finished = [];
@@ -41,6 +41,6 @@ export default {
     state.currentStatus = data;
   },
   updateConfig(state, data) {
-    state.componentsConfig[`${data.name}`] = data.value;
+    state.componentsConfig[data.name] = data.value;
   }
 };

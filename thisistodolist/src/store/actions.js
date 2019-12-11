@@ -5,7 +5,7 @@ export default {
     commit("updateConfig", data);
   },
   selectionHandler({ dispatch, state }, data) {
-    //data:{listNum:[Object],actions:[name:String,act:{Json}]}
+    //data:{listType:[Object],actions:[name:String,act:{Json}]}
     let list;
     if (data.listType === "unfin") {
       list = state.todo.unfinished;
@@ -18,11 +18,32 @@ export default {
       for (let j = 0; j < state.componentsConfig.selected.length; j++) {
         if (state.componentsConfig.selected[j] === list[i].uid) {
           data.actions.act.pos = i--;
+          data.actions.act.uidPos = j;
           dispatch(data.actions.name, data.actions.act);
           break;
         }
       }
     }
+  },
+  setConfigForInputarea({ commit, state, dispatch }, data) {
+    state.componentsConfig.selected.pop();
+    let tmpItem;
+    if (data.name === "unfin") {
+      tmpItem = state.todo.unfinished[data.pos];
+    } else if (data.name === "fin") {
+      tmpItem = state.todo.finished[data.pos];
+    }
+    dispatch("changeConfig", {
+      name: "inputAreaMissionConfig",
+      value: {
+        title: "編輯項目",
+        content: tmpItem.content,
+        type: tmpItem.completed,
+        classes: "edit",
+        itemPos: { list: data.name, pos: data.pos },
+        item: tmpItem
+      }
+    });
   },
   delItem({ commit, state }, data) {
     if (data.name === "unfin") {
@@ -38,9 +59,27 @@ export default {
     if (data.name === "tra") {
       commit("popItemTrashcan", data.pos);
     }
+    state.componentsConfig.selected.pop(data.uidPos);
   },
   setCurrentStatus: ({ commit }, data) => {
     commit("setStatus", data);
+  },
+  editItem: async ({ commit }, data) => {
+    try {
+      await axios.post("/lists");
+      commit(data.type ? "setItemFinished" : "setItemUnfinished", {
+        index: data.data.index,
+        data: data.data.data
+      });
+    } catch (e) {
+      console.log(e + "\nerror@Vuex.action.editItem\n");
+    }
+  },
+  testEditItem: ({ commit }, data) => {
+    commit(data.type ? "setItemFinished" : "setItemUnfinished", {
+      index: data.data.index,
+      data: data.data.data
+    });
   },
   syncData: async ({ commit }) => {
     try {

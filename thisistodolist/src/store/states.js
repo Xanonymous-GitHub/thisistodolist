@@ -35,6 +35,6 @@ export default {
   componentsConfig: {
     inputAreaDialogStatus: false,
     inputAreaMissionConfig: {},
-    selected:[]
+    selected: []
   }
 };
