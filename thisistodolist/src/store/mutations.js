@@ -3,7 +3,7 @@ export default {
     //insert a new item to finished
     state.todo.finished.splice(0, 0, data.data);
   },
-  popItemFinished(state, index) {
+  popItemFinished(state,index) {
     state.todo.finished.splice(index, 1);
   },
   pushItemUnfinished(state, data) {

@@ -200,10 +200,31 @@
       });
     },
     deleteItem() {
-      this.$store.dispatch("delItem", {
-        data: this.$refs.child.$refs,
-        type: this.currentStatus
-      });
+      //data:{listType:[int],actions:[name:String,act:{Json}]}
+      if(this.currentStatus==='full'){
+        this.$store.dispatch("selectionHandler", {
+          listType: "unfin",
+          actions: {
+            name: "delItem",
+            act: { name: "unfin" }
+          }
+        });
+        this.$store.dispatch("selectionHandler", {
+          listType: "fin",
+          actions: {
+            name: "delItem",
+            act: { name: "fin" }
+          }
+        });
+      }else{
+        this.$store.dispatch("selectionHandler", {
+          listType: this.currentStatus,
+          actions: {
+            name: "delItem",
+            act: { name: this.currentStatus }
+          }
+        });
+      }
     }
   },
   computed: {

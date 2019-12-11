@@ -4,45 +4,39 @@ export default {
   changeConfig({ commit }, data) {
     commit("updateConfig", data);
   },
+  selectionHandler({ dispatch, state }, data) {
+    //data:{listNum:[Object],actions:[name:String,act:{Json}]}
+    let list;
+    if (data.listType === "unfin") {
+      list = state.todo.unfinished;
+    } else if (data.listType === "fin") {
+      list = state.todo.finished;
+    } else if (data.listType === "tra") {
+      list = state.trashcan;
+    }
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < state.componentsConfig.selected.length; j++) {
+        if (state.componentsConfig.selected[j] === list[i].uid) {
+          data.actions.act.pos = i--;
+          dispatch(data.actions.name, data.actions.act);
+          break;
+        }
+      }
+    }
+  },
   delItem({ commit, state }, data) {
-    if (data.type === "unfin") {
-      for (let i = 0; i < state.todo.unfinished.length; i++) {
-        let transferBox = state.todo.unfinished[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemUnfinished", i--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-    } else if (data.type === "fin") {
-      for (let i = 0; i < state.todo.finished.length; i++) {
-        let transferBox = state.todo.finished[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemFinished", i--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-    } else if (data.type === "full") {
-      for (let i = 0; i < state.todo.unfinished.length; i++) {
-        let transferBox = state.todo.unfinished[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemUnfinished", i--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-      for (let j = 0; j < state.todo.finished.length; j++) {
-        let transferBox = state.todo.finished[j];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemFinished", j--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-    } else if (data.type === "tra") {
-      for (let i = 0; i < state.trashcan.length; i++) {
-        let transferBox = state.trashcan[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemTrashcan", i--);
-        }
-      }
+    if (data.name === "unfin") {
+      let transferBox = state.todo.unfinished[data.pos];
+      commit("popItemUnfinished", data.pos);
+      commit("pushItemTrashcan", transferBox);
+    }
+    if (data.name === "fin") {
+      let transferBox = state.todo.finished[data.pos];
+      commit("popItemFinished", data.pos);
+      commit("pushItemTrashcan", transferBox);
+    }
+    if (data.name === "tra") {
+      commit("popItemTrashcan", data.pos);
     }
   },
   setCurrentStatus: ({ commit }, data) => {
@@ -106,8 +100,3 @@ export default {
     });
   }
 };
-/*
-
-{author:'String',uid:'String',completed:'[true/false]',deleted:'[true/false]',content:'String'}
-
-*/

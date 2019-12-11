@@ -16,11 +16,11 @@
         />
         <v-btn
           :disabled="!valid || !inputarea.trim()"
-          @click="submit"
+          @click="submit(true)"
           color="primary"
           >確定
         </v-btn>
-        <v-btn @click="submit" color="error">取消</v-btn>
+        <v-btn @click="submit(false)" color="error">取消</v-btn>
       </v-card-actions>
     </v-card>
   </v-form>
@@ -37,8 +37,10 @@
     valid: true
   }),
   methods: {
-    submit() {
-      this.AddItem();
+    submit(type) {
+      if(type){
+        this.AddItem();
+      }
       this.$store.dispatch("changeConfig", {
         name: "inputAreaDialogStatus",
         value: false

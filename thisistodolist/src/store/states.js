@@ -7,7 +7,8 @@ export default {
       //   completed: true,
       //   deleted: false,
       //   content: "String2",
-      //   selected: false
+      //   private:false,
+      //   locked:false
       // }
     ],
     unfinished: [
@@ -17,7 +18,6 @@ export default {
       //   completed: false,
       //   deleted: false,
       //   content: "String",
-      //   selected: false
       // }
     ]
   },
@@ -34,6 +34,7 @@ export default {
   currentStatus: "full", //[full,unfin,fin,tra,set]
   componentsConfig: {
     inputAreaDialogStatus: false,
-    inputAreaMissionConfig: {}
+    inputAreaMissionConfig: {},
+    selected:[]
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <v-list shaped v-show="items.length" class="transparent mx-2">
-    <v-list-item-group multiple>
+    <v-list-item-group multiple v-model="inActiveItem">
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
           <v-list-item
@@ -8,6 +8,7 @@
             :value="item.uid"
             active-class="green"
             class="my-3"
+            @click="onItemClick"
           >
             <template v-slot:default="{ active }">
               <v-icon color="green" left>mdi-check-circle-outline</v-icon>
@@ -34,12 +35,29 @@
 
   export default {
   name: "finishedlist",
+  data: () => ({
+    inActiveItem: []
+  }),
   computed: {
     ...mapGetters({
       items: "getItemFinished"
     })
   },
+  methods: {
+    onItemClick() {
+      this.$nextTick(() => {
+        this.$store.dispatch("changeConfig", {
+          name: "selected",
+          value: this.inActiveItem
+        });
+      });
+    }
+  },
   beforeCreate() {
+    this.$store.dispatch("changeConfig", {
+      name: "selected",
+      value: []
+    });
     this.$store.dispatch("setCurrentStatus", "fin");
   }
 };
