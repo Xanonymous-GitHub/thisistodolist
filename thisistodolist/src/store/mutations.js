@@ -28,7 +28,7 @@ export default {
     state.todo.unfinished = [];
   },
   pushItemTrashcan(state, data) {
-    data.delete = true;
+    data.deleted = true;
     state.trashcan.splice(0, 0, data);
   },
   popItemTrashcan(state, index) {

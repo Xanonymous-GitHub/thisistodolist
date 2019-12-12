@@ -18,7 +18,7 @@ export default {
       for (let j = 0; j < state.componentsConfig.selected.length; j++) {
         if (state.componentsConfig.selected[j] === list[i].uid) {
           data.actions.act.pos = i--;
-          data.actions.act.uidPos = j;
+          data.actions.act.uidPos = j--;
           dispatch(data.actions.name, data.actions.act);
           break;
         }
@@ -45,6 +45,16 @@ export default {
       }
     });
   },
+  reDelItem({ commit, state }, data) {
+    let transferBox = state.trashcan[data.pos];
+    transferBox.deleted = false;
+    commit("popItemTrashcan", data.pos);
+    commit(transferBox.completed ? "pushItemFinished" : "pushItemUnfinished", {
+      data: transferBox,
+      index: 0
+    });
+    state.componentsConfig.selected.splice(data.uidPos, 1);
+  },
   delItem({ commit, state }, data) {
     if (data.name === "unfin") {
       let transferBox = state.todo.unfinished[data.pos];
@@ -59,27 +69,10 @@ export default {
     if (data.name === "tra") {
       commit("popItemTrashcan", data.pos);
     }
-    state.componentsConfig.selected.pop(data.uidPos);
+    state.componentsConfig.selected.splice(data.uidPos, 1);
   },
   setCurrentStatus: ({ commit }, data) => {
     commit("setStatus", data);
-  },
-  editItem: async ({ commit }, data) => {
-    try {
-      await axios.post("/lists");
-      commit(data.type ? "setItemFinished" : "setItemUnfinished", {
-        index: data.data.index,
-        data: data.data.data
-      });
-    } catch (e) {
-      console.log(e + "\nerror@Vuex.action.editItem\n");
-    }
-  },
-  testEditItem: ({ commit }, data) => {
-    commit(data.type ? "setItemFinished" : "setItemUnfinished", {
-      index: data.data.index,
-      data: data.data.data
-    });
   },
   syncData: async ({ commit }) => {
     try {
@@ -111,8 +104,7 @@ export default {
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
-      content: dataPack.text,
-      selected: false
+      content: dataPack.text
     };
     try {
       await axios.post("/lists", JSON.stringify(data));
@@ -130,8 +122,7 @@ export default {
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
-      content: dataPack.text,
-      selected: false
+      content: dataPack.text
     };
     commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", {
       data: data,

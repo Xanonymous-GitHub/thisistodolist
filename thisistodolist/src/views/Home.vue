@@ -140,6 +140,16 @@
         >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
+        <v-btn
+          v-show="currentStatus === 'tra'"
+          color="amber"
+          @click="restoreDeletedItem"
+          :disabled="!config.selected.length"
+          fab
+          small
+        >
+          <v-icon>mdi-delete-restore</v-icon>
+        </v-btn>
       </v-speed-dial>
     </v-card>
     <v-dialog v-model="config.inputAreaDialogStatus" width="600">
@@ -222,6 +232,16 @@
       this.$store.dispatch("changeConfig", {
         name: "inputAreaDialogStatus",
         value: true
+      });
+    },
+    restoreDeletedItem() {
+      //data:{listType:[Object],actions:[name:String,act:{Json}]}
+      this.$store.dispatch("selectionHandler", {
+        listType: "tra",
+        actions: {
+          name: "reDelItem",
+          act: {}
+        }
       });
     },
     deleteItem() {
