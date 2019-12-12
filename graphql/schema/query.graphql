@@ -1,0 +1,15 @@
+type Query{
+    me: User!
+    users: [UserLayout!]!
+    usersForAdmin: [User!]!
+    myFriends: [UserForFriend!]!
+    userByUsername(input: userByUsernameInput!): UserLayout!
+}
+input userByUsernameInput{
+    username: String!
+}
+type UserLayout{
+    nikename: String!
+    pictureUrl: String!
+    verified: Boolean!
+}

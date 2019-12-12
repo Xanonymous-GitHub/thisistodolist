@@ -1,0 +1,10 @@
+type Todo{
+    id: ID!
+    sort: Int!
+    content: String!
+    completed: Boolean!
+    deleted: Boolean!
+    author: UserLayout!
+    private: Boolean!
+    locked: Boolean!
+}

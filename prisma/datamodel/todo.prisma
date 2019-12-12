@@ -1,0 +1,14 @@
+type Todo {
+    id: ID! @id
+    sort: TodoSort!
+    content: String!
+    completed: Boolean! @default(value: false)
+    deleted: Boolean! @default(value: false)
+    author: User! @relation(name: "TodoByUser")
+    private: Boolean! @default(value: false)
+    locked: Boolean! @default(value: false)
+}
+type TodoSort{
+    sortID: Int! @id(strategy: SEQUENCE) @sequence(name: "series", initialValue: 1, allocationSize: 1)
+    useful: Boolean! @default(value: true)
+}

@@ -1,0 +1,39 @@
+type BatchPayload{
+    count: Int!
+}
+
+input changeTodosInput{
+    id: [ID!]!
+    sort: Int
+    content: String
+    completed: Boolean
+    deleted: Boolean
+    private: Boolean
+    locked: Boolean
+}
+input changeUserInput{
+    username: String!
+    nikename: String
+    pictureUrl: String
+    oldpassword: String
+    newpassword: String
+}
+input creatTodoInput{
+    content: String!
+    completed: Boolean
+    private: Boolean
+    locked: Boolean
+}
+input creatUserInput{
+    username: String!
+    email: String!
+    nickname: String!
+    password: String!
+}
+
+type Mutation{
+    changeTodos(input: changeTodosInput): BatchPayload!
+    changeUser(input: changeUserInput): User!
+    createTodo(input: creatTodoInput): Todo!
+    createUser(input: creatUserInput): User!
+}
