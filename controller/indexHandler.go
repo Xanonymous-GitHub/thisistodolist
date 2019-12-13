@@ -6,6 +6,6 @@ import (
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	index, _ := template.New("").Delims("[(", ")]").ParseFiles("dist/index.html")
+	index, _ := template.New("").Delims("[(", ")]").ParseFiles("thisistodolist/dist/index.html")
 	index.Execute(w, nil)
 }
