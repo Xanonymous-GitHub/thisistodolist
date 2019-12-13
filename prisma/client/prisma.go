@@ -264,7 +264,7 @@ func (client *Client) TodoSort(params TodoSortWhereUniqueInput) *TodoSortExec {
 		params,
 		[2]string{"TodoSortWhereUniqueInput!", "TodoSort"},
 		"todoSort",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -298,7 +298,7 @@ func (client *Client) TodoSorts(params *TodoSortsParams) *TodoSortExecArray {
 		wparams,
 		[3]string{"TodoSortWhereInput", "TodoSortOrderByInput", "TodoSort"},
 		"todoSorts",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExecArray{ret}
 }
@@ -717,7 +717,7 @@ func (client *Client) CreateTodoSort(params TodoSortCreateInput) *TodoSortExec {
 		params,
 		[2]string{"TodoSortCreateInput!", "TodoSort"},
 		"createTodoSort",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -735,7 +735,7 @@ func (client *Client) UpdateTodoSort(params TodoSortUpdateParams) *TodoSortExec 
 		},
 		[3]string{"TodoSortUpdateInput!", "TodoSortWhereUniqueInput!", "TodoSort"},
 		"updateTodoSort",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -772,7 +772,7 @@ func (client *Client) UpsertTodoSort(params TodoSortUpsertParams) *TodoSortExec 
 		uparams,
 		[4]string{"TodoSortWhereUniqueInput!", "TodoSortCreateInput!", "TodoSortUpdateInput!", "TodoSort"},
 		"upsertTodoSort",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -782,7 +782,7 @@ func (client *Client) DeleteTodoSort(params TodoSortWhereUniqueInput) *TodoSortE
 		params,
 		[2]string{"TodoSortWhereUniqueInput!", "TodoSort"},
 		"deleteTodoSort",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -1016,10 +1016,10 @@ const (
 type TodoSortOrderByInput string
 
 const (
-	TodoSortOrderByInputSortIdAsc  TodoSortOrderByInput = "sortID_ASC"
-	TodoSortOrderByInputSortIdDesc TodoSortOrderByInput = "sortID_DESC"
-	TodoSortOrderByInputUsefulAsc  TodoSortOrderByInput = "useful_ASC"
-	TodoSortOrderByInputUsefulDesc TodoSortOrderByInput = "useful_DESC"
+	TodoSortOrderByInputSortIdAsc   TodoSortOrderByInput = "sortID_ASC"
+	TodoSortOrderByInputSortIdDesc  TodoSortOrderByInput = "sortID_DESC"
+	TodoSortOrderByInputUserfulAsc  TodoSortOrderByInput = "userful_ASC"
+	TodoSortOrderByInputUserfulDesc TodoSortOrderByInput = "userful_DESC"
 )
 
 type EmailTokenOrderByInput string
@@ -1264,8 +1264,9 @@ type TodoSortWhereInput struct {
 	SortIdLte   *int32               `json:"sortID_lte,omitempty"`
 	SortIdGt    *int32               `json:"sortID_gt,omitempty"`
 	SortIdGte   *int32               `json:"sortID_gte,omitempty"`
-	Useful      *bool                `json:"useful,omitempty"`
-	UsefulNot   *bool                `json:"useful_not,omitempty"`
+	Todo        *TodoWhereInput      `json:"todo,omitempty"`
+	Userful     *bool                `json:"userful,omitempty"`
+	UserfulNot  *bool                `json:"userful_not,omitempty"`
 	And         []TodoSortWhereInput `json:"AND,omitempty"`
 	Or          []TodoSortWhereInput `json:"OR,omitempty"`
 	Not         []TodoSortWhereInput `json:"NOT,omitempty"`
@@ -1351,23 +1352,23 @@ type SessionUpdateManyMutationInput struct {
 }
 
 type TodoCreateInput struct {
-	ID        *string                        `json:"id,omitempty"`
-	Sort      TodoSortCreateOneInput         `json:"sort"`
-	Content   string                         `json:"content"`
-	Completed *bool                          `json:"completed,omitempty"`
-	Deleted   *bool                          `json:"deleted,omitempty"`
-	Author    UserCreateOneWithoutTodosInput `json:"author"`
-	Private   *bool                          `json:"private,omitempty"`
-	Locked    *bool                          `json:"locked,omitempty"`
+	ID        *string                            `json:"id,omitempty"`
+	Sort      *TodoSortCreateOneWithoutTodoInput `json:"sort,omitempty"`
+	Content   string                             `json:"content"`
+	Completed *bool                              `json:"completed,omitempty"`
+	Deleted   *bool                              `json:"deleted,omitempty"`
+	Author    UserCreateOneWithoutTodosInput     `json:"author"`
+	Private   *bool                              `json:"private,omitempty"`
+	Locked    *bool                              `json:"locked,omitempty"`
 }
 
-type TodoSortCreateOneInput struct {
-	Create  *TodoSortCreateInput      `json:"create,omitempty"`
-	Connect *TodoSortWhereUniqueInput `json:"connect,omitempty"`
+type TodoSortCreateOneWithoutTodoInput struct {
+	Create  *TodoSortCreateWithoutTodoInput `json:"create,omitempty"`
+	Connect *TodoSortWhereUniqueInput       `json:"connect,omitempty"`
 }
 
-type TodoSortCreateInput struct {
-	Useful *bool `json:"useful,omitempty"`
+type TodoSortCreateWithoutTodoInput struct {
+	Userful *bool `json:"userful,omitempty"`
 }
 
 type UserCreateOneWithoutTodosInput struct {
@@ -1413,17 +1414,17 @@ type TodoCreateManyWithoutAuthorInput struct {
 }
 
 type TodoCreateWithoutAuthorInput struct {
-	ID        *string                `json:"id,omitempty"`
-	Sort      TodoSortCreateOneInput `json:"sort"`
-	Content   string                 `json:"content"`
-	Completed *bool                  `json:"completed,omitempty"`
-	Deleted   *bool                  `json:"deleted,omitempty"`
-	Private   *bool                  `json:"private,omitempty"`
-	Locked    *bool                  `json:"locked,omitempty"`
+	ID        *string                            `json:"id,omitempty"`
+	Sort      *TodoSortCreateOneWithoutTodoInput `json:"sort,omitempty"`
+	Content   string                             `json:"content"`
+	Completed *bool                              `json:"completed,omitempty"`
+	Deleted   *bool                              `json:"deleted,omitempty"`
+	Private   *bool                              `json:"private,omitempty"`
+	Locked    *bool                              `json:"locked,omitempty"`
 }
 
 type TodoUpdateInput struct {
-	Sort      *TodoSortUpdateOneRequiredInput         `json:"sort,omitempty"`
+	Sort      *TodoSortUpdateOneWithoutTodoInput      `json:"sort,omitempty"`
 	Content   *string                                 `json:"content,omitempty"`
 	Completed *bool                                   `json:"completed,omitempty"`
 	Deleted   *bool                                   `json:"deleted,omitempty"`
@@ -1432,20 +1433,22 @@ type TodoUpdateInput struct {
 	Locked    *bool                                   `json:"locked,omitempty"`
 }
 
-type TodoSortUpdateOneRequiredInput struct {
-	Create  *TodoSortCreateInput       `json:"create,omitempty"`
-	Update  *TodoSortUpdateDataInput   `json:"update,omitempty"`
-	Upsert  *TodoSortUpsertNestedInput `json:"upsert,omitempty"`
-	Connect *TodoSortWhereUniqueInput  `json:"connect,omitempty"`
+type TodoSortUpdateOneWithoutTodoInput struct {
+	Create     *TodoSortCreateWithoutTodoInput     `json:"create,omitempty"`
+	Update     *TodoSortUpdateWithoutTodoDataInput `json:"update,omitempty"`
+	Upsert     *TodoSortUpsertWithoutTodoInput     `json:"upsert,omitempty"`
+	Delete     *bool                               `json:"delete,omitempty"`
+	Disconnect *bool                               `json:"disconnect,omitempty"`
+	Connect    *TodoSortWhereUniqueInput           `json:"connect,omitempty"`
 }
 
-type TodoSortUpdateDataInput struct {
-	Useful *bool `json:"useful,omitempty"`
+type TodoSortUpdateWithoutTodoDataInput struct {
+	Userful *bool `json:"userful,omitempty"`
 }
 
-type TodoSortUpsertNestedInput struct {
-	Update TodoSortUpdateDataInput `json:"update"`
-	Create TodoSortCreateInput     `json:"create"`
+type TodoSortUpsertWithoutTodoInput struct {
+	Update TodoSortUpdateWithoutTodoDataInput `json:"update"`
+	Create TodoSortCreateWithoutTodoInput     `json:"create"`
 }
 
 type UserUpdateOneRequiredWithoutTodosInput struct {
@@ -1515,12 +1518,12 @@ type TodoUpdateWithWhereUniqueWithoutAuthorInput struct {
 }
 
 type TodoUpdateWithoutAuthorDataInput struct {
-	Sort      *TodoSortUpdateOneRequiredInput `json:"sort,omitempty"`
-	Content   *string                         `json:"content,omitempty"`
-	Completed *bool                           `json:"completed,omitempty"`
-	Deleted   *bool                           `json:"deleted,omitempty"`
-	Private   *bool                           `json:"private,omitempty"`
-	Locked    *bool                           `json:"locked,omitempty"`
+	Sort      *TodoSortUpdateOneWithoutTodoInput `json:"sort,omitempty"`
+	Content   *string                            `json:"content,omitempty"`
+	Completed *bool                              `json:"completed,omitempty"`
+	Deleted   *bool                              `json:"deleted,omitempty"`
+	Private   *bool                              `json:"private,omitempty"`
+	Locked    *bool                              `json:"locked,omitempty"`
 }
 
 type TodoUpsertWithWhereUniqueWithoutAuthorInput struct {
@@ -1717,12 +1720,56 @@ type TodoUpdateManyMutationInput struct {
 	Locked    *bool   `json:"locked,omitempty"`
 }
 
+type TodoSortCreateInput struct {
+	Todo    *TodoCreateOneWithoutSortInput `json:"todo,omitempty"`
+	Userful *bool                          `json:"userful,omitempty"`
+}
+
+type TodoCreateOneWithoutSortInput struct {
+	Create  *TodoCreateWithoutSortInput `json:"create,omitempty"`
+	Connect *TodoWhereUniqueInput       `json:"connect,omitempty"`
+}
+
+type TodoCreateWithoutSortInput struct {
+	ID        *string                        `json:"id,omitempty"`
+	Content   string                         `json:"content"`
+	Completed *bool                          `json:"completed,omitempty"`
+	Deleted   *bool                          `json:"deleted,omitempty"`
+	Author    UserCreateOneWithoutTodosInput `json:"author"`
+	Private   *bool                          `json:"private,omitempty"`
+	Locked    *bool                          `json:"locked,omitempty"`
+}
+
 type TodoSortUpdateInput struct {
-	Useful *bool `json:"useful,omitempty"`
+	Todo    *TodoUpdateOneWithoutSortInput `json:"todo,omitempty"`
+	Userful *bool                          `json:"userful,omitempty"`
+}
+
+type TodoUpdateOneWithoutSortInput struct {
+	Create     *TodoCreateWithoutSortInput     `json:"create,omitempty"`
+	Update     *TodoUpdateWithoutSortDataInput `json:"update,omitempty"`
+	Upsert     *TodoUpsertWithoutSortInput     `json:"upsert,omitempty"`
+	Delete     *bool                           `json:"delete,omitempty"`
+	Disconnect *bool                           `json:"disconnect,omitempty"`
+	Connect    *TodoWhereUniqueInput           `json:"connect,omitempty"`
+}
+
+type TodoUpdateWithoutSortDataInput struct {
+	Content   *string                                 `json:"content,omitempty"`
+	Completed *bool                                   `json:"completed,omitempty"`
+	Deleted   *bool                                   `json:"deleted,omitempty"`
+	Author    *UserUpdateOneRequiredWithoutTodosInput `json:"author,omitempty"`
+	Private   *bool                                   `json:"private,omitempty"`
+	Locked    *bool                                   `json:"locked,omitempty"`
+}
+
+type TodoUpsertWithoutSortInput struct {
+	Update TodoUpdateWithoutSortDataInput `json:"update"`
+	Create TodoCreateWithoutSortInput     `json:"create"`
 }
 
 type TodoSortUpdateManyMutationInput struct {
-	Useful *bool `json:"useful,omitempty"`
+	Userful *bool `json:"userful,omitempty"`
 }
 
 type UserUpdateInput struct {
@@ -2040,7 +2087,7 @@ func (instance *TodoExec) Sort() *TodoSortExec {
 		nil,
 		[2]string{"", "TodoSort"},
 		"sort",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -2097,6 +2144,17 @@ type TodoSortExec struct {
 	exec *prisma.Exec
 }
 
+func (instance *TodoSortExec) Todo() *TodoExec {
+	ret := instance.exec.Client.GetOne(
+		instance.exec,
+		nil,
+		[2]string{"", "Todo"},
+		"todo",
+		[]string{"id", "content", "completed", "deleted", "private", "locked"})
+
+	return &TodoExec{ret}
+}
+
 func (instance TodoSortExec) Exec(ctx context.Context) (*TodoSort, error) {
 	var v TodoSort
 	ok, err := instance.exec.Exec(ctx, &v)
@@ -2123,11 +2181,11 @@ func (instance TodoSortExecArray) Exec(ctx context.Context) ([]TodoSort, error) 
 	return v, err
 }
 
-var TodoSortFields = []string{"sortID", "useful"}
+var TodoSortFields = []string{"sortID", "userful"}
 
 type TodoSort struct {
-	SortId int32 `json:"sortID"`
-	Useful bool  `json:"useful"`
+	SortId  int32 `json:"sortID"`
+	Userful *bool `json:"userful,omitempty"`
 }
 
 type UserExec struct {
@@ -2468,7 +2526,7 @@ func (instance *TodoSortEdgeExec) Node() *TodoSortExec {
 		nil,
 		[2]string{"", "TodoSort"},
 		"node",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -3018,7 +3076,7 @@ func (instance *TodoSortSubscriptionPayloadExec) Node() *TodoSortExec {
 		nil,
 		[2]string{"", "TodoSort"},
 		"node",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortExec{ret}
 }
@@ -3029,7 +3087,7 @@ func (instance *TodoSortSubscriptionPayloadExec) PreviousValues() *TodoSortPrevi
 		nil,
 		[2]string{"", "TodoSortPreviousValues"},
 		"previousValues",
-		[]string{"sortID", "useful"})
+		[]string{"sortID", "userful"})
 
 	return &TodoSortPreviousValuesExec{ret}
 }
@@ -3098,11 +3156,11 @@ func (instance TodoSortPreviousValuesExecArray) Exec(ctx context.Context) ([]Tod
 	return v, err
 }
 
-var TodoSortPreviousValuesFields = []string{"sortID", "useful"}
+var TodoSortPreviousValuesFields = []string{"sortID", "userful"}
 
 type TodoSortPreviousValues struct {
-	SortId int32 `json:"sortID"`
-	Useful bool  `json:"useful"`
+	SortId  int32 `json:"sortID"`
+	Userful *bool `json:"userful,omitempty"`
 }
 
 type UserSubscriptionPayloadExec struct {

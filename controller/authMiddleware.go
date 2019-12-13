@@ -22,13 +22,14 @@ func Auth(db *prisma.Client) func(http.Handler) http.Handler {
 				http.Error(w,"Token error",http.StatusForbidden)
 			}*/
 			//ctx:=context.WithValue(r.Context(),userContextKey,session.Username)
-			ctx := context.WithValue(r.Context(), userContextKey, "wayne")
+			name := "wayne"
+			ctx := context.WithValue(r.Context(), userContextKey, &name)
 			ctx.Value(userContextKey)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
 }
-func ForContext(ctx context.Context) string {
-	raw, _ := ctx.Value(userContextKey).(string)
+func ForContext(ctx context.Context) *string {
+	raw, _ := ctx.Value(userContextKey).(*string)
 	return raw
 }

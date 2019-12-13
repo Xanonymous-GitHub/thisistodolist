@@ -32,8 +32,7 @@ func (r *Resolver) User() graphql1.UserResolver {
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) ChangeTodos(ctx context.Context, input *model.ChangeTodosInput) (*prisma.BatchPayload, error) {
-	ctxuser := controller.ForContext(ctx)
-	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: &ctxuser}).Exec(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: controller.ForContext(ctx)}).Exec(ctx)
 	if err != nil || user == nil || user.UserLevel == prisma.LevelRestricted {
 		return nil, fmt.Errorf("Access denied")
 	}
@@ -67,7 +66,19 @@ func (r *mutationResolver) ChangeUser(ctx context.Context, input *model.ChangeUs
 	panic("not implemented")
 }
 func (r *mutationResolver) CreateTodo(ctx context.Context, input *model.CreatTodoInput) (*prisma.Todo, error) {
-	panic("not implemented")
+	username := controller.ForContext(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
+	if err != nil || user == nil || user.UserLevel == prisma.LevelRestricted {
+		return nil, fmt.Errorf("Access denied")
+	}
+	return r.Prisma.CreateTodo(prisma.TodoCreateInput{
+		Content:   input.Content,
+		Locked:    input.Locked,
+		Private:   input.Private,
+		Completed: input.Completed,
+		Author:    prisma.UserCreateOneWithoutTodosInput{Connect: &prisma.UserWhereUniqueInput{Username: username}},
+		Sort:      &prisma.TodoSortCreateOneWithoutTodoInput{Create: &prisma.TodoSortCreateWithoutTodoInput{}},
+	}).Exec(ctx)
 }
 func (r *mutationResolver) CreateUser(ctx context.Context, input *model.CreatUserInput) (*prisma.User, error) {
 	panic("not implemented")
@@ -76,7 +87,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input *model.CreatUse
 type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Me(ctx context.Context) (*prisma.User, error) {
-	panic("not implemented")
+	username := controller.ForContext(ctx)
+	return r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 }
 func (r *queryResolver) Users(ctx context.Context) ([]model.UserLayout, error) {
 	panic("not implemented")
@@ -94,7 +106,8 @@ func (r *queryResolver) UserByUsername(ctx context.Context, input model.UserByUs
 type todoResolver struct{ *Resolver }
 
 func (r *todoResolver) Sort(ctx context.Context, obj *prisma.Todo) (int, error) {
-	panic("not implemented")
+	sort, err := r.Prisma.TodoSorts(&prisma.TodoSortsParams{Where: &prisma.TodoSortWhereInput{Todo: &prisma.TodoWhereInput{ID: &obj.ID}}}).Exec(ctx)
+	return int(sort[0].SortId), err
 }
 func (r *todoResolver) Author(ctx context.Context, obj *prisma.Todo) (*model.UserLayout, error) {
 	panic("not implemented")
@@ -109,5 +122,5 @@ func (r *userResolver) Friends(ctx context.Context, obj *prisma.User) ([]model.U
 	panic("not implemented")
 }
 func (r *userResolver) Todos(ctx context.Context, obj *prisma.User) ([]prisma.Todo, error) {
-	panic("not implemented")
+	return r.Prisma.Todoes(&prisma.TodoesParams{Where: &prisma.TodoWhereInput{Author: &prisma.UserWhereInput{Username: &obj.Username}}}).Exec(ctx)
 }

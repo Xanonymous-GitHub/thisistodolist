@@ -1,6 +1,6 @@
 type Todo {
     id: ID! @id
-    sort: TodoSort!
+    sort: TodoSort @relation(name:"TodoBySort" link: TABLE)
     content: String!
     completed: Boolean! @default(value: false)
     deleted: Boolean! @default(value: false)
@@ -10,5 +10,6 @@ type Todo {
 }
 type TodoSort{
     sortID: Int! @id(strategy: SEQUENCE) @sequence(name: "series", initialValue: 1, allocationSize: 1)
-    useful: Boolean! @default(value: true)
+    todo: Todo @relation(name:"TodoBySort")
+    userful: Boolean @default(value: true)
 }
