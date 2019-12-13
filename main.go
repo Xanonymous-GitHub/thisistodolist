@@ -20,6 +20,7 @@ func main() {
 	router.Use(controller.Auth(client))
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
+	router.NotFound(controller.IndexHandler)
 	router.Post("/query", handler.GraphQL(graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver})))
 	router.Get("/", handler.Playground("GraphQL playground", "/query"))
 	http.ListenAndServe(":8888", router)
