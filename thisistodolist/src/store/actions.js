@@ -76,21 +76,64 @@ export default {
   },
   syncData: async ({ commit }) => {
     try {
-      let data = (await axios.get("/lists")).data;
+      let data = JSON.parse(
+        (
+          await axios.post(
+            "/query",
+            {
+              query: `
+                 query{
+                     me{
+                         username
+                         email
+                         nickname
+                         pictureUrl
+                         verified
+                         userLevel
+                         todos{
+                           id
+                           sort
+                           content
+                           completed
+                           deleted
+                           private
+                           locked
+                         }
+                       }
+                     }
+                    `,
+              variables: {}
+            },
+            {
+              headers: {
+                "Content-Type": "application/json"
+              }
+            }
+          )
+        ).data["data"]["me"]
+      );
       commit("delItemFinished");
       commit("delItemUnfinished");
       commit("cleanItemTrashcan");
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].deleted) {
+      commit("setUserInfo", {
+        username: data.username,
+        user: data.nickname,
+        email: data.email,
+        pic: data.pictureUrl,
+        type: data.userLevel,
+        verified: data.verified
+      });
+      for (let i = 0; i < data.todos.length; i++) {
+        if (data.todos[i].deleted) {
           //deleted -> true : inTrashcan
-          commit("pushItemTrashcan", data[i]);
+          commit("pushItemTrashcan", data.todos[i]);
         } else {
-          if (data[i].completed) {
+          if (data.todos[i].completed) {
             //completed -> true : finished
-            commit("pushItemFinished", data[i], 0);
+            commit("pushItemFinished", data.todos[i], 0);
           } else {
             //completed -> false : unfinished
-            commit("pushItemUnfinished", data[i], 0);
+            commit("pushItemUnfinished", data.todos[i], 0);
           }
         }
       }

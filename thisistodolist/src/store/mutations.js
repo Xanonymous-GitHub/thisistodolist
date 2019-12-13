@@ -13,14 +13,6 @@ export default {
   popItemUnfinished(state, index) {
     state.todo.unfinished.splice(index, 1);
   },
-  setItemFinished(state, data) {
-    //change the exists item
-    state.todo.finished[data.index] = data.data;
-  },
-  setItemUnfinished(state, data) {
-    //change the exists item
-    state.todo.unfinished[data.index] = data.data;
-  },
   delItemFinished(state) {
     state.todo.finished = [];
   },
@@ -42,5 +34,8 @@ export default {
   },
   updateConfig(state, data) {
     state.componentsConfig[data.name] = data.value;
+  },
+  setUserInfo(state,data){
+    state.userinfo=data;
   }
 };

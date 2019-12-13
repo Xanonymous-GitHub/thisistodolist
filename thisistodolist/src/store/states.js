@@ -27,7 +27,7 @@ export default {
     user: "TeU",
     email: "trusaidlin@gmail.com",
     pic: "https://avatars2.githubusercontent.com/u/47718989?s=460&v=4",
-    type: "administrator", //[administrator,super,user,restricted]
+    type: "ADMIN", //[administrator,super,user,restricted]
     verified: true,
     emailVerified: true
   },

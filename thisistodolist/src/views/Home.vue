@@ -279,8 +279,8 @@
       config: "getComponentConfig"
     })
   },
-  beforeCreate() {
-
+  mounted() {
+    this.$store.dispatch("syncData");
   }
 };
 </script>
