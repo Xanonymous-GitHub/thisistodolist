@@ -278,6 +278,9 @@
       traLength: "getTraLength",
       config: "getComponentConfig"
     })
+  },
+  beforeCreate() {
+
   }
 };
 </script>
