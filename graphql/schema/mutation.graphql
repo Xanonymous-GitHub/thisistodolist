@@ -27,12 +27,14 @@ input creatTodoInput{
 input creatUserInput{
     username: String!
     email: String!
-    nickname: String!
+    nickname: String
     password: String!
+    recaptcha:String!
 }
 input loginInput{
     password:String!
     emailorusername: String!
+    recaptcha: String!
 }
 type Mutation{
     changeTodos(input: changeTodosInput): BatchPayload!

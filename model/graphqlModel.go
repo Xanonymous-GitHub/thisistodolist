@@ -11,7 +11,8 @@ import (
 )
 
 type UserForFriend struct {
-	Nickname   string          `json:"nickname"`
+	Nickname   *string         `json:"nickname"`
+	Username   string          `json:"username"`
 	Email      string          `json:"email"`
 	PictureURL string          `json:"pictureUrl"`
 	Verified   bool            `json:"verified"`
@@ -20,9 +21,10 @@ type UserForFriend struct {
 }
 
 type UserLayout struct {
-	Nikename   string `json:"nikename"`
-	PictureURL string `json:"pictureUrl"`
-	Verified   bool   `json:"verified"`
+	Nickname   *string `json:"nickname"`
+	Username   string  `json:"username"`
+	PictureURL string  `json:"pictureUrl"`
+	Verified   bool    `json:"verified"`
 }
 
 type ChangeTodosInput struct {
@@ -51,10 +53,17 @@ type CreatTodoInput struct {
 }
 
 type CreatUserInput struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Nickname string `json:"nickname"`
-	Password string `json:"password"`
+	Username  string  `json:"username"`
+	Email     string  `json:"email"`
+	Nickname  *string `json:"nickname"`
+	Password  string  `json:"password"`
+	Recaptcha string  `json:"recaptcha"`
+}
+
+type LoginInput struct {
+	Password        string `json:"password"`
+	Emailorusername string `json:"emailorusername"`
+	Recaptcha       string `json:"recaptcha"`
 }
 
 type UserByUsernameInput struct {

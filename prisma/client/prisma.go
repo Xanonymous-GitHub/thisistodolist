@@ -1381,7 +1381,7 @@ type UserCreateWithoutTodosInput struct {
 	Username      string               `json:"username"`
 	EmailVerified *bool                `json:"emailVerified,omitempty"`
 	Email         string               `json:"email"`
-	Nickname      string               `json:"nickname"`
+	Nickname      *string              `json:"nickname,omitempty"`
 	PictureUrl    *string              `json:"pictureUrl,omitempty"`
 	Verified      *bool                `json:"verified,omitempty"`
 	UserLevel     *Level               `json:"userLevel,omitempty"`
@@ -1399,7 +1399,7 @@ type UserCreateInput struct {
 	Username      string                            `json:"username"`
 	EmailVerified *bool                             `json:"emailVerified,omitempty"`
 	Email         string                            `json:"email"`
-	Nickname      string                            `json:"nickname"`
+	Nickname      *string                           `json:"nickname,omitempty"`
 	PictureUrl    *string                           `json:"pictureUrl,omitempty"`
 	Verified      *bool                             `json:"verified,omitempty"`
 	UserLevel     *Level                            `json:"userLevel,omitempty"`
@@ -2289,15 +2289,15 @@ func (instance UserExecArray) Exec(ctx context.Context) ([]User, error) {
 var UserFields = []string{"id", "username", "emailVerified", "email", "nickname", "pictureUrl", "verified", "userLevel", "password"}
 
 type User struct {
-	ID            string `json:"id"`
-	Username      string `json:"username"`
-	EmailVerified bool   `json:"emailVerified"`
-	Email         string `json:"email"`
-	Nickname      string `json:"nickname"`
-	PictureUrl    string `json:"pictureUrl"`
-	Verified      bool   `json:"verified"`
-	UserLevel     Level  `json:"userLevel"`
-	Password      string `json:"password"`
+	ID            string  `json:"id"`
+	Username      string  `json:"username"`
+	EmailVerified bool    `json:"emailVerified"`
+	Email         string  `json:"email"`
+	Nickname      *string `json:"nickname,omitempty"`
+	PictureUrl    string  `json:"pictureUrl"`
+	Verified      bool    `json:"verified"`
+	UserLevel     Level   `json:"userLevel"`
+	Password      string  `json:"password"`
 }
 
 type TodoConnectionExec struct {
@@ -2749,7 +2749,7 @@ func (instance *EmailTokenConnectionExec) PageInfo() *PageInfoExec {
 	return &PageInfoExec{ret}
 }
 
-func (instance *EmailTokenConnectionExec) Edges() *EmailTokenEdgeExecArray {
+func (instance *EmailTokenConnectionExec) Edges() *emailTokenEdgeExecArray {
 	edges := instance.exec.Client.GetMany(
 		instance.exec,
 		nil,
@@ -2764,7 +2764,7 @@ func (instance *EmailTokenConnectionExec) Edges() *EmailTokenEdgeExecArray {
 		"node",
 		emailTokenFields)
 
-	return &EmailTokenEdgeExecArray{nodes}
+	return &emailTokenEdgeExecArray{nodes}
 }
 
 func (instance *EmailTokenConnectionExec) Aggregate(ctx context.Context) (*Aggregate, error) {
@@ -3256,15 +3256,15 @@ func (instance UserPreviousValuesExecArray) Exec(ctx context.Context) ([]UserPre
 var UserPreviousValuesFields = []string{"id", "username", "emailVerified", "email", "nickname", "pictureUrl", "verified", "userLevel", "password"}
 
 type UserPreviousValues struct {
-	ID            string `json:"id"`
-	Username      string `json:"username"`
-	EmailVerified bool   `json:"emailVerified"`
-	Email         string `json:"email"`
-	Nickname      string `json:"nickname"`
-	PictureUrl    string `json:"pictureUrl"`
-	Verified      bool   `json:"verified"`
-	UserLevel     Level  `json:"userLevel"`
-	Password      string `json:"password"`
+	ID            string  `json:"id"`
+	Username      string  `json:"username"`
+	EmailVerified bool    `json:"emailVerified"`
+	Email         string  `json:"email"`
+	Nickname      *string `json:"nickname,omitempty"`
+	PictureUrl    string  `json:"pictureUrl"`
+	Verified      bool    `json:"verified"`
+	UserLevel     Level   `json:"userLevel"`
+	Password      string  `json:"password"`
 }
 
 type EmailTokenSubscriptionPayloadExec struct {

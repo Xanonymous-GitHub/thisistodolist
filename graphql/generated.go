@@ -55,6 +55,7 @@ type ComplexityRoot struct {
 		ChangeUser  func(childComplexity int, input *model.ChangeUserInput) int
 		CreateTodo  func(childComplexity int, input *model.CreatTodoInput) int
 		CreateUser  func(childComplexity int, input *model.CreatUserInput) int
+		Login       func(childComplexity int, input *model.LoginInput) int
 	}
 
 	Query struct {
@@ -95,12 +96,14 @@ type ComplexityRoot struct {
 		Nickname   func(childComplexity int) int
 		PictureURL func(childComplexity int) int
 		Todos      func(childComplexity int) int
+		Username   func(childComplexity int) int
 		Verified   func(childComplexity int) int
 	}
 
 	UserLayout struct {
-		Nikename   func(childComplexity int) int
+		Nickname   func(childComplexity int) int
 		PictureURL func(childComplexity int) int
+		Username   func(childComplexity int) int
 		Verified   func(childComplexity int) int
 	}
 }
@@ -110,6 +113,7 @@ type MutationResolver interface {
 	ChangeUser(ctx context.Context, input *model.ChangeUserInput) (*prisma.User, error)
 	CreateTodo(ctx context.Context, input *model.CreatTodoInput) (*prisma.Todo, error)
 	CreateUser(ctx context.Context, input *model.CreatUserInput) (*prisma.User, error)
+	Login(ctx context.Context, input *model.LoginInput) (*prisma.User, error)
 }
 type QueryResolver interface {
 	Me(ctx context.Context) (*prisma.User, error)
@@ -198,6 +202,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(*model.CreatUserInput)), true
+
+	case "Mutation.login":
+		if e.complexity.Mutation.Login == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_login_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Login(childComplexity, args["input"].(*model.LoginInput)), true
 
 	case "Query.me":
 		if e.complexity.Query.Me == nil {
@@ -400,6 +416,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserForFriend.Todos(childComplexity), true
 
+	case "UserForFriend.username":
+		if e.complexity.UserForFriend.Username == nil {
+			break
+		}
+
+		return e.complexity.UserForFriend.Username(childComplexity), true
+
 	case "UserForFriend.verified":
 		if e.complexity.UserForFriend.Verified == nil {
 			break
@@ -407,12 +430,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserForFriend.Verified(childComplexity), true
 
-	case "UserLayout.nikename":
-		if e.complexity.UserLayout.Nikename == nil {
+	case "UserLayout.nickname":
+		if e.complexity.UserLayout.Nickname == nil {
 			break
 		}
 
-		return e.complexity.UserLayout.Nikename(childComplexity), true
+		return e.complexity.UserLayout.Nickname(childComplexity), true
 
 	case "UserLayout.pictureUrl":
 		if e.complexity.UserLayout.PictureURL == nil {
@@ -420,6 +443,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserLayout.PictureURL(childComplexity), true
+
+	case "UserLayout.username":
+		if e.complexity.UserLayout.Username == nil {
+			break
+		}
+
+		return e.complexity.UserLayout.Username(childComplexity), true
 
 	case "UserLayout.verified":
 		if e.complexity.UserLayout.Verified == nil {
@@ -519,15 +549,21 @@ input creatTodoInput{
 input creatUserInput{
     username: String!
     email: String!
-    nickname: String!
+    nickname: String
     password: String!
+    recaptcha:String!
 }
-
+input loginInput{
+    password:String!
+    emailorusername: String!
+    recaptcha: String!
+}
 type Mutation{
     changeTodos(input: changeTodosInput): BatchPayload!
     changeUser(input: changeUserInput): User!
     createTodo(input: creatTodoInput): Todo!
     createUser(input: creatUserInput): User!
+    login(input: loginInput):User!
 }`},
 	&ast.Source{Name: "graphql/schema/query.graphql", Input: `type Query{
     me: User!
@@ -540,7 +576,8 @@ input userByUsernameInput{
     username: String!
 }
 type UserLayout{
-    nikename: String!
+    nickname: String
+    username:String!
     pictureUrl: String!
     verified: Boolean!
 }`},
@@ -565,7 +602,7 @@ type User{
     username: String!
     emailVerified: Boolean!
     email: String!
-    nickname: String!
+    nickname: String
     pictureUrl: String!
     verified: Boolean!
     userLevel: Level!
@@ -573,7 +610,8 @@ type User{
     todos: [Todo!]!
 }
 type UserForFriend{
-    nickname: String!
+    nickname: String
+    username:String!
     email: String!
     pictureUrl: String!
     verified: Boolean!
@@ -634,6 +672,20 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var arg0 *model.CreatUserInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalOcreatUserInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐCreatUserInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.LoginInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOloginInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐLoginInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -902,6 +954,50 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateUser(rctx, args["input"].(*model.CreatUserInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*prisma.User)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋprismaᚋclientᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_login_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Login(rctx, args["input"].(*model.LoginInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1656,15 +1752,12 @@ func (ec *executionContext) _User_nickname(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !ec.HasError(rctx) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_pictureUrl(ctx context.Context, field graphql.CollectedField, obj *prisma.User) (ret graphql.Marshaler) {
@@ -1878,6 +1971,40 @@ func (ec *executionContext) _UserForFriend_nickname(ctx context.Context, field g
 		return graphql.Null
 	}
 	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserForFriend_username(ctx context.Context, field graphql.CollectedField, obj *model.UserForFriend) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "UserForFriend",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Username, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
 		if !ec.HasError(rctx) {
 			ec.Errorf(ctx, "must not be null")
 		}
@@ -2074,7 +2201,7 @@ func (ec *executionContext) _UserForFriend_todos(ctx context.Context, field grap
 	return ec.marshalNTodo2ᚕgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋprismaᚋclientᚐTodoᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserLayout_nikename(ctx context.Context, field graphql.CollectedField, obj *model.UserLayout) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserLayout_nickname(ctx context.Context, field graphql.CollectedField, obj *model.UserLayout) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2093,7 +2220,41 @@ func (ec *executionContext) _UserLayout_nikename(ctx context.Context, field grap
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Nikename, nil
+		return obj.Nickname, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserLayout_username(ctx context.Context, field graphql.CollectedField, obj *model.UserLayout) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "UserLayout",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Username, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3488,13 +3649,49 @@ func (ec *executionContext) unmarshalInputcreatUserInput(ctx context.Context, ob
 			}
 		case "nickname":
 			var err error
-			it.Nickname, err = ec.unmarshalNString2string(ctx, v)
+			it.Nickname, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "password":
 			var err error
 			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recaptcha":
+			var err error
+			it.Recaptcha, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputloginInput(ctx context.Context, obj interface{}) (model.LoginInput, error) {
+	var it model.LoginInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "password":
+			var err error
+			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "emailorusername":
+			var err error
+			it.Emailorusername, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recaptcha":
+			var err error
+			it.Recaptcha, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3589,6 +3786,11 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "createUser":
 			out.Values[i] = ec._Mutation_createUser(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "login":
+			out.Values[i] = ec._Mutation_login(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3816,9 +4018,6 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "nickname":
 			out.Values[i] = ec._User_nickname(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
 		case "pictureUrl":
 			out.Values[i] = ec._User_pictureUrl(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -3895,6 +4094,8 @@ func (ec *executionContext) _UserForFriend(ctx context.Context, sel ast.Selectio
 			out.Values[i] = graphql.MarshalString("UserForFriend")
 		case "nickname":
 			out.Values[i] = ec._UserForFriend_nickname(ctx, field, obj)
+		case "username":
+			out.Values[i] = ec._UserForFriend_username(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3945,8 +4146,10 @@ func (ec *executionContext) _UserLayout(ctx context.Context, sel ast.SelectionSe
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("UserLayout")
-		case "nikename":
-			out.Values[i] = ec._UserLayout_nikename(ctx, field, obj)
+		case "nickname":
+			out.Values[i] = ec._UserLayout_nickname(ctx, field, obj)
+		case "username":
+			out.Values[i] = ec._UserLayout_username(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -5058,6 +5261,18 @@ func (ec *executionContext) unmarshalOcreatUserInput2ᚖgithubᚗcomᚋXanonymou
 		return nil, nil
 	}
 	res, err := ec.unmarshalOcreatUserInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐCreatUserInput(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOloginInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐLoginInput(ctx context.Context, v interface{}) (model.LoginInput, error) {
+	return ec.unmarshalInputloginInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOloginInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐLoginInput(ctx context.Context, v interface{}) (*model.LoginInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOloginInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐLoginInput(ctx, v)
 	return &res, err
 }
 
