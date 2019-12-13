@@ -1,0 +1,8 @@
+endpoint: http://localhost:4466
+datamodel:
+  - prisma/datamodel/todo.prisma
+  - prisma/datamodel/user.prisma
+  - prisma/datamodel/auth.prisma
+generate:
+  - generator: go-client
+    output: ./prisma/client

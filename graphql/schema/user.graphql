@@ -1,0 +1,25 @@
+enum Level{
+    ADMIN
+    USER
+    RESTRICTED
+}
+type User{
+    id: ID!
+    username: String!
+    emailVerified: Boolean!
+    email: String!
+    nickname: String!
+    pictureUrl: String!
+    verified: Boolean!
+    userLevel: Level!
+    friends: [UserForFriend!]!
+    todos: [Todo!]!
+}
+type UserForFriend{
+    nickname: String!
+    email: String!
+    pictureUrl: String!
+    verified: Boolean!
+    friends: [UserForFriend!]!
+    todos: [Todo!]!
+}

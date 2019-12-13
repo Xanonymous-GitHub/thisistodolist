@@ -1,0 +1,18 @@
+enum Level{
+    ADMIN
+    USER
+    RESTRICTED
+}
+type User{
+    id: ID! @id
+    username: String! @unique
+    emailVerified: Boolean! @default(value: false)
+    email: String! @unique
+    nickname: String!
+    pictureUrl: String! @default(value: "i.stack.imgur.com/34AD2.jpg")
+    verified: Boolean! @default(value: false)
+    userLevel: Level! @default(value: USER)
+    password: String!
+    friends: [User!]!
+    todos: [Todo!]! @relation(name: "TodoByUser" onDelete: CASCADE)
+}

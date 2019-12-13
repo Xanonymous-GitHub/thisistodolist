@@ -1,0 +1,11 @@
+type Session{
+    id:ID! @id
+    username: String! @unique
+    token: String! @unique
+    updatedAt: DateTime! @updatedAt
+}
+type emailToken{
+    id: ID! @id
+    email: String! @unique
+    token: String!
+}

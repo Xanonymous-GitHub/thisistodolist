@@ -1,0 +1,64 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+directive @hasLevel(level:[Level!]!) on FIELD_DEFINITION
+directive @auth on QUERY
+directive @authRestricted on MUTATION
+type Todo {
+  id: ID!
+  content: String!
+  completed: Boolean!
+  deleted: Boolean!
+  author: User!
+  private: Boolean!
+}
+enum Level{
+  Admin
+  Super
+  User
+  Restricted
+}
+type User{
+  id: ID!
+  username: String!
+  emailVerified: Boolean!
+  email: String!
+  nickname: String!
+  pictureUrl: String!
+  verified: Boolean!
+  userLevel: Int!
+  password: String! @deprecated(reason: "That is secret")
+  friend: [User!]
+  todos: [Todo!]!
+}
+type Session{
+  user_id:ID!
+  token: String! @deprecated(reason: "That is secret")
+  setTime: String!
+}
+type Query {
+  findTodoByAuthor: [Todo!]!
+  user: User!
+  findAllUsers:[User!]! @hasLevel(level:[Admin,Super])
+  findAllTodo:[Todo!]! @hasLevel(level:[Admin,Super])
+}
+
+input NewTodo {
+  text: String!
+}
+input NewUser{
+  name: String!
+  email: String!
+  password: String!
+}
+input CTodo {
+  id:ID!
+  content: String
+  completed: Boolean
+  deleted: Boolean
+}
+type Mutation {
+  createTodo(input: NewTodo!): Todo!
+  createUser(input: NewUser!): User!
+  changeTodo(input:CTodo):Todo!
+}
