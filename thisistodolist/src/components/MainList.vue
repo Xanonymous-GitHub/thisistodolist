@@ -1,6 +1,6 @@
 <template>
   <v-list shaped v-show="items.length" class="transparent mx-2">
-    <v-list-item-group multiple>
+    <v-list-item-group multiple v-model="inActiveItems">
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
           <v-list-item
@@ -8,6 +8,7 @@
             :value="item.uid"
             active-class="amber"
             class="my-3"
+            @click="onItemClick"
           >
             <template v-slot:default="{ active }">
               <v-icon :color="getIconColor(item.completed)" left>{{
@@ -36,9 +37,13 @@
 
   export default {
   name: "mainlist",
+  data: () => ({
+    inActiveItems: []
+  }),
   computed: {
     ...mapGetters({
-      items: "getItemExsist"
+      items: "getItemExsist",
+      config: "getComponentConfig"
     })
   },
   methods: {
@@ -47,9 +52,21 @@
     },
     getIconColor(type) {
       return type ? "green" : "red";
+    },
+    onItemClick() {
+      this.$nextTick(() => {
+        this.$store.dispatch("changeConfig", {
+          name: "selected",
+          value: this.inActiveItems
+        });
+      });
     }
   },
   beforeCreate() {
+    this.$store.dispatch("changeConfig", {
+      name: "selected",
+      value: []
+    });
     this.$store.dispatch("setCurrentStatus", "full");
   }
 };

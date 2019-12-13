@@ -16,11 +16,11 @@ export default {
   },
   getUser(state) {
     let user = state.userinfo;
-    if (user.type === "administrator") {
+    if (user.type === "ADMIN") {
       user.badgeClass = "";
       user.special = "mdi-shield-star";
     }
-    if (user.type === "super") {
+    if (user.type === "SUPER") {
       user.badgeClass = "";
       user.special = "mdi-shield-account-outline";
     }
@@ -34,5 +34,8 @@ export default {
   },
   getTraLength(state) {
     return state.trashcan.length;
+  },
+  getComponentConfig(state) {
+    return state.componentsConfig;
   }
 };

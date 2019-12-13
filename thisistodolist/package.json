@@ -25,7 +25,7 @@
     "graphql-type-json": "^0.3.1",
     "lowdb": "^1.0.0",
     "mkdirp": "^0.5.1",
-    "serialize-javascript": "^2.1.1",
+    "serialize-javascript": "^2.1.2",
     "shortid": "^2.2.15",
     "validation": "0.0.1",
     "vue": "^2.6.10",

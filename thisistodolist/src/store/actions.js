@@ -1,70 +1,139 @@
 import axios from "axios";
 
 export default {
-  delItem({ commit, state }, data) {
-    if (data.type === "unfin") {
-      for (let i = 0; i < state.todo.unfinished.length; i++) {
-        let transferBox = state.todo.unfinished[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemUnfinished", i--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-    } else if (data.type === "fin") {
-      for (let i = 0; i < state.todo.finished.length; i++) {
-        let transferBox = state.todo.finished[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemFinished", i--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-    } else if (data.type === "full") {
-      for (let i = 0; i < state.todo.unfinished.length; i++) {
-        let transferBox = state.todo.unfinished[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemUnfinished", i--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-      for (let j = 0; j < state.todo.finished.length; j++) {
-        let transferBox = state.todo.finished[j];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemFinished", j--);
-          commit("pushItemTrashcan", transferBox);
-        }
-      }
-    } else if (data.type === "tra") {
-      for (let i = 0; i < state.trashcan.length; i++) {
-        let transferBox = state.trashcan[i];
-        if (data.data[`${transferBox.uid}`][0].isActive === true) {
-          commit("popItemTrashcan", i--);
+  changeConfig({ commit }, data) {
+    commit("updateConfig", data);
+  },
+  selectionHandler({ dispatch, state }, data) {
+    //data:{listType:[Object],actions:[name:String,act:{Json}]}
+    let list;
+    if (data.listType === "unfin") {
+      list = state.todo.unfinished;
+    } else if (data.listType === "fin") {
+      list = state.todo.finished;
+    } else if (data.listType === "tra") {
+      list = state.trashcan;
+    }
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < state.componentsConfig.selected.length; j++) {
+        if (state.componentsConfig.selected[j] === list[i].uid) {
+          data.actions.act.pos = i--;
+          data.actions.act.uidPos = j--;
+          dispatch(data.actions.name, data.actions.act);
+          break;
         }
       }
     }
   },
-  itemSelectedChange: ({ commit }, data) => {
-    commit("changeItemStatus", data);
+  setConfigForInputarea({ commit, state, dispatch }, data) {
+    state.componentsConfig.selected.pop();
+    let tmpItem;
+    if (data.name === "unfin") {
+      tmpItem = state.todo.unfinished[data.pos];
+    } else if (data.name === "fin") {
+      tmpItem = state.todo.finished[data.pos];
+    }
+    dispatch("changeConfig", {
+      name: "inputAreaMissionConfig",
+      value: {
+        title: "編輯項目",
+        content: tmpItem.content,
+        type: tmpItem.completed,
+        classes: "edit",
+        itemPos: { list: data.name, pos: data.pos },
+        item: tmpItem
+      }
+    });
+  },
+  reDelItem({ commit, state }, data) {
+    let transferBox = state.trashcan[data.pos];
+    transferBox.deleted = false;
+    commit("popItemTrashcan", data.pos);
+    commit(transferBox.completed ? "pushItemFinished" : "pushItemUnfinished", {
+      data: transferBox,
+      index: 0
+    });
+    state.componentsConfig.selected.splice(data.uidPos, 1);
+  },
+  delItem({ commit, state }, data) {
+    if (data.name === "unfin") {
+      let transferBox = state.todo.unfinished[data.pos];
+      commit("popItemUnfinished", data.pos);
+      commit("pushItemTrashcan", transferBox);
+    }
+    if (data.name === "fin") {
+      let transferBox = state.todo.finished[data.pos];
+      commit("popItemFinished", data.pos);
+      commit("pushItemTrashcan", transferBox);
+    }
+    if (data.name === "tra") {
+      commit("popItemTrashcan", data.pos);
+    }
+    state.componentsConfig.selected.splice(data.uidPos, 1);
   },
   setCurrentStatus: ({ commit }, data) => {
     commit("setStatus", data);
   },
   syncData: async ({ commit }) => {
     try {
-      let data = (await axios.get("/lists")).data;
+      let data = JSON.parse(
+        (
+          await axios.post(
+            "/query",
+            {
+              query: `
+                 query{
+                     me{
+                         username
+                         email
+                         nickname
+                         pictureUrl
+                         verified
+                         userLevel
+                         todos{
+                           id
+                           sort
+                           content
+                           completed
+                           deleted
+                           private
+                           locked
+                         }
+                       }
+                     }
+                    `,
+              variables: {}
+            },
+            {
+              headers: {
+                "Content-Type": "application/json"
+              }
+            }
+          )
+        ).data["data"]["me"]
+      );
       commit("delItemFinished");
       commit("delItemUnfinished");
       commit("cleanItemTrashcan");
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].deleted) {
+      commit("setUserInfo", {
+        username: data.username,
+        user: data.nickname,
+        email: data.email,
+        pic: data.pictureUrl,
+        type: data.userLevel,
+        verified: data.verified
+      });
+      for (let i = 0; i < data.todos.length; i++) {
+        if (data.todos[i].deleted) {
           //deleted -> true : inTrashcan
-          commit("pushItemTrashcan", data[i]);
+          commit("pushItemTrashcan", data.todos[i]);
         } else {
-          if (data[i].completed) {
+          if (data.todos[i].completed) {
             //completed -> true : finished
-            commit("pushItemFinished", data[i], 0);
+            commit("pushItemFinished", data.todos[i], 0);
           } else {
             //completed -> false : unfinished
-            commit("pushItemUnfinished", data[i], 0);
+            commit("pushItemUnfinished", data.todos[i], 0);
           }
         }
       }
@@ -78,8 +147,7 @@ export default {
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
-      content: dataPack.text,
-      selected: false
+      content: dataPack.text
     };
     try {
       await axios.post("/lists", JSON.stringify(data));
@@ -97,8 +165,7 @@ export default {
       uid: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
-      content: dataPack.text,
-      selected: false
+      content: dataPack.text
     };
     commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", {
       data: data,
@@ -106,8 +173,3 @@ export default {
     });
   }
 };
-/*
-
-{author:'String',uid:'String',completed:'[true/false]',deleted:'[true/false]',content:'String'}
-
-*/

@@ -7,7 +7,8 @@ export default {
       //   completed: true,
       //   deleted: false,
       //   content: "String2",
-      //   selected: false
+      //   private:false,
+      //   locked:false
       // }
     ],
     unfinished: [
@@ -17,7 +18,6 @@ export default {
       //   completed: false,
       //   deleted: false,
       //   content: "String",
-      //   selected: false
       // }
     ]
   },
@@ -27,9 +27,14 @@ export default {
     user: "TeU",
     email: "trusaidlin@gmail.com",
     pic: "https://avatars2.githubusercontent.com/u/47718989?s=460&v=4",
-    type: "administrator", //[administrator,super,user,restricted]
+    type: "ADMIN", //[administrator,super,user,restricted]
     verified: true,
     emailVerified: true
   },
-  currentStatus: "full" //[full,unfin,fin,tra,set]
+  currentStatus: "full", //[full,unfin,fin,tra,set]
+  componentsConfig: {
+    inputAreaDialogStatus: false,
+    inputAreaMissionConfig: {},
+    selected: []
+  }
 };

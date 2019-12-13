@@ -8,6 +8,7 @@
 
 <style scoped>
 #app {
+  overflow: hidden !important;
   font-family: Arial, Helvetica, sans-serif;
 }
 </style>

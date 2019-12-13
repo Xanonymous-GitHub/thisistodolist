@@ -1,13 +1,14 @@
 <template>
   <v-list shaped v-show="items.length" class="transparent mx-2">
-    <v-list-item-group multiple>
+    <v-list-item-group multiple v-model="inActiveItem">
       <template v-for="item in items">
         <v-card :key="`${item.uid}`">
           <v-list-item
             :ref="item.uid"
             :value="item.uid"
-            active-class="amber"
+            active-class="grey"
             class="my-3"
+            @click="onItemClick"
           >
             <template v-slot:default="{ active }">
               <v-icon color="grey" left>{{ getIcon(item.completed) }}</v-icon>
@@ -34,6 +35,9 @@
 
   export default {
   name: "trashcan",
+  data: () => ({
+    inActiveItem: []
+  }),
   computed: {
     ...mapGetters({
       items: "getItemTrashcan"
@@ -42,9 +46,21 @@
   methods: {
     getIcon(type) {
       return type ? "mdi-check-circle-outline" : "mdi-alert-circle-outline";
+    },
+    onItemClick() {
+      this.$nextTick(() => {
+        this.$store.dispatch("changeConfig", {
+          name: "selected",
+          value: this.inActiveItem
+        });
+      });
     }
   },
   beforeCreate() {
+    this.$store.dispatch("changeConfig", {
+      name: "selected",
+      value: []
+    });
     this.$store.dispatch("setCurrentStatus", "tra");
   }
 };
