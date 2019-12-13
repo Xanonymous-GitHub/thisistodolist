@@ -30,10 +30,14 @@ input creatUserInput{
     nickname: String!
     password: String!
 }
-
+input loginInput{
+    password:String!
+    emailorusername: String!
+}
 type Mutation{
     changeTodos(input: changeTodosInput): BatchPayload!
     changeUser(input: changeUserInput): User!
     createTodo(input: creatTodoInput): Todo!
     createUser(input: creatUserInput): User!
+    login(input: loginInput):User!
 }
