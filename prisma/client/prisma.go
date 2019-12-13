@@ -2749,7 +2749,7 @@ func (instance *EmailTokenConnectionExec) PageInfo() *PageInfoExec {
 	return &PageInfoExec{ret}
 }
 
-func (instance *EmailTokenConnectionExec) Edges() *emailTokenEdgeExecArray {
+func (instance *EmailTokenConnectionExec) Edges() *EmailTokenEdgeExecArray {
 	edges := instance.exec.Client.GetMany(
 		instance.exec,
 		nil,
@@ -2764,7 +2764,7 @@ func (instance *EmailTokenConnectionExec) Edges() *emailTokenEdgeExecArray {
 		"node",
 		emailTokenFields)
 
-	return &emailTokenEdgeExecArray{nodes}
+	return &EmailTokenEdgeExecArray{nodes}
 }
 
 func (instance *EmailTokenConnectionExec) Aggregate(ctx context.Context) (*Aggregate, error) {
