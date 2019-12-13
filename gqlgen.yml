@@ -1,23 +1,17 @@
-# .gqlgen.yml example
-#
-# Refer to https://gqlgen.com/config/
-# for detailed .gqlgen.yml documentation.
-
-schema:
-- ./gqlgen/schema.graphql
+schema: graphql/schema/*.graphql
 exec:
-  filename: ./gqlgen/generated.go
-model:
-  filename: ./model/gqlgenmodel.go
+  filename: graphql/generated.go
 models:
   Todo:
-    model: github.com/Xanonymous-GitHub/thisistodolist/model.Todo
+    model: github.com/Xanonymous-GitHub/thisistodolist/prisma/client.Todo
   User:
-    model: github.com/Xanonymous-GitHub/thisistodolist/model.User
-  UserNoPassword:
-    model: github.com/Xanonymous-GitHub/thisistodolist/model.UserNoPassword
-  Session:
-    model: github.com/Xanonymous-GitHub/thisistodolist/model.Session
+    model: github.com/Xanonymous-GitHub/thisistodolist/prisma/client.User
+  BatchPayload:
+    model: github.com/Xanonymous-GitHub/thisistodolist/prisma/client.BatchPayload
+model:
+  filename: model/graphqlModel.go
 resolver:
-  filename: ./gqlgen/resolver.go
+  # Goal: copy&paste from generated file
+  filename: graphql/reslover/resolver.go
   type: Resolver
+omit_slice_element_pointers: true

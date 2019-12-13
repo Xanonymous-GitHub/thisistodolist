@@ -9,7 +9,8 @@ input userByUsernameInput{
     username: String!
 }
 type UserLayout{
-    nikename: String!
+    nickname: String
+    username:String!
     pictureUrl: String!
     verified: Boolean!
 }

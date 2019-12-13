@@ -63,7 +63,32 @@ func (r *mutationResolver) ChangeTodos(ctx context.Context, input *model.ChangeT
 	return &output, err
 }
 func (r *mutationResolver) ChangeUser(ctx context.Context, input *model.ChangeUserInput) (*prisma.User, error) {
-	panic("not implemented")
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: controller.ForContext(ctx)}).Exec(ctx)
+	if err != nil || user == nil || user.UserLevel == prisma.LevelRestricted {
+		return nil, fmt.Errorf("Access denied")
+	}
+	if user.UserLevel != prisma.LevelAdmin && user.Username != input.Username {
+		return nil, fmt.Errorf("Access denied")
+	}
+	if input.Oldpassword != nil || input.Newpassword != nil {
+		user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: &input.Username}).Exec(ctx)
+		if err != nil || user == nil {
+			return nil, fmt.Errorf("This people not exist")
+		}
+		if user.Password != *input.Oldpassword {
+			return nil, fmt.Errorf("Password not right")
+		}
+	}
+	return r.Prisma.UpdateUser(
+		prisma.UserUpdateParams{
+			Data: prisma.UserUpdateInput{
+				Nickname:   input.Nikename,
+				PictureUrl: input.PictureURL,
+				Password:   input.Newpassword,
+			},
+			Where: prisma.UserWhereUniqueInput{
+				Username: &input.Username,
+			}}).Exec(ctx)
 }
 func (r *mutationResolver) CreateTodo(ctx context.Context, input *model.CreatTodoInput) (*prisma.Todo, error) {
 	username := controller.ForContext(ctx)
@@ -83,6 +108,9 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input *model.CreatTod
 func (r *mutationResolver) CreateUser(ctx context.Context, input *model.CreatUserInput) (*prisma.User, error) {
 	panic("not implemented")
 }
+func (r *mutationResolver) Login(ctx context.Context, input *model.LoginInput) (*prisma.User, error) {
+	panic("not implemented")
+}
 
 type queryResolver struct{ *Resolver }
 
@@ -99,9 +127,10 @@ func (r *queryResolver) Users(ctx context.Context) ([]model.UserLayout, error) {
 	users, err := r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{UsernameNot: username}}).Exec(ctx)
 	layout := make([]model.UserLayout, len(users))
 	for i, v := range users {
-		layout[i].Nikename = v.Nickname
+		layout[i].Nickname = v.Nickname
 		layout[i].PictureURL = v.PictureUrl
 		layout[i].Verified = v.Verified
+		layout[i].Username = v.Username
 	}
 	return layout, err
 }
@@ -124,9 +153,10 @@ func (r *queryResolver) UserByUsername(ctx context.Context, input model.UserByUs
 	}
 	userother, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: &input.Username}).Exec(ctx)
 	var layout model.UserLayout
-	layout.Nikename = userother.Nickname
+	layout.Nickname = userother.Nickname
 	layout.PictureURL = userother.PictureUrl
 	layout.Verified = userother.Verified
+	layout.Username = userother.Username
 	return &layout, err
 }
 
@@ -141,7 +171,8 @@ func (r *todoResolver) Author(ctx context.Context, obj *prisma.Todo) (*model.Use
 	var layout model.UserLayout
 	layout.Verified = user[0].Verified
 	layout.PictureURL = user[0].PictureUrl
-	layout.Nikename = user[0].Nickname
+	layout.Nickname = user[0].Nickname
+	layout.Username = user[0].Username
 	return &layout, err
 }
 
