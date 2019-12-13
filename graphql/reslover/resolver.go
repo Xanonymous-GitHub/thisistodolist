@@ -91,16 +91,43 @@ func (r *queryResolver) Me(ctx context.Context) (*prisma.User, error) {
 	return r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 }
 func (r *queryResolver) Users(ctx context.Context) ([]model.UserLayout, error) {
-	panic("not implemented")
+	username := controller.ForContext(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
+	if err != nil || user == nil {
+		return nil, fmt.Errorf("Access denied")
+	}
+	users, err := r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{UsernameNot: username}}).Exec(ctx)
+	layout := make([]model.UserLayout, len(users))
+	for i, v := range users {
+		layout[i].Nikename = v.Nickname
+		layout[i].PictureURL = v.PictureUrl
+		layout[i].Verified = v.Verified
+	}
+	return layout, err
 }
 func (r *queryResolver) UsersForAdmin(ctx context.Context) ([]prisma.User, error) {
-	panic("not implemented")
+	username := controller.ForContext(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
+	if err != nil || user == nil || user.UserLevel != prisma.LevelAdmin {
+		return nil, fmt.Errorf("Access denied")
+	}
+	return r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{UsernameNot: username}}).Exec(ctx)
 }
 func (r *queryResolver) MyFriends(ctx context.Context) ([]model.UserForFriend, error) {
 	panic("not implemented")
 }
 func (r *queryResolver) UserByUsername(ctx context.Context, input model.UserByUsernameInput) (*model.UserLayout, error) {
-	panic("not implemented")
+	username := controller.ForContext(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
+	if err != nil || user == nil {
+		return nil, fmt.Errorf("Access denied")
+	}
+	userother, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: &input.Username}).Exec(ctx)
+	var layout model.UserLayout
+	layout.Nikename = userother.Nickname
+	layout.PictureURL = userother.PictureUrl
+	layout.Verified = userother.Verified
+	return &layout, err
 }
 
 type todoResolver struct{ *Resolver }
@@ -110,13 +137,26 @@ func (r *todoResolver) Sort(ctx context.Context, obj *prisma.Todo) (int, error) 
 	return int(sort[0].SortId), err
 }
 func (r *todoResolver) Author(ctx context.Context, obj *prisma.Todo) (*model.UserLayout, error) {
-	panic("not implemented")
+	user, err := r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{TodosSome: &prisma.TodoWhereInput{ID: &obj.ID}}}).Exec(ctx)
+	var layout model.UserLayout
+	layout.Verified = user[0].Verified
+	layout.PictureURL = user[0].PictureUrl
+	layout.Nikename = user[0].Nickname
+	return &layout, err
 }
 
 type userResolver struct{ *Resolver }
 
 func (r *userResolver) UserLevel(ctx context.Context, obj *prisma.User) (model.Level, error) {
-	panic("not implemented")
+	var level model.Level
+	if obj.UserLevel == prisma.LevelAdmin {
+		level = model.LevelAdmin
+	} else if obj.UserLevel == prisma.LevelUser {
+		level = model.LevelUser
+	} else {
+		level = model.LevelRestricted
+	}
+	return level, nil
 }
 func (r *userResolver) Friends(ctx context.Context, obj *prisma.User) ([]model.UserForFriend, error) {
 	panic("not implemented")
