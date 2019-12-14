@@ -16,7 +16,7 @@ export default {
     }
     for (let i = 0; i < list.length; i++) {
       for (let j = 0; j < state.componentsConfig.selected.length; j++) {
-        if (state.componentsConfig.selected[j] === list[i].uid) {
+        if (state.componentsConfig.selected[j] === list[i].id) {
           data.actions.act.pos = i--;
           data.actions.act.uidPos = j--;
           dispatch(data.actions.name, data.actions.act);
@@ -24,6 +24,20 @@ export default {
         }
       }
     }
+  },
+  changeCompleted({ commit, state }, data) {
+    if (data.name === "unfin") {
+      let transferBox = state.todo.unfinished[data.pos];
+      transferBox.completed = true;
+      commit("popItemUnfinished", data.pos);
+      commit("pushItemFinished", transferBox);
+    } else if (data.name === "fin") {
+      let transferBox = state.todo.finished[data.pos];
+      transferBox.completed = false;
+      commit("popItemFinished", data.pos);
+      commit("pushItemUnfinished", transferBox);
+    }
+    state.componentsConfig.selected.splice(data.uidPos, 1);
   },
   setConfigForInputarea({ commit, state, dispatch }, data) {
     state.componentsConfig.selected.pop();
@@ -49,10 +63,10 @@ export default {
     let transferBox = state.trashcan[data.pos];
     transferBox.deleted = false;
     commit("popItemTrashcan", data.pos);
-    commit(transferBox.completed ? "pushItemFinished" : "pushItemUnfinished", {
-      data: transferBox,
-      index: 0
-    });
+    commit(
+      transferBox.completed ? "pushItemFinished" : "pushItemUnfinished",
+      transferBox
+    );
     state.componentsConfig.selected.splice(data.uidPos, 1);
   },
   delItem({ commit, state }, data) {
@@ -76,12 +90,11 @@ export default {
   },
   syncData: async ({ commit }) => {
     try {
-      let data = JSON.parse(
-        (
-          await axios.post(
-            "/query",
-            {
-              query: `
+      let data = (
+        await axios.post(
+          "/query",
+          {
+            query: `
                  query{
                      me{
                          username
@@ -102,22 +115,21 @@ export default {
                        }
                      }
                     `,
-              variables: {}
-            },
-            {
-              headers: {
-                "Content-Type": "application/json"
-              }
+            variables: {}
+          },
+          {
+            headers: {
+              "Content-Type": "application/json"
             }
-          )
-        ).data["data"]["me"]
-      );
+          }
+        )
+      ).data["data"]["me"];
       commit("delItemFinished");
       commit("delItemUnfinished");
       commit("cleanItemTrashcan");
       commit("setUserInfo", {
         username: data.username,
-        user: data.nickname,
+        nickname: data.nickname,
         email: data.email,
         pic: data.pictureUrl,
         type: data.userLevel,
@@ -125,36 +137,52 @@ export default {
       });
       for (let i = 0; i < data.todos.length; i++) {
         if (data.todos[i].deleted) {
-          //deleted -> true : inTrashcan
           commit("pushItemTrashcan", data.todos[i]);
         } else {
           if (data.todos[i].completed) {
-            //completed -> true : finished
             commit("pushItemFinished", data.todos[i], 0);
           } else {
-            //completed -> false : unfinished
             commit("pushItemUnfinished", data.todos[i], 0);
           }
         }
       }
     } catch (e) {
+      //show error dialog message box**
       console.log(e + "\nerror@Vuex.action.sync_data\n");
     }
   },
   addNewItem: async ({ commit, state }, dataPack) => {
-    let data = {
-      author: state.userinfo.username,
-      uid: require("js-sha256").sha256(dataPack.text + Date.now()),
-      completed: dataPack.type,
-      deleted: false,
-      content: dataPack.text
-    };
     try {
-      await axios.post("/lists", JSON.stringify(data));
-      commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", {
-        data: data,
-        index: 0
-      });
+      let data = (
+        await axios.post(
+          "/query",
+          {
+            query: `
+                  mutation {
+                    createTodo(
+                      input: { content: "${dataPack.text}", completed: ${dataPack.type}, private: true, locked: false }
+                    ) {
+                      id
+                    }
+                  }
+                  `,
+            variables: {}
+          },
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        )
+      ).data["data"]["createTodo"];
+      let dataRe = {
+        author: state.userinfo.username,
+        id: data["id"],
+        completed: dataPack.type,
+        deleted: false,
+        content: dataPack.text
+      };
+      commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", dataRe);
     } catch (e) {
       console.log(e + "\nerror@Vuex.action.addNewItem\n");
     }
@@ -162,14 +190,11 @@ export default {
   testAddNewItem: ({ commit, state }, dataPack) => {
     let data = {
       author: state.userinfo.username,
-      uid: require("js-sha256").sha256(dataPack.text + Date.now()),
+      id: require("js-sha256").sha256(dataPack.text + Date.now()),
       completed: dataPack.type,
       deleted: false,
       content: dataPack.text
     };
-    commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", {
-      data: data,
-      index: 0
-    });
+    commit(dataPack.type ? "pushItemFinished" : "pushItemUnfinished", data);
   }
 };

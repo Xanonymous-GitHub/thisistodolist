@@ -14,7 +14,7 @@
                 :color="user.badgeClass"
                 left
                 >{{ user.special }}</v-icon
-              >{{ user.user }}</v-list-item-title
+              >{{ user.nickname }}</v-list-item-title
             >
             <v-list-item-subtitle
               >{{ "@" + user.username
@@ -150,6 +150,16 @@
         >
           <v-icon>mdi-delete-restore</v-icon>
         </v-btn>
+        <v-btn
+          v-show="currentStatus !== 'tra' && currentStatus !== 'set'"
+          color="amber"
+          @click="flipItemCompleted"
+          :disabled="!config.selected.length"
+          fab
+          small
+        >
+          <v-icon>mdi-autorenew</v-icon>
+        </v-btn>
       </v-speed-dial>
     </v-card>
     <v-dialog v-model="config.inputAreaDialogStatus" width="600">
@@ -162,10 +172,10 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
-  import inputArea from "@/components/InputArea.vue";
+import { mapGetters } from "vuex";
+import inputArea from "@/components/InputArea.vue";
 
-  export default {
+export default {
   components: {
     inputArea
   },
@@ -183,9 +193,6 @@
     left: false,
     inputAreaKey: -1
   }),
-  created() {
-    this.$vuetify.theme.dark = true;
-  },
   watch: {
     top(val) {
       this.bottom = !val;
@@ -267,6 +274,22 @@
           act: { name: "tra" }
         }
       });
+    },
+    flipItemCompleted() {
+      this.$store.dispatch("selectionHandler", {
+        listType: "unfin",
+        actions: {
+          name: "changeCompleted",
+          act: { name: "unfin" }
+        }
+      });
+      this.$store.dispatch("selectionHandler", {
+        listType: "fin",
+        actions: {
+          name: "changeCompleted",
+          act: { name: "fin" }
+        }
+      });
     }
   },
   computed: {
@@ -281,6 +304,7 @@
   },
   mounted() {
     this.$store.dispatch("syncData");
+    this.$vuetify.theme.dark = this.config.darkmode;
   }
 };
 </script>

@@ -2,10 +2,10 @@
   <v-list shaped v-show="items.length" class="transparent mx-2">
     <v-list-item-group multiple v-model="inActiveItems">
       <template v-for="item in items">
-        <v-card :key="`${item.uid}`">
+        <v-card :key="`${item.id}`">
           <v-list-item
-            :ref="item.uid"
-            :value="item.uid"
+            :ref="item.id"
+            :value="item.id"
             active-class="amber"
             class="my-3"
             @click="onItemClick"
@@ -33,9 +33,9 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-  export default {
+export default {
   name: "mainlist",
   data: () => ({
     inActiveItems: []

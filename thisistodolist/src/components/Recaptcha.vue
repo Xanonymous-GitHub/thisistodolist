@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import VueRecaptcha from "vue-recaptcha";
-  //import Validation from "@/services/recaptchaValidate.js";
+import VueRecaptcha from "vue-recaptcha";
+//import Validation from "@/services/recaptchaValidate.js";
 export default {
   name: "recaptcha",
   components: { VueRecaptcha },
