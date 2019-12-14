@@ -21,11 +21,18 @@ func main() {
 		Prisma: client,
 	}
 	router := chi.NewRouter()
-	router.Use(controller.Auth(client))
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
-	router.Get("*", controller.IndexHandler)
+	router.Use(middleware.URLFormat)
+	router.Use(controller.Auth(client))
 	controller.FileServer(router, "/", http.Dir(fileDir))
+	router.Get("/", controller.IndexHandler)
+	router.Get("/unfinished", controller.IndexHandler)
+	router.Get("/finished", controller.IndexHandler)
+	router.Get("/trashcan", controller.IndexHandler)
+	router.Get("/settings", controller.IndexHandler)
+	router.Get("/signin", controller.IndexHandler)
+	router.Get("/signup", controller.IndexHandler)
 	router.Post("/query", handler.GraphQL(graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver})))
 	http.ListenAndServe(":8888", router)
 }
