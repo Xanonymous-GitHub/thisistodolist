@@ -72,10 +72,10 @@
   </v-app>
 </template>
 <script>
-  import axios from "axios";
-  import Recaptcha from "@/components/Recaptcha";
+import axios from "axios";
+import Recaptcha from "@/components/Recaptcha";
 
-  export default {
+export default {
   name: "signup",
   components: { Recaptcha },
   data: () => ({

@@ -1,14 +1,14 @@
 export default {
   pushItemFinished(state, data) {
     //insert a new item to finished
-    state.todo.finished.splice(0, 0, data.data);
+    state.todo.finished.splice(0, 0, data);
   },
   popItemFinished(state, index) {
     state.todo.finished.splice(index, 1);
   },
   pushItemUnfinished(state, data) {
     //insert a new item to unfinished
-    state.todo.unfinished.splice(0, 0, data.data);
+    state.todo.unfinished.splice(0, 0, data);
   },
   popItemUnfinished(state, index) {
     state.todo.unfinished.splice(index, 1);
@@ -35,7 +35,7 @@ export default {
   updateConfig(state, data) {
     state.componentsConfig[data.name] = data.value;
   },
-  setUserInfo(state,data){
-    state.userinfo=data;
+  setUserInfo(state, data) {
+    state.userinfo = data;
   }
 };

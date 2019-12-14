@@ -27,9 +27,9 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-  export default {
+export default {
   name: "InputArea",
   data: () => ({
     inputarea: "",
@@ -51,7 +51,7 @@
       });
     },
     addItem() {
-      this.$store.dispatch("testAddNewItem", {
+      this.$store.dispatch("addNewItem", {
         text: this.inputarea,
         type: this.newItemType
       });
@@ -60,13 +60,13 @@
       let tmpItem = this.config.inputAreaMissionConfig.item;
       tmpItem.content = this.inputarea;
       if (this.newItemType !== tmpItem.complete) {
-        this.$store.dispatch("testAddNewItem", {
+        this.$store.dispatch("addNewItem", {
           text: this.inputarea,
           type: this.newItemType
         });
         this.$store.dispatch("changeConfig", {
           name: "selected",
-          value: Array(tmpItem.uid)
+          value: Array(tmpItem.id)
         });
         this.$store.dispatch("selectionHandler", {
           listType: "unfin",
