@@ -63,7 +63,7 @@ func (r *mutationResolver) ChangeTodos(ctx context.Context, input *model.ChangeT
 	return &output, err
 }
 func (r *mutationResolver) ChangeUser(ctx context.Context, input *model.ChangeUserInput) (*prisma.User, error) {
-	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: controller.ForContext(ctx)}).Exec(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: controller.ForContext(ctx).Username}).Exec(ctx)
 	if err != nil || user == nil || user.UserLevel == prisma.LevelRestricted {
 		return nil, fmt.Errorf("Access denied")
 	}
@@ -91,7 +91,7 @@ func (r *mutationResolver) ChangeUser(ctx context.Context, input *model.ChangeUs
 			}}).Exec(ctx)
 }
 func (r *mutationResolver) CreateTodo(ctx context.Context, input *model.CreatTodoInput) (*prisma.Todo, error) {
-	username := controller.ForContext(ctx)
+	username := controller.ForContext(ctx).Username
 	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 	if err != nil || user == nil || user.UserLevel == prisma.LevelRestricted {
 		return nil, fmt.Errorf("Access denied")
@@ -106,20 +106,76 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input *model.CreatTod
 	}).Exec(ctx)
 }
 func (r *mutationResolver) CreateUser(ctx context.Context, input *model.CreatUserInput) (*prisma.User, error) {
-	panic("not implemented")
+	detail := controller.ForContext(ctx)
+	if detail.Username != nil {
+		return nil, fmt.Errorf("You already had an account")
+	}
+	vailed, err := controller.VailUser(input.Recaptcha, string(detail.IP))
+	if err != nil {
+		return nil, err
+	}
+	if !vailed {
+		return nil, fmt.Errorf("You are robot")
+	}
+	layout, err := r.Prisma.CreateUser(prisma.UserCreateInput{
+		Username: input.Username,
+		Email:    input.Email,
+		Nickname: input.Nickname,
+	}).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	mail := controller.New("wayne900619@gmail.com", "awbnlgfmcdwyubru")
+	//add crypto method
+	mail.Send("Hello,"+layout.Username, "", layout.Email)
+	return layout, err
 }
 func (r *mutationResolver) Login(ctx context.Context, input *model.LoginInput) (*prisma.User, error) {
+	detail := controller.ForContext(ctx)
+	if detail.Username != nil {
+		return nil, fmt.Errorf("You have already login")
+	}
+	vailed, err := controller.VailUser(input.Recaptcha, string(detail.IP))
+	if err != nil {
+		return nil, err
+	}
+	if !vailed {
+		return nil, fmt.Errorf("You are robot")
+	}
+	user, err := r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{Username: &input.Emailorusername, Or: []prisma.UserWhereInput{{Email: &input.Emailorusername}}}}).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		return nil, fmt.Errorf("username or email wrong")
+	}
+	if input.Password != user[0].Password {
+		return nil, fmt.Errorf("password wrong")
+	}
+	token := "itis" + user[0].Username
+	context.WithValue(ctx, "cookie", token)
+	r.Prisma.UpsertSession(prisma.SessionUpsertParams{
+		Where:  prisma.SessionWhereUniqueInput{Username: &user[0].Username},
+		Create: prisma.SessionCreateInput{Username: user[0].Username, Token: token},
+		Update: prisma.SessionUpdateInput{Token: &token},
+	}).Exec(ctx)
+	return &user[0], err
+}
+func (r *mutationResolver) VerifyEmail(ctx context.Context, input *model.VerifyEmailInput) (bool, error) {
+	panic("not implemented")
+}
+func (r *mutationResolver) ResentEmail(ctx context.Context, input *model.ResentEmailInput) (*bool, error) {
 	panic("not implemented")
 }
 
 type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Me(ctx context.Context) (*prisma.User, error) {
-	username := controller.ForContext(ctx)
+	username := controller.ForContext(ctx).Username
 	return r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 }
 func (r *queryResolver) Users(ctx context.Context) ([]model.UserLayout, error) {
-	username := controller.ForContext(ctx)
+	username := controller.ForContext(ctx).Username
 	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 	if err != nil || user == nil {
 		return nil, fmt.Errorf("Access denied")
@@ -135,7 +191,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]model.UserLayout, error) {
 	return layout, err
 }
 func (r *queryResolver) UsersForAdmin(ctx context.Context) ([]prisma.User, error) {
-	username := controller.ForContext(ctx)
+	username := controller.ForContext(ctx).Username
 	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 	if err != nil || user == nil || user.UserLevel != prisma.LevelAdmin {
 		return nil, fmt.Errorf("Access denied")
@@ -146,7 +202,7 @@ func (r *queryResolver) MyFriends(ctx context.Context) ([]model.UserForFriend, e
 	panic("not implemented")
 }
 func (r *queryResolver) UserByUsername(ctx context.Context, input model.UserByUsernameInput) (*model.UserLayout, error) {
-	username := controller.ForContext(ctx)
+	username := controller.ForContext(ctx).Username
 	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: username}).Exec(ctx)
 	if err != nil || user == nil {
 		return nil, fmt.Errorf("Access denied")

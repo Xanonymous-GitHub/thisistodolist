@@ -66,8 +66,17 @@ type LoginInput struct {
 	Recaptcha       string `json:"recaptcha"`
 }
 
+type ResentEmailInput struct {
+	Emailorusername string `json:"emailorusername"`
+	Password        string `json:"password"`
+}
+
 type UserByUsernameInput struct {
 	Username string `json:"username"`
+}
+
+type VerifyEmailInput struct {
+	Token string `json:"token"`
 }
 
 type Level string

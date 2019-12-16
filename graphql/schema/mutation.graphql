@@ -36,10 +36,19 @@ input loginInput{
     emailorusername: String!
     recaptcha: String!
 }
+input verifyEmailInput{
+    token:String!
+}
+input resentEmailInput{
+    emailorusername: String!
+    password:String!
+}
 type Mutation{
     changeTodos(input: changeTodosInput): BatchPayload!
     changeUser(input: changeUserInput): User!
     createTodo(input: creatTodoInput): Todo!
     createUser(input: creatUserInput): User!
     login(input: loginInput):User!
+    verifyEmail(input: verifyEmailInput):Boolean!
+    resentEmail(input: resentEmailInput):Boolean
 }

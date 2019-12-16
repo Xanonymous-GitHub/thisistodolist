@@ -4,8 +4,3 @@ type Session{
     token: String! @unique
     updatedAt: DateTime! @updatedAt
 }
-type emailToken{
-    id: ID! @id
-    email: String! @unique
-    token: String!
-}
