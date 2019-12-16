@@ -56,6 +56,8 @@ type ComplexityRoot struct {
 		CreateTodo  func(childComplexity int, input *model.CreatTodoInput) int
 		CreateUser  func(childComplexity int, input *model.CreatUserInput) int
 		Login       func(childComplexity int, input *model.LoginInput) int
+		ResentEmail func(childComplexity int, input *model.ResentEmailInput) int
+		VerifyEmail func(childComplexity int, input *model.VerifyEmailInput) int
 	}
 
 	Query struct {
@@ -114,6 +116,8 @@ type MutationResolver interface {
 	CreateTodo(ctx context.Context, input *model.CreatTodoInput) (*prisma.Todo, error)
 	CreateUser(ctx context.Context, input *model.CreatUserInput) (*prisma.User, error)
 	Login(ctx context.Context, input *model.LoginInput) (*prisma.User, error)
+	VerifyEmail(ctx context.Context, input *model.VerifyEmailInput) (bool, error)
+	ResentEmail(ctx context.Context, input *model.ResentEmailInput) (*bool, error)
 }
 type QueryResolver interface {
 	Me(ctx context.Context) (*prisma.User, error)
@@ -214,6 +218,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.Login(childComplexity, args["input"].(*model.LoginInput)), true
+
+	case "Mutation.resentEmail":
+		if e.complexity.Mutation.ResentEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resentEmail_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ResentEmail(childComplexity, args["input"].(*model.ResentEmailInput)), true
+
+	case "Mutation.verifyEmail":
+		if e.complexity.Mutation.VerifyEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_verifyEmail_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.VerifyEmail(childComplexity, args["input"].(*model.VerifyEmailInput)), true
 
 	case "Query.me":
 		if e.complexity.Query.Me == nil {
@@ -558,12 +586,21 @@ input loginInput{
     emailorusername: String!
     recaptcha: String!
 }
+input verifyEmailInput{
+    token:String!
+}
+input resentEmailInput{
+    emailorusername: String!
+    password:String!
+}
 type Mutation{
     changeTodos(input: changeTodosInput): BatchPayload!
     changeUser(input: changeUserInput): User!
     createTodo(input: creatTodoInput): Todo!
     createUser(input: creatUserInput): User!
     login(input: loginInput):User!
+    verifyEmail(input: verifyEmailInput):Boolean!
+    resentEmail(input: resentEmailInput):Boolean
 }`},
 	&ast.Source{Name: "graphql/schema/query.graphql", Input: `type Query{
     me: User!
@@ -686,6 +723,34 @@ func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawAr
 	var arg0 *model.LoginInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalOloginInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐLoginInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_resentEmail_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ResentEmailInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOresentEmailInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐResentEmailInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_verifyEmail_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.VerifyEmailInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOverifyEmailInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐVerifyEmailInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1013,6 +1078,91 @@ func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.C
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalNUser2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋprismaᚋclientᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_verifyEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_verifyEmail_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().VerifyEmail(rctx, args["input"].(*model.VerifyEmailInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_resentEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_resentEmail_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ResentEmail(rctx, args["input"].(*model.ResentEmailInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3701,6 +3851,30 @@ func (ec *executionContext) unmarshalInputloginInput(ctx context.Context, obj in
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputresentEmailInput(ctx context.Context, obj interface{}) (model.ResentEmailInput, error) {
+	var it model.ResentEmailInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "emailorusername":
+			var err error
+			it.Emailorusername, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "password":
+			var err error
+			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputuserByUsernameInput(ctx context.Context, obj interface{}) (model.UserByUsernameInput, error) {
 	var it model.UserByUsernameInput
 	var asMap = obj.(map[string]interface{})
@@ -3710,6 +3884,24 @@ func (ec *executionContext) unmarshalInputuserByUsernameInput(ctx context.Contex
 		case "username":
 			var err error
 			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputverifyEmailInput(ctx context.Context, obj interface{}) (model.VerifyEmailInput, error) {
+	var it model.VerifyEmailInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "token":
+			var err error
+			it.Token, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3794,6 +3986,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "verifyEmail":
+			out.Values[i] = ec._Mutation_verifyEmail(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "resentEmail":
+			out.Values[i] = ec._Mutation_resentEmail(ctx, field)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5273,6 +5472,30 @@ func (ec *executionContext) unmarshalOloginInput2ᚖgithubᚗcomᚋXanonymousᚑ
 		return nil, nil
 	}
 	res, err := ec.unmarshalOloginInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐLoginInput(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOresentEmailInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐResentEmailInput(ctx context.Context, v interface{}) (model.ResentEmailInput, error) {
+	return ec.unmarshalInputresentEmailInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOresentEmailInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐResentEmailInput(ctx context.Context, v interface{}) (*model.ResentEmailInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOresentEmailInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐResentEmailInput(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOverifyEmailInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐVerifyEmailInput(ctx context.Context, v interface{}) (model.VerifyEmailInput, error) {
+	return ec.unmarshalInputverifyEmailInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOverifyEmailInput2ᚖgithubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐVerifyEmailInput(ctx context.Context, v interface{}) (*model.VerifyEmailInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOverifyEmailInput2githubᚗcomᚋXanonymousᚑGitHubᚋthisistodolistᚋmodelᚐVerifyEmailInput(ctx, v)
 	return &res, err
 }
 

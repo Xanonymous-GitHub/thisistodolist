@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"github.com/Xanonymous-GitHub/thisistodolist/model"
 	prisma "github.com/Xanonymous-GitHub/thisistodolist/prisma/client"
 	"net/http"
 )
@@ -23,13 +24,18 @@ func Auth(db *prisma.Client) func(http.Handler) http.Handler {
 			}*/
 			//ctx:=context.WithValue(r.Context(),userContextKey,session.Username)
 			name := "wayne"
-			ctx := context.WithValue(r.Context(), userContextKey, &name)
-			ctx.Value(userContextKey)
+			ip, _ := GetIP(r)
+			detail := model.AuthDetail{Username: &name, IP: ip}
+			ctx := context.WithValue(r.Context(), userContextKey, detail)
 			next.ServeHTTP(w, r.WithContext(ctx))
+			if r.Context().Value("token") != nil {
+				cookie := &http.Cookie{Name: "session", Value: r.Context().Value("token").(string), HttpOnly: false}
+				http.SetCookie(w, cookie)
+			}
 		})
 	}
 }
-func ForContext(ctx context.Context) *string {
-	raw, _ := ctx.Value(userContextKey).(*string)
+func ForContext(ctx context.Context) model.AuthDetail {
+	raw, _ := ctx.Value(userContextKey).(model.AuthDetail)
 	return raw
 }
