@@ -32,5 +32,5 @@ func main() {
 	router.Get("/signin", controller.IndexHandler)
 	router.Get("/signup", controller.IndexHandler)
 	router.Post("/query", handler.GraphQL(graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver})))
-	http.ListenAndServe(":8888", router)
+	http.ListenAndServe(":80", router)
 }
