@@ -57,33 +57,46 @@ export default {
       });
     },
     editItem() {
-      let tmpItem = this.config.inputAreaMissionConfig.item;
-      tmpItem.content = this.inputarea;
-      if (this.newItemType !== tmpItem.complete) {
-        this.$store.dispatch("addNewItem", {
-          text: this.inputarea,
-          type: this.newItemType
-        });
-        this.$store.dispatch("changeConfig", {
-          name: "selected",
-          value: Array(tmpItem.id)
-        });
-        this.$store.dispatch("selectionHandler", {
-          listType: "unfin",
-          actions: {
-            name: "delItem",
-            act: { name: "unfin" }
-          }
-        });
-        this.$store.dispatch("selectionHandler", {
-          listType: "fin",
-          actions: {
-            name: "delItem",
-            act: { name: "fin" }
-          }
-        });
-        this.$store.dispatch("delItem", { name: "tra", pos: 0 });
-      }
+      //data:{iFrom:"",iTo:{list:"",pos:int},actions:{}}
+      this.$store.dispatch("selectionHandler", {
+        iFrom: this.config.inputAreaMissionConfig.itemPos.list,
+        iTo: { list: this.newItemType ? "fin" : "unfin", pos: 0},
+        action: {
+          content: this.inputarea,
+          completed: this.newItemType,
+          deleted: false,
+          local: undefined,
+          sort: undefined,
+          locked: undefined
+        }
+      });
+      // let tmpItem = this.config.inputAreaMissionConfig.item;
+      // tmpItem.content = this.inputarea;
+      // if (this.newItemType !== tmpItem.complete) {
+      //   this.$store.dispatch("testAddNewItem", {
+      //     text: this.inputarea,
+      //     type: this.newItemType
+      //   });
+      //   this.$store.dispatch("changeConfig", {
+      //     name: "selected",
+      //     value: Array(tmpItem.id)
+      //   });
+      //   this.$store.dispatch("selectionHandler", {
+      //     listType: "unfin",
+      //     actions: {
+      //       name: "delItem",
+      //       act: { name: "unfin" }
+      //     }
+      //   });
+      //   this.$store.dispatch("selectionHandler", {
+      //     listType: "fin",
+      //     actions: {
+      //       name: "delItem",
+      //       act: { name: "fin" }
+      //     }
+      //   });
+      //   this.$store.dispatch("delItem", { name: "tra", pos: 0 });
+      // }
     }
   },
   computed: {

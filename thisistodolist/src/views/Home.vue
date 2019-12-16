@@ -133,7 +133,7 @@
         <v-btn
           v-show="currentStatus !== 'set'"
           color="red"
-          @click="deleteItem"
+          @click.stop="deleteItem"
           :disabled="!config.selected.length"
           fab
           small
@@ -143,7 +143,7 @@
         <v-btn
           v-show="currentStatus === 'tra'"
           color="amber"
-          @click="restoreDeletedItem"
+          @click.stop="restoreDeletedItem"
           :disabled="!config.selected.length"
           fab
           small
@@ -153,7 +153,7 @@
         <v-btn
           v-show="currentStatus !== 'tra' && currentStatus !== 'set'"
           color="amber"
-          @click="flipItemCompleted"
+          @click.stop="flipItemCompleted"
           :disabled="!config.selected.length"
           fab
           small
@@ -220,20 +220,7 @@ export default {
         });
       }
       if (data === "edit") {
-        this.$store.dispatch("selectionHandler", {
-          listType: "unfin",
-          actions: {
-            name: "setConfigForInputarea",
-            act: { name: "unfin" }
-          }
-        });
-        this.$store.dispatch("selectionHandler", {
-          listType: "fin",
-          actions: {
-            name: "setConfigForInputarea",
-            act: { name: "fin" }
-          }
-        });
+        this.$store.dispatch("setConfigForInputarea");
       }
       this.inputAreaKey++;
       this.$store.dispatch("changeConfig", {

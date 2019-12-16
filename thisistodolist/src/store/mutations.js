@@ -1,6 +1,7 @@
 export default {
   pushItemFinished(state, data) {
     //insert a new item to finished
+    data.completed = true;
     state.todo.finished.splice(0, 0, data);
   },
   popItemFinished(state, index) {
@@ -8,6 +9,7 @@ export default {
   },
   pushItemUnfinished(state, data) {
     //insert a new item to unfinished
+    data.completed = false;
     state.todo.unfinished.splice(0, 0, data);
   },
   popItemUnfinished(state, index) {
