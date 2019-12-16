@@ -32,7 +32,7 @@ func (r *Resolver) User() graphql1.UserResolver {
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) ChangeTodos(ctx context.Context, input *model.ChangeTodosInput) (*prisma.BatchPayload, error) {
-	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: controller.ForContext(ctx)}).Exec(ctx)
+	user, err := r.Prisma.User(prisma.UserWhereUniqueInput{Username: controller.ForContext(ctx).Username}).Exec(ctx)
 	if err != nil || user == nil || user.UserLevel == prisma.LevelRestricted {
 		return nil, fmt.Errorf("Access denied")
 	}
@@ -110,24 +110,25 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input *model.CreatUse
 	if detail.Username != nil {
 		return nil, fmt.Errorf("You already had an account")
 	}
-	vailed, err := controller.VailUser(input.Recaptcha, string(detail.IP))
+	/*vailed, err := controller.VailUser(input.Recaptcha, string(detail.IP))
 	if err != nil {
 		return nil, err
 	}
 	if !vailed {
 		return nil, fmt.Errorf("You are robot")
-	}
+	}*/
 	layout, err := r.Prisma.CreateUser(prisma.UserCreateInput{
 		Username: input.Username,
 		Email:    input.Email,
 		Nickname: input.Nickname,
+		Password: input.Password,
 	}).Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
 	mail := controller.New("wayne900619@gmail.com", "awbnlgfmcdwyubru")
 	//add crypto method
-	mail.Send("Hello,"+layout.Username, "", layout.Email)
+	go mail.Send("Hello,"+layout.Username, "", layout.Email)
 	return layout, err
 }
 func (r *mutationResolver) Login(ctx context.Context, input *model.LoginInput) (*prisma.User, error) {
@@ -135,25 +136,25 @@ func (r *mutationResolver) Login(ctx context.Context, input *model.LoginInput) (
 	if detail.Username != nil {
 		return nil, fmt.Errorf("You have already login")
 	}
-	vailed, err := controller.VailUser(input.Recaptcha, string(detail.IP))
+	/*vailed, err := controller.VailUser(input.Recaptcha, string(detail.IP))
 	if err != nil {
 		return nil, err
 	}
 	if !vailed {
 		return nil, fmt.Errorf("You are robot")
-	}
-	user, err := r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{Username: &input.Emailorusername, Or: []prisma.UserWhereInput{{Email: &input.Emailorusername}}}}).Exec(ctx)
+	}*/
+	user, err := r.Prisma.Users(&prisma.UsersParams{Where: &prisma.UserWhereInput{Or: []prisma.UserWhereInput{{Email: &input.Emailorusername}, {Username: &input.Emailorusername}}}}).Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
-	if user == nil {
+	if len(user) < 1 {
 		return nil, fmt.Errorf("username or email wrong")
 	}
 	if input.Password != user[0].Password {
 		return nil, fmt.Errorf("password wrong")
 	}
 	token := "itis" + user[0].Username
-	context.WithValue(ctx, "cookie", token)
+	*detail.Token = token
 	r.Prisma.UpsertSession(prisma.SessionUpsertParams{
 		Where:  prisma.SessionWhereUniqueInput{Username: &user[0].Username},
 		Create: prisma.SessionCreateInput{Username: user[0].Username, Token: token},
